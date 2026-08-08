@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "experience": 0.1,
+  "ingredient": [
+    "minecraft:obsidian",
+    "minecraft:crying_obsidian"
+  ],
+  "result": {
+    "id": "obsidian:obsidian_ingot"
+  }
+}

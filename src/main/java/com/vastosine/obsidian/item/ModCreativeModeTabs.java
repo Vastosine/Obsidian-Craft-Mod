@@ -1,0 +1,35 @@
+package com.vastosine.obsidian.item;
+
+import com.vastosine.obsidian.ObsidianCraft;
+import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+
+public final class ModCreativeModeTabs {
+	public static final ResourceKey<CreativeModeTab> OBSIDIAN = ResourceKey.create(
+		Registries.CREATIVE_MODE_TAB,
+		ObsidianCraft.id("obsidian")
+	);
+
+	private ModCreativeModeTabs() {
+	}
+
+	public static void init() {
+		Registry.register(
+			BuiltInRegistries.CREATIVE_MODE_TAB,
+			OBSIDIAN,
+			FabricCreativeModeTab.builder()
+				.title(Component.translatable("itemGroup.obsidian"))
+				.icon(() -> new ItemStack(ModItems.OBSIDIAN_INGOT))
+				.displayItems((parameters, output) -> {
+					output.accept(ModItems.OBSIDIAN_INGOT);
+				})
+				.build()
+		);
+	}
+}
