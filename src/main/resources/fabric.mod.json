@@ -3,13 +3,12 @@
 	"id": "obsidian",
 	"version": "${version}",
 	"name": "Obsidian Craft",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A mod about obsidian",
 	"authors": [
-		"Me!"
+		"Vastosine"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/Vastosine/Obsidian-Craft-Mod"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/obsidian/icon.png",
@@ -20,6 +19,9 @@
 		],
 		"fabric-datagen": [
 			"com.vastosine.obsidian.ObsidianCraftDataGenerator"
+		],
+		"client": [
+			"com.vastosine.obsidian.ObsidianCraftClient"
 		]
 	},
 	"mixins": [
