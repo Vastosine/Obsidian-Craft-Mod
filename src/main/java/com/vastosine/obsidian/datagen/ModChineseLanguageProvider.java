@@ -18,6 +18,7 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
 	public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
 		translationBuilder.add(ModBlocks.OBSIDIAN_BLOCK, "黑曜石块");
 		translationBuilder.add(ModItems.OBSIDIAN_INGOT, "黑曜石锭");
+		translationBuilder.add(ModItems.OBSIDIAN_APPLE, "黑曜石苹果");
 		translationBuilder.add(ModCreativeModeTabs.OBSIDIAN, "黑曜石工艺");
 
 		translationBuilder.add(ModItems.OBSIDIAN_PICKAXE, "黑曜石镐");

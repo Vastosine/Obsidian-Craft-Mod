@@ -18,6 +18,7 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
 	public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
 		translationBuilder.add(ModBlocks.OBSIDIAN_BLOCK, "Obsidian Block");
 		translationBuilder.add(ModItems.OBSIDIAN_INGOT, "Obsidian Ingot");
+		translationBuilder.add(ModItems.OBSIDIAN_APPLE, "Obsidian Apple");
 		translationBuilder.add(ModCreativeModeTabs.OBSIDIAN, "Obsidian Craft");
 
 		translationBuilder.add(ModItems.OBSIDIAN_PICKAXE, "Obsidian Pickaxe");

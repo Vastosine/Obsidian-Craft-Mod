@@ -14,11 +14,17 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.food.Foods;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemUseAnimation;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.item.component.ItemLore;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 import net.minecraft.world.item.component.Tool;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
@@ -47,6 +53,33 @@ public final class ModItems {
 
 	public static final ResourceKey<Item> OBSIDIAN_INGOT_KEY = key("obsidian_ingot");
 	public static final Item OBSIDIAN_INGOT = registerItem(OBSIDIAN_INGOT_KEY, new Item.Properties());
+
+	public static final ResourceKey<Item> OBSIDIAN_APPLE_KEY = key("obsidian_apple");
+
+	// Golden-apple nutrition/saturation (4 hunger, 9.6 saturation) with obsidian effects:
+	// Fire Resistance 30s, Resistance I 10s, Slowness I 20s. Amplifiers are in-code levels
+	// (game level - 1), so Resistance I and Slowness I are amplifier 0. Eating takes twice
+	// as long as normal food (1.6s -> 3.2s).
+	private static final Consumable OBSIDIAN_APPLE_CONSUMABLE = Consumable.builder()
+		.consumeSeconds(3.2F)
+		.animation(ItemUseAnimation.EAT)
+		.sound(SoundEvents.GENERIC_EAT)
+		.hasConsumeParticles(true)
+		.onConsume(
+			new ApplyStatusEffectsConsumeEffect(
+				List.of(
+					new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 600, 0),
+					new MobEffectInstance(MobEffects.RESISTANCE, 200, 0),
+					new MobEffectInstance(MobEffects.SLOWNESS, 400, 0)
+				)
+			)
+		)
+		.build();
+
+	public static final Item OBSIDIAN_APPLE = registerItem(
+		OBSIDIAN_APPLE_KEY,
+		new Item.Properties().food(Foods.GOLDEN_APPLE, OBSIDIAN_APPLE_CONSUMABLE)
+	);
 
 	// Iron-tier stats with doubled durability (500 = 2x iron 250), diamond mining level,
 	// repaired with obsidian ingots on an anvil

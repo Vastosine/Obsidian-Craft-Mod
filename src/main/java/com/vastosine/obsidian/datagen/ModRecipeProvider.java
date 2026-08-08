@@ -46,6 +46,16 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 						ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_block_from_ingots"))
 					);
 
+				// 1 apple surrounded by 4 obsidian ingots (up, down, left, right), shaped
+				this.shaped(RecipeCategory.FOOD, ModItems.OBSIDIAN_APPLE)
+					.pattern(" I ")
+					.pattern("IAI")
+					.pattern(" I ")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('A', Items.APPLE)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_apple")));
+
 				// 1 obsidian block breaks down into 4 obsidian ingots
 				this.shapeless(RecipeCategory.MISC, ModItems.OBSIDIAN_INGOT, 4)
 					.requires(ModBlocks.OBSIDIAN_BLOCK)
