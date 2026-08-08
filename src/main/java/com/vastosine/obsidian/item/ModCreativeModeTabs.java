@@ -30,6 +30,15 @@ public final class ModCreativeModeTabs {
 				.displayItems((parameters, output) -> {
 					output.accept(ModBlocks.OBSIDIAN_BLOCK);
 					output.accept(ModItems.OBSIDIAN_INGOT);
+					output.accept(ModItems.OBSIDIAN_PICKAXE);
+					output.accept(ModItems.OBSIDIAN_AXE);
+					output.accept(ModItems.OBSIDIAN_SHOVEL);
+					output.accept(ModItems.OBSIDIAN_HOE);
+					output.accept(ModItems.OBSIDIAN_SWORD);
+					output.accept(ModItems.OBSIDIAN_HELMET);
+					output.accept(ModItems.OBSIDIAN_CHESTPLATE);
+					output.accept(ModItems.OBSIDIAN_LEGGINGS);
+					output.accept(ModItems.OBSIDIAN_BOOTS);
 				})
 				.build()
 		);

@@ -8,6 +8,8 @@ import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ModelTemplates;
 
+import java.util.Map;
+
 public class ModModelProvider extends FabricModelProvider {
 	public ModModelProvider(FabricPackOutput output) {
 		super(output);
@@ -22,5 +24,22 @@ public class ModModelProvider extends FabricModelProvider {
 	@Override
 	public void generateItemModels(ItemModelGenerators itemModelGenerator) {
 		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_INGOT, ModelTemplates.FLAT_ITEM);
+
+		// Tools use the handheld (first-person in hand) template
+		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_PICKAXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_AXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_SHOVEL, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_HOE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
+
+		// Armor item models (with trim support, no dyed layer, no trim palette overrides)
+		itemModelGenerator.generateTrimmableArmorSet(
+			ModItems.OBSIDIAN_HELMET,
+			ModItems.OBSIDIAN_CHESTPLATE,
+			ModItems.OBSIDIAN_LEGGINGS,
+			ModItems.OBSIDIAN_BOOTS,
+			false,
+			Map.of()
+		);
 	}
 }

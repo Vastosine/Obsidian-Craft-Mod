@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "obsidian:obsidian_block",
+    "I": "obsidian:obsidian_ingot"
+  },
+  "pattern": [
+    "BBB",
+    "I I"
+  ],
+  "result": {
+    "id": "obsidian:obsidian_helmet"
+  }
+}

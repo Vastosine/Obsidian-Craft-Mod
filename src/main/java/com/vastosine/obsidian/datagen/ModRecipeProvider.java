@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.concurrent.CompletableFuture;
@@ -85,6 +86,93 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 						this.output,
 						ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_ingot_from_obsidian_blasting"))
 					);
+
+				// Tools follow the vanilla patterns, but the core cell is an obsidian block
+				// (e.g. the middle cell of the pickaxe head) instead of an obsidian ingot
+				this.shaped(RecipeCategory.TOOLS, ModItems.OBSIDIAN_PICKAXE)
+					.pattern("IBI")
+					.pattern(" S ")
+					.pattern(" S ")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.define('S', Items.STICK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_pickaxe")));
+
+				this.shaped(RecipeCategory.TOOLS, ModItems.OBSIDIAN_AXE)
+					.pattern("II")
+					.pattern("BS")
+					.pattern(" S")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.define('S', Items.STICK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_axe")));
+
+				this.shaped(RecipeCategory.TOOLS, ModItems.OBSIDIAN_SHOVEL)
+					.pattern("B")
+					.pattern("S")
+					.pattern("S")
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.define('S', Items.STICK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_shovel")));
+
+				this.shaped(RecipeCategory.TOOLS, ModItems.OBSIDIAN_HOE)
+					.pattern("IB")
+					.pattern(" S")
+					.pattern(" S")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.define('S', Items.STICK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_hoe")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.OBSIDIAN_SWORD)
+					.pattern("I")
+					.pattern("B")
+					.pattern("S")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.define('S', Items.STICK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_sword")));
+
+				// Armor follows the vanilla patterns, with the core cell as an obsidian block
+				// (e.g. the center of the chestplate)
+				this.shaped(RecipeCategory.COMBAT, ModItems.OBSIDIAN_HELMET)
+					.pattern("BBB")
+					.pattern("I I")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_helmet")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.OBSIDIAN_CHESTPLATE)
+					.pattern("I I")
+					.pattern("IBI")
+					.pattern("III")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_chestplate")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.OBSIDIAN_LEGGINGS)
+					.pattern("IBI")
+					.pattern("I I")
+					.pattern("I I")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_leggings")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.OBSIDIAN_BOOTS)
+					.pattern("IBI")
+					.pattern("I I")
+					.define('I', ModItems.OBSIDIAN_INGOT)
+					.define('B', ModBlocks.OBSIDIAN_BLOCK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_boots")));
 			}
 		};
 	}

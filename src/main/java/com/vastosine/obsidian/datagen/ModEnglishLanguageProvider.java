@@ -19,5 +19,20 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
 		translationBuilder.add(ModBlocks.OBSIDIAN_BLOCK, "Obsidian Block");
 		translationBuilder.add(ModItems.OBSIDIAN_INGOT, "Obsidian Ingot");
 		translationBuilder.add(ModCreativeModeTabs.OBSIDIAN, "Obsidian Craft");
+
+		translationBuilder.add(ModItems.OBSIDIAN_PICKAXE, "Obsidian Pickaxe");
+		translationBuilder.add(ModItems.OBSIDIAN_AXE, "Obsidian Axe");
+		translationBuilder.add(ModItems.OBSIDIAN_SHOVEL, "Obsidian Shovel");
+		translationBuilder.add(ModItems.OBSIDIAN_HOE, "Obsidian Hoe");
+		translationBuilder.add(ModItems.OBSIDIAN_SWORD, "Obsidian Sword");
+		translationBuilder.add(ModItems.OBSIDIAN_HELMET, "Obsidian Helmet");
+		translationBuilder.add(ModItems.OBSIDIAN_CHESTPLATE, "Obsidian Chestplate");
+		translationBuilder.add(ModItems.OBSIDIAN_LEGGINGS, "Obsidian Leggings");
+		translationBuilder.add(ModItems.OBSIDIAN_BOOTS, "Obsidian Boots");
+		translationBuilder.add("item.obsidian.obsidian_pickaxe.tooltip", "+150% mining speed on obsidian");
+		translationBuilder.add("item.obsidian.obsidian_pickaxe.repair", "Mining obsidian restores 2 durability");
+		translationBuilder.add("item.obsidian.unbreaking.tooltip", "Unbreaking");
+		translationBuilder.add("item.obsidian.fire_protection.tooltip", "Fire Protection");
+		translationBuilder.add("item.obsidian.shift_hint", "Hold Shift for details");
 	}
 }

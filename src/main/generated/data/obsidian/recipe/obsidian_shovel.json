@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": "obsidian:obsidian_block",
+    "S": "minecraft:stick"
+  },
+  "pattern": [
+    "B",
+    "S",
+    "S"
+  ],
+  "result": {
+    "id": "obsidian:obsidian_shovel"
+  }
+}

@@ -1,5 +1,19 @@
 {
   "block.obsidian.obsidian_block": "黑曜石块",
+  "item.obsidian.fire_protection.tooltip": "抗火",
+  "item.obsidian.obsidian_axe": "黑曜石斧",
+  "item.obsidian.obsidian_boots": "黑曜石靴子",
+  "item.obsidian.obsidian_chestplate": "黑曜石胸甲",
+  "item.obsidian.obsidian_helmet": "黑曜石头盔",
+  "item.obsidian.obsidian_hoe": "黑曜石锄",
   "item.obsidian.obsidian_ingot": "黑曜石锭",
+  "item.obsidian.obsidian_leggings": "黑曜石护腿",
+  "item.obsidian.obsidian_pickaxe": "黑曜石镐",
+  "item.obsidian.obsidian_pickaxe.repair": "挖掘黑曜石时恢复2点耐久",
+  "item.obsidian.obsidian_pickaxe.tooltip": "对黑曜石的挖掘速度提升150%",
+  "item.obsidian.obsidian_shovel": "黑曜石锹",
+  "item.obsidian.obsidian_sword": "黑曜石剑",
+  "item.obsidian.shift_hint": "按住Shift查看详情",
+  "item.obsidian.unbreaking.tooltip": "持久",
   "itemGroup.obsidian": "黑曜石工艺"
 }
