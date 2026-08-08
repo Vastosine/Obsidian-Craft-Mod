@@ -17,7 +17,7 @@ public final class ModItems {
 	}
 
 	public static void init() {
-		// 触发上面的静态字段完成注册
+		// Trigger registration by initializing the static fields above
 	}
 
 	private static Item registerItem(String path, Item.Properties properties) {

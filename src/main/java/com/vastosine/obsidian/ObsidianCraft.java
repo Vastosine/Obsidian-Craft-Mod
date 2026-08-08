@@ -1,5 +1,6 @@
 package com.vastosine.obsidian;
 
+import com.vastosine.obsidian.block.ModBlocks;
 import com.vastosine.obsidian.item.ModCreativeModeTabs;
 import com.vastosine.obsidian.item.ModItems;
 import net.fabricmc.api.ModInitializer;
@@ -23,6 +24,7 @@ public class ObsidianCraft implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		ModBlocks.init();
 		ModItems.init();
 		ModCreativeModeTabs.init();
 

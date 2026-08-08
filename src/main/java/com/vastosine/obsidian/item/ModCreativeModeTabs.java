@@ -1,6 +1,7 @@
 package com.vastosine.obsidian.item;
 
 import com.vastosine.obsidian.ObsidianCraft;
+import com.vastosine.obsidian.block.ModBlocks;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,6 +28,7 @@ public final class ModCreativeModeTabs {
 				.title(Component.translatable("itemGroup.obsidian"))
 				.icon(() -> new ItemStack(ModItems.OBSIDIAN_INGOT))
 				.displayItems((parameters, output) -> {
+					output.accept(ModBlocks.OBSIDIAN_BLOCK);
 					output.accept(ModItems.OBSIDIAN_INGOT);
 				})
 				.build()
