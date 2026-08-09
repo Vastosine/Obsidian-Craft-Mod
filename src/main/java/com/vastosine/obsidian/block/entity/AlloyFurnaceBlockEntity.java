@@ -1,10 +1,15 @@
 package com.vastosine.obsidian.block.entity;
 
+import com.google.common.collect.Lists;
+import com.mojang.serialization.Codec;
 import com.vastosine.obsidian.block.AlloyFurnaceBlock;
+import com.vastosine.obsidian.item.ModItemTags;
 import com.vastosine.obsidian.menu.AlloyFurnaceMenu;
 import com.vastosine.obsidian.recipe.AlloyFurnaceRecipe;
 import com.vastosine.obsidian.recipe.AlloyRecipeInput;
 import com.vastosine.obsidian.recipe.ModRecipeTypes;
+import it.unimi.dsi.fastutil.objects.Reference2IntMap;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.fabricmc.fabric.api.recipe.v1.FabricRecipeManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,8 +18,10 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -26,6 +33,7 @@ import net.minecraft.world.item.component.CookingFuel;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipePropertySet;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
@@ -34,9 +42,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.providers.number.ResolvableNumber;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * The Alloy Furnace block entity.
@@ -77,6 +87,10 @@ public class AlloyFurnaceBlockEntity extends BaseContainerBlockEntity implements
 	private int cookingTotalTime = 200;
 	/** Id of the recipe currently being cooked (set when a cook completes), used to detect recipe changes in setItem. */
 	private @Nullable ResourceKey<Recipe<?>> currentRecipe;
+	/** How often each recipe has been cooked; popped as experience orbs when the result is taken. */
+	private final Reference2IntOpenHashMap<ResourceKey<Recipe<?>>> recipesUsed = new Reference2IntOpenHashMap<>();
+
+	private static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USED_CODEC = Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
 
 	private final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> smeltingCheck;
 
@@ -420,7 +434,13 @@ public class AlloyFurnaceBlockEntity extends BaseContainerBlockEntity implements
 			// 26.3 fuel is data-driven: the COOKING_FUEL component marks burnable items
 			return itemStack.has(DataComponents.COOKING_FUEL);
 		}
-		return true;
+		// Vanilla furnace behavior: items that take part in no recipe cannot enter the
+		// ingredient slots. Smeltable items plus the alloy material tags (gold, copper
+		// and netherite sources, none of which are fully covered by the smelt property).
+		return this.level.recipeAccess().propertySet(RecipePropertySet.FURNACE_INPUT).test(itemStack)
+			|| itemStack.is(ModItemTags.GOLD_MATERIALS)
+			|| itemStack.is(ModItemTags.COPPER_MATERIALS)
+			|| itemStack.is(ModItemTags.DEBRIS_MATERIALS);
 	}
 
 	// --- Name / menu ---
@@ -435,10 +455,16 @@ public class AlloyFurnaceBlockEntity extends BaseContainerBlockEntity implements
 		return new AlloyFurnaceMenu(containerId, inventory, this, this.dataAccess);
 	}
 
-	// --- Recipe crafting holder (XP awarding intentionally skipped) ---
+	// --- Recipe crafting holder (XP) ---
+	// Vanilla furnace pattern: each completed cook adds to the recipesUsed map;
+	// the result slot pops the accumulated experience as orbs when the output is
+	// taken, and the recipes are awarded to the player (recipe book unlocks).
 
 	@Override
 	public void setRecipeUsed(final @Nullable RecipeHolder<?> recipeUsed) {
+		if (recipeUsed != null) {
+			this.recipesUsed.addTo(recipeUsed.id(), 1);
+		}
 	}
 
 	@Override
@@ -450,6 +476,61 @@ public class AlloyFurnaceBlockEntity extends BaseContainerBlockEntity implements
 	public void awardUsedRecipes(final Player player, final List<ItemStack> itemStacks) {
 	}
 
+	public void awardUsedRecipesAndPopExperience(final ServerPlayer player) {
+		List<RecipeHolder<?>> recipesToAward = this.getRecipesToAwardAndPopExperience(player.level(), player.position());
+		player.awardRecipes(recipesToAward);
+
+		for (RecipeHolder<?> recipe : recipesToAward) {
+			player.triggerRecipeCrafted(recipe, this.items);
+		}
+
+		this.recipesUsed.clear();
+	}
+
+	public List<RecipeHolder<?>> getRecipesToAwardAndPopExperience(final ServerLevel level, final Vec3 position) {
+		List<RecipeHolder<?>> recipesToAward = Lists.newArrayList();
+
+		for (Reference2IntMap.Entry<ResourceKey<Recipe<?>>> entry : this.recipesUsed.reference2IntEntrySet()) {
+			level.recipeAccess().byKey(entry.getKey()).ifPresent(recipe -> {
+				recipesToAward.add(recipe);
+				createExperience(level, position, entry.getIntValue(), experienceOf(recipe.value()));
+			});
+		}
+
+		return recipesToAward;
+	}
+
+	/** Vanilla smelting recipes give their vanilla XP; alloy recipes carry their own XP. */
+	private static float experienceOf(final Recipe<?> recipe) {
+		if (recipe instanceof AlloyFurnaceRecipe alloyRecipe) {
+			return alloyRecipe.experience();
+		}
+		if (recipe instanceof SmeltingRecipe smeltRecipe) {
+			return smeltRecipe.experience();
+		}
+		return 0.0F;
+	}
+
+	private static void createExperience(final ServerLevel level, final Vec3 position, final int amount, final float value) {
+		int xpReward = Mth.floor(amount * value);
+		float xpFraction = Mth.frac(amount * value);
+		if (xpFraction != 0.0F && level.getRandom().nextFloat() < xpFraction) {
+			xpReward++;
+		}
+
+		ExperienceOrb.award(level, position, xpReward);
+	}
+
+	// Pop the pending XP orbs when the block is broken (the recipes themselves are
+	// not awarded: the player might not be nearby, like vanilla)
+	@Override
+	public void preRemoveSideEffects(final BlockPos pos, final BlockState state) {
+		super.preRemoveSideEffects(pos, state);
+		if (this.level instanceof ServerLevel serverLevel) {
+			this.getRecipesToAwardAndPopExperience(serverLevel, Vec3.atCenterOf(pos));
+		}
+	}
+
 	// --- Persistence (items are saved by the base class via the CONTAINER component) ---
 
 	@Override
@@ -459,6 +540,8 @@ public class AlloyFurnaceBlockEntity extends BaseContainerBlockEntity implements
 		this.cookingTotalTime = input.getShortOr("cooking_total_time", (short) 0);
 		this.litTimeRemaining = input.getShortOr("lit_time_remaining", (short) 0);
 		this.litTotalTime = input.getShortOr("lit_total_time", (short) 0);
+		this.recipesUsed.clear();
+		this.recipesUsed.putAll(input.read("RecipesUsed", RECIPES_USED_CODEC).orElse(Map.of()));
 	}
 
 	@Override
@@ -468,5 +551,6 @@ public class AlloyFurnaceBlockEntity extends BaseContainerBlockEntity implements
 		output.putShort("cooking_total_time", (short) this.cookingTotalTime);
 		output.putShort("lit_time_remaining", (short) this.litTimeRemaining);
 		output.putShort("lit_total_time", (short) this.litTotalTime);
+		output.store("RecipesUsed", RECIPES_USED_CODEC, this.recipesUsed);
 	}
 }

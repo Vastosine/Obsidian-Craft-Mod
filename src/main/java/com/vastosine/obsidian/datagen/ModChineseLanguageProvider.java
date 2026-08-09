@@ -18,8 +18,10 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
 	public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
 		translationBuilder.add(ModBlocks.OBSIDIAN_BLOCK, "黑曜石块");
 		translationBuilder.add(ModBlocks.ALLOY_FURNACE, "合金炉");
+		translationBuilder.add(ModBlocks.ROSE_GOLD_BLOCK, "玫瑰金块");
 		translationBuilder.add(ModItems.OBSIDIAN_INGOT, "黑曜石锭");
 		translationBuilder.add(ModItems.ROSE_GOLD_INGOT, "玫瑰金锭");
+		translationBuilder.add(ModItems.ROSE_GOLD_NUGGET, "玫瑰金粒");
 		translationBuilder.add(ModItems.OBSIDIAN_APPLE, "黑曜石苹果");
 		translationBuilder.add(ModCreativeModeTabs.OBSIDIAN, "黑曜石工艺");
 		translationBuilder.add("container.alloy_furnace", "合金炉");
@@ -34,10 +36,21 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
 		translationBuilder.add(ModItems.OBSIDIAN_SHOVEL, "黑曜石锹");
 		translationBuilder.add(ModItems.OBSIDIAN_HOE, "黑曜石锄");
 		translationBuilder.add(ModItems.OBSIDIAN_SWORD, "黑曜石剑");
+		translationBuilder.add(ModItems.OBSIDIAN_SPEAR, "黑曜石长矛");
 		translationBuilder.add(ModItems.OBSIDIAN_HELMET, "黑曜石头盔");
 		translationBuilder.add(ModItems.OBSIDIAN_CHESTPLATE, "黑曜石胸甲");
 		translationBuilder.add(ModItems.OBSIDIAN_LEGGINGS, "黑曜石护腿");
 		translationBuilder.add(ModItems.OBSIDIAN_BOOTS, "黑曜石靴子");
+		translationBuilder.add(ModItems.ROSE_GOLD_PICKAXE, "玫瑰金镐");
+		translationBuilder.add(ModItems.ROSE_GOLD_AXE, "玫瑰金斧");
+		translationBuilder.add(ModItems.ROSE_GOLD_SHOVEL, "玫瑰金锹");
+		translationBuilder.add(ModItems.ROSE_GOLD_HOE, "玫瑰金锄");
+		translationBuilder.add(ModItems.ROSE_GOLD_SWORD, "玫瑰金剑");
+		translationBuilder.add(ModItems.ROSE_GOLD_SPEAR, "玫瑰金长矛");
+		translationBuilder.add(ModItems.ROSE_GOLD_HELMET, "玫瑰金头盔");
+		translationBuilder.add(ModItems.ROSE_GOLD_CHESTPLATE, "玫瑰金胸甲");
+		translationBuilder.add(ModItems.ROSE_GOLD_LEGGINGS, "玫瑰金护腿");
+		translationBuilder.add(ModItems.ROSE_GOLD_BOOTS, "玫瑰金靴子");
 		translationBuilder.add("item.obsidian.obsidian_pickaxe.tooltip", "对黑曜石的挖掘速度提升150%");
 		translationBuilder.add("item.obsidian.obsidian_pickaxe.repair", "挖掘黑曜石时恢复2点耐久");
 		translationBuilder.add("item.obsidian.unbreaking.tooltip", "持久");

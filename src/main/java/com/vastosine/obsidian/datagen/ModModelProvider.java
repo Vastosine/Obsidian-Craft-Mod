@@ -20,6 +20,7 @@ public class ModModelProvider extends FabricModelProvider {
 	public void generateBlockStateModels(BlockModelGenerators blockStateModelGenerator) {
 		// Simple cube with the same texture on all six faces (the BlockItem's inventory model is generated automatically)
 		blockStateModelGenerator.createTrivialCube(ModBlocks.OBSIDIAN_BLOCK);
+		blockStateModelGenerator.createTrivialCube(ModBlocks.ROSE_GOLD_BLOCK);
 
 		// Furnace-like machine: front/side/top textures, lit variant, blockstate and item model
 		blockStateModelGenerator.createFurnace(ModBlocks.ALLOY_FURNACE, TexturedModel.ORIENTABLE_ONLY_TOP);
@@ -29,6 +30,7 @@ public class ModModelProvider extends FabricModelProvider {
 	public void generateItemModels(ItemModelGenerators itemModelGenerator) {
 		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_INGOT, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(ModItems.ROSE_GOLD_INGOT, ModelTemplates.FLAT_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.ROSE_GOLD_NUGGET, ModelTemplates.FLAT_ITEM);
 		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_APPLE, ModelTemplates.FLAT_ITEM);
 
 		// Tools use the handheld (first-person in hand) template
@@ -37,6 +39,15 @@ public class ModModelProvider extends FabricModelProvider {
 		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_SHOVEL, ModelTemplates.FLAT_HANDHELD_ITEM);
 		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_HOE, ModelTemplates.FLAT_HANDHELD_ITEM);
 		itemModelGenerator.generateFlatItem(ModItems.OBSIDIAN_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.ROSE_GOLD_PICKAXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.ROSE_GOLD_AXE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.ROSE_GOLD_SHOVEL, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.ROSE_GOLD_HOE, ModelTemplates.FLAT_HANDHELD_ITEM);
+		itemModelGenerator.generateFlatItem(ModItems.ROSE_GOLD_SWORD, ModelTemplates.FLAT_HANDHELD_ITEM);
+
+		// Spears: flat item model plus the in-hand model (item model dispatch)
+		itemModelGenerator.generateSpear(ModItems.OBSIDIAN_SPEAR);
+		itemModelGenerator.generateSpear(ModItems.ROSE_GOLD_SPEAR);
 
 		// Armor item models (with trim support, no dyed layer, no trim palette overrides)
 		itemModelGenerator.generateTrimmableArmorSet(
@@ -44,6 +55,14 @@ public class ModModelProvider extends FabricModelProvider {
 			ModItems.OBSIDIAN_CHESTPLATE,
 			ModItems.OBSIDIAN_LEGGINGS,
 			ModItems.OBSIDIAN_BOOTS,
+			false,
+			Map.of()
+		);
+		itemModelGenerator.generateTrimmableArmorSet(
+			ModItems.ROSE_GOLD_HELMET,
+			ModItems.ROSE_GOLD_CHESTPLATE,
+			ModItems.ROSE_GOLD_LEGGINGS,
+			ModItems.ROSE_GOLD_BOOTS,
 			false,
 			Map.of()
 		);

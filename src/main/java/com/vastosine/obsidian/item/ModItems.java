@@ -60,6 +60,10 @@ public final class ModItems {
 	public static final ResourceKey<Item> ROSE_GOLD_INGOT_KEY = key("rose_gold_ingot");
 	public static final Item ROSE_GOLD_INGOT = registerItem(ROSE_GOLD_INGOT_KEY, new Item.Properties());
 
+	// Rose gold nugget: 9 per ingot (1:9 conversions with the ingot, like gold)
+	public static final ResourceKey<Item> ROSE_GOLD_NUGGET_KEY = key("rose_gold_nugget");
+	public static final Item ROSE_GOLD_NUGGET = registerItem(ROSE_GOLD_NUGGET_KEY, new Item.Properties());
+
 	// Golden-apple nutrition/saturation (4 hunger, 9.6 saturation) with obsidian effects:
 	// Fire Resistance 30s, Resistance I 10s, Slowness I 20s. Amplifiers are in-code levels
 	// (game level - 1), so Resistance I and Slowness I are amplifier 0. Eating takes twice
@@ -168,6 +172,61 @@ public final class ModItems {
 			.customDamage(OBSIDIAN_UNBREAKING)
 	);
 
+	// Obsidian spear: iron spear stats (matches the iron-tier obsidian tools),
+	// with the same hardcoded Unbreaking I as the other obsidian tools
+	public static final Item OBSIDIAN_SPEAR = registerItem(
+		key("obsidian_spear"),
+		new Item.Properties()
+			.spear(OBSIDIAN_TOOL_MATERIAL, 0.95F, 0.95F, 0.6F, 2.5F, 11.0F, 6.75F, 5.1F, 11.25F, 4.6F)
+			.component(DataComponents.LORE, new ItemLore(List.of(UNBREAKING_LINE)))
+			.customDamage(OBSIDIAN_UNBREAKING)
+	);
+
+	// --- Rose gold: copper-tier tools, armor between iron and copper (rounded up) ---
+
+	// Repair tags: tools and armor are repaired with rose gold ingots on an anvil
+	public static final TagKey<Item> ROSE_GOLD_TOOL_MATERIALS_TAG = TagKey.create(Registries.ITEM, ObsidianCraft.id("rose_gold_tool_materials"));
+	public static final TagKey<Item> REPAIRS_ROSE_GOLD_ARMOR_TAG = TagKey.create(Registries.ITEM, ObsidianCraft.id("repairs_rose_gold_armor"));
+
+	// Copper tool stats (durability 190, speed 5.0, damage 1.0, enchant 13, copper mining level)
+	private static final ToolMaterial ROSE_GOLD_TOOL_MATERIAL = new ToolMaterial(
+		BlockTags.INCORRECT_FOR_COPPER_TOOL,
+		190, 5.0F, 1.0F, 13,
+		ROSE_GOLD_TOOL_MATERIALS_TAG
+	);
+
+	// Armor stats = average of iron (15, {2,5,6,2,5}, 9) and copper (11, {1,3,4,2,4}, 8),
+	// each value rounded up: durability 13, defense {2,4,5,2,5}, enchantment 9
+	private static final ArmorMaterial ROSE_GOLD_ARMOR_MATERIAL = new ArmorMaterial(
+		13,
+		Map.of(
+			ArmorType.BOOTS, 2,
+			ArmorType.LEGGINGS, 4,
+			ArmorType.CHESTPLATE, 5,
+			ArmorType.HELMET, 2,
+			ArmorType.BODY, 5
+		),
+		9,
+		SoundEvents.ARMOR_EQUIP_COPPER,
+		0.0F,
+		0.0F,
+		REPAIRS_ROSE_GOLD_ARMOR_TAG,
+		ResourceKey.create(EquipmentAssets.ROOT_ID, ObsidianCraft.id("rose_gold"))
+	);
+
+	public static final Item ROSE_GOLD_PICKAXE = registerItem(key("rose_gold_pickaxe"), new Item.Properties().pickaxe(ROSE_GOLD_TOOL_MATERIAL, 1.0F, -2.8F));
+	public static final Item ROSE_GOLD_AXE = registerItem(key("rose_gold_axe"), new Item.Properties().axe(ROSE_GOLD_TOOL_MATERIAL, 7.0F, -3.2F));
+	public static final Item ROSE_GOLD_SHOVEL = registerItem(key("rose_gold_shovel"), new Item.Properties().shovel(ROSE_GOLD_TOOL_MATERIAL, 1.5F, -3.0F));
+	public static final Item ROSE_GOLD_HOE = registerItem(key("rose_gold_hoe"), new Item.Properties().hoe(ROSE_GOLD_TOOL_MATERIAL, -1.0F, -2.0F));
+	public static final Item ROSE_GOLD_SWORD = registerItem(key("rose_gold_sword"), new Item.Properties().sword(ROSE_GOLD_TOOL_MATERIAL, 3.0F, -2.4F));
+	// Rose gold spear: copper spear stats
+	public static final Item ROSE_GOLD_SPEAR = registerItem(key("rose_gold_spear"), new Item.Properties().spear(ROSE_GOLD_TOOL_MATERIAL, 0.85F, 0.82F, 0.65F, 4.0F, 12.0F, 8.25F, 5.1F, 12.5F, 4.6F));
+
+	public static final Item ROSE_GOLD_HELMET = registerItem(key("rose_gold_helmet"), roseGoldArmorProperties(ArmorType.HELMET));
+	public static final Item ROSE_GOLD_CHESTPLATE = registerItem(key("rose_gold_chestplate"), roseGoldArmorProperties(ArmorType.CHESTPLATE));
+	public static final Item ROSE_GOLD_LEGGINGS = registerItem(key("rose_gold_leggings"), roseGoldArmorProperties(ArmorType.LEGGINGS));
+	public static final Item ROSE_GOLD_BOOTS = registerItem(key("rose_gold_boots"), roseGoldArmorProperties(ArmorType.BOOTS));
+
 	// All obsidian armor has hardcoded Fire Protection II (see LivingEntityMixin) and Unbreaking I.
 	// No enchantment components: the effects are pure code, so tooltips explain them.
 	public static final Item OBSIDIAN_HELMET = registerItem(key("obsidian_helmet"), armorProperties(ArmorType.HELMET));
@@ -180,6 +239,10 @@ public final class ModItems {
 			.humanoidArmor(OBSIDIAN_ARMOR_MATERIAL, type)
 			.component(DataComponents.LORE, new ItemLore(List.of(FIRE_PROTECTION_LINE, UNBREAKING_LINE)))
 			.customDamage(OBSIDIAN_UNBREAKING);
+	}
+
+	private static Item.Properties roseGoldArmorProperties(ArmorType type) {
+		return new Item.Properties().humanoidArmor(ROSE_GOLD_ARMOR_MATERIAL, type);
 	}
 
 	// Counts worn obsidian armor pieces (shared by the fire effect mixins:

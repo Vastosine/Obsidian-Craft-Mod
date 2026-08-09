@@ -16,6 +16,7 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.RecipeUnlockAdvancementBuilder;
 import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.worldgen.BootstrapContext;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
@@ -31,6 +32,14 @@ import java.util.concurrent.CompletableFuture;
 public class ModRecipeProvider extends FabricRecipeProvider {
 	public ModRecipeProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookup) {
 		super(output, registryLookup);
+	}
+
+	// Fabric's default rewrites every recipe namespace to the mod id, which would turn
+	// the minecraft:netherite_ingot override into obsidian:netherite_ingot (colliding
+	// with the alloy recipe). Keep the keys as written.
+	@Override
+	protected Identifier getRecipeIdentifier(Identifier identifier) {
+		return identifier;
 	}
 
 	@Override
@@ -218,7 +227,7 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 					Items.GOLD_INGOT,
 					ModItems.ROSE_GOLD_INGOT,
 					4,
-					1.5F,
+					1.0F,
 					160,
 					List.of(3, 1),
 					List.of(
@@ -226,6 +235,158 @@ public class ModRecipeProvider extends FabricRecipeProvider {
 						Ingredient.of(registries.lookupOrThrow(Registries.ITEM).getOrThrow(ModItemTags.COPPER_MATERIALS))
 					)
 				);
+
+				// Netherite: the vanilla 4 scrap + 4 gold crafting recipe is removed and
+				// replaced by an alloy furnace recipe. Ores work as substitutes (the gold
+				// material tag and the debris tag both list ores).
+				alloyFurnaceRecipe(
+					"netherite_ingot",
+					Items.NETHERITE_SCRAP,
+					Items.NETHERITE_INGOT,
+					1,
+					2.0F,
+					240,
+					List.of(4, 4),
+					List.of(
+						Ingredient.of(registries.lookupOrThrow(Registries.ITEM).getOrThrow(ModItemTags.DEBRIS_MATERIALS)),
+						Ingredient.of(registries.lookupOrThrow(Registries.ITEM).getOrThrow(ModItemTags.GOLD_MATERIALS))
+					)
+				);
+
+				// The vanilla netherite recipe is overridden with a shapeless recipe whose
+				// only ingredient is an empty tag: it decodes fine but can never be placed,
+				// so the RecipeManager ignores it (warn + skip) — the alloy furnace recipe
+				// above becomes the only way to craft netherite.
+				this.shapeless(RecipeCategory.MISC, Items.NETHERITE_INGOT)
+					.requires(ModItemTags.RECIPE_REMOVED)
+					.unlockedBy("has_netherite_ingot", this.has(Items.NETHERITE_INGOT))
+					.save(
+						this.output,
+						ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath("minecraft", "netherite_ingot"))
+					);
+
+				// Rose gold block and nugget: 1:9 conversions in both directions
+				this.shaped(RecipeCategory.BUILDING_BLOCKS, ModBlocks.ROSE_GOLD_BLOCK)
+					.pattern("###")
+					.pattern("###")
+					.pattern("###")
+					.define('#', ModItems.ROSE_GOLD_INGOT)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_block_from_ingots")));
+
+				this.shapeless(RecipeCategory.MISC, ModItems.ROSE_GOLD_INGOT, 9)
+					.requires(ModBlocks.ROSE_GOLD_BLOCK)
+					.unlockedBy("has_rose_gold_block", this.has(ModBlocks.ROSE_GOLD_BLOCK))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_ingots_from_block")));
+
+				this.shaped(RecipeCategory.MISC, ModItems.ROSE_GOLD_INGOT)
+					.pattern("###")
+					.pattern("###")
+					.pattern("###")
+					.define('#', ModItems.ROSE_GOLD_NUGGET)
+					.unlockedBy("has_rose_gold_nugget", this.has(ModItems.ROSE_GOLD_NUGGET))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_ingot_from_nuggets")));
+
+				this.shapeless(RecipeCategory.MISC, ModItems.ROSE_GOLD_NUGGET, 9)
+					.requires(ModItems.ROSE_GOLD_INGOT)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_nuggets_from_ingot")));
+
+				// Rose gold tools: vanilla copper patterns with the rose gold tool materials tag
+				this.shaped(RecipeCategory.TOOLS, ModItems.ROSE_GOLD_PICKAXE)
+					.pattern("XXX")
+					.pattern(" S ")
+					.pattern(" S ")
+					.define('X', ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG)
+					.define('S', Items.STICK)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_pickaxe")));
+
+				this.shaped(RecipeCategory.TOOLS, ModItems.ROSE_GOLD_AXE)
+					.pattern("XX")
+					.pattern("XS")
+					.pattern(" S")
+					.define('X', ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG)
+					.define('S', Items.STICK)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_axe")));
+
+				this.shaped(RecipeCategory.TOOLS, ModItems.ROSE_GOLD_SHOVEL)
+					.pattern("X")
+					.pattern("S")
+					.pattern("S")
+					.define('X', ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG)
+					.define('S', Items.STICK)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_shovel")));
+
+				this.shaped(RecipeCategory.TOOLS, ModItems.ROSE_GOLD_HOE)
+					.pattern("XX")
+					.pattern(" S")
+					.pattern(" S")
+					.define('X', ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG)
+					.define('S', Items.STICK)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_hoe")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.ROSE_GOLD_SWORD)
+					.pattern("X")
+					.pattern("X")
+					.pattern("S")
+					.define('X', ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG)
+					.define('S', Items.STICK)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_sword")));
+
+				// Spears follow the vanilla pattern: material tip on top, stick diagonal
+				this.shaped(RecipeCategory.COMBAT, ModItems.ROSE_GOLD_SPEAR)
+					.pattern("  X")
+					.pattern(" # ")
+					.pattern("#  ")
+					.define('X', ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG)
+					.define('#', Items.STICK)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_TOOL_MATERIALS_TAG))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_spear")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.OBSIDIAN_SPEAR)
+					.pattern("  X")
+					.pattern(" # ")
+					.pattern("#  ")
+					.define('X', ModItems.OBSIDIAN_INGOT)
+					.define('#', Items.STICK)
+					.unlockedBy("has_obsidian_ingot", this.has(ModItems.OBSIDIAN_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("obsidian_spear")));
+
+				// Rose gold armor: vanilla copper patterns
+				this.shaped(RecipeCategory.COMBAT, ModItems.ROSE_GOLD_HELMET)
+					.pattern("XXX")
+					.pattern("X X")
+					.define('X', ModItems.ROSE_GOLD_INGOT)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_helmet")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.ROSE_GOLD_CHESTPLATE)
+					.pattern("X X")
+					.pattern("XXX")
+					.pattern("XXX")
+					.define('X', ModItems.ROSE_GOLD_INGOT)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_chestplate")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.ROSE_GOLD_LEGGINGS)
+					.pattern("XXX")
+					.pattern("X X")
+					.pattern("X X")
+					.define('X', ModItems.ROSE_GOLD_INGOT)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_leggings")));
+
+				this.shaped(RecipeCategory.COMBAT, ModItems.ROSE_GOLD_BOOTS)
+					.pattern("X X")
+					.pattern("X X")
+					.define('X', ModItems.ROSE_GOLD_INGOT)
+					.unlockedBy("has_rose_gold_ingot", this.has(ModItems.ROSE_GOLD_INGOT))
+					.save(this.output, ResourceKey.create(Registries.RECIPE, ObsidianCraft.id("rose_gold_boots")));
 			}
 
 			/**

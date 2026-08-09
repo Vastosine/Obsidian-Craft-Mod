@@ -9,6 +9,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.recipebook.ServerPlaceRecipe;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Prediction;
 import net.minecraft.world.Container;
@@ -69,7 +70,7 @@ public class AlloyFurnaceMenu extends RecipeBookMenu {
 		this.addSlot(new Slot(container, 1, 56, 17));
 		this.addSlot(new Slot(container, 2, 82, 17));
 		this.addSlot(new Slot(container, AlloyFurnaceBlockEntity.SLOT_FUEL, 56, 53));
-		this.addSlot(new Slot(container, AlloyFurnaceBlockEntity.SLOT_OUTPUT, 116, 35));
+		this.addSlot(new AlloyFurnaceResultSlot(inventory.player, container, AlloyFurnaceBlockEntity.SLOT_OUTPUT, 116, 35));
 		this.addStandardInventorySlots(inventory, 8, 84);
 		this.addDataSlots(data);
 	}
@@ -358,11 +359,13 @@ public class AlloyFurnaceMenu extends RecipeBookMenu {
 	// --- Ingredient / fuel checks ---
 
 	public boolean isIngredient(final ItemStack itemStack) {
-		// Vanilla smeltable items, plus gold/copper materials (the gold ingot itself is
-		// not smeltable, so the alloy tags must be checked separately)
+		// Vanilla smeltable items, plus the alloy material tags (gold/copper ingots are
+		// not smeltable; netherite scrap neither — they must be checked separately).
+		// Same rule as the block entity's canPlaceItem for the ingredient slots.
 		return this.level.recipeAccess().propertySet(RecipePropertySet.FURNACE_INPUT).test(itemStack)
 			|| itemStack.is(ModItemTags.GOLD_MATERIALS)
-			|| itemStack.is(ModItemTags.COPPER_MATERIALS);
+			|| itemStack.is(ModItemTags.COPPER_MATERIALS)
+			|| itemStack.is(ModItemTags.DEBRIS_MATERIALS);
 	}
 
 	public boolean isFuel(final ItemStack itemStack) {
@@ -385,5 +388,55 @@ public class AlloyFurnaceMenu extends RecipeBookMenu {
 
 	public boolean isLit() {
 		return this.data.get(AlloyFurnaceBlockEntity.DATA_LIT_TIME) > 0;
+	}
+
+	/**
+	 * Output slot that pops the accumulated XP orbs and awards the cooked recipes
+	 * when the result is taken (vanilla FurnaceResultSlot pattern).
+	 */
+	private static class AlloyFurnaceResultSlot extends Slot {
+		private final Player player;
+		private int removeCount;
+
+		AlloyFurnaceResultSlot(final Player player, final Container container, final int slot, final int x, final int y) {
+			super(container, slot, x, y);
+			this.player = player;
+		}
+
+		@Override
+		public boolean mayPlace(final ItemStack itemStack) {
+			return false;
+		}
+
+		@Override
+		public ItemStack remove(final int amount) {
+			if (this.hasItem()) {
+				this.removeCount = this.removeCount + Math.min(amount, this.getItem().getCount());
+			}
+
+			return super.remove(amount);
+		}
+
+		@Override
+		public void onTake(final Player player, final ItemStack carried) {
+			this.checkTakeAchievements(carried);
+			super.onTake(player, carried);
+		}
+
+		@Override
+		protected void onQuickCraft(final ItemStack picked, final int count) {
+			this.removeCount += count;
+			this.checkTakeAchievements(picked);
+		}
+
+		@Override
+		protected void checkTakeAchievements(final ItemStack carried) {
+			carried.onCraftedBy(this.player, this.removeCount);
+			if (this.player instanceof ServerPlayer serverPlayer && this.container instanceof AlloyFurnaceBlockEntity alloyFurnace) {
+				alloyFurnace.awardUsedRecipesAndPopExperience(serverPlayer);
+			}
+
+			this.removeCount = 0;
+		}
 	}
 }

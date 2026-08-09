@@ -14,6 +14,10 @@ public final class ModItemTags {
 	public static final TagKey<Item> GOLD_MATERIALS = create("gold_materials");
 	/** Copper sources for alloying (ingot, ores, raw copper). */
 	public static final TagKey<Item> COPPER_MATERIALS = create("copper_materials");
+	/** Netherite sources for alloying (netherite scrap, ancient debris). */
+	public static final TagKey<Item> DEBRIS_MATERIALS = create("debris_materials");
+	/** Empty tag: makes the overridden vanilla netherite_ingot recipe impossible to place. */
+	public static final TagKey<Item> RECIPE_REMOVED = create("recipe_removed");
 
 	private ModItemTags() {
 	}

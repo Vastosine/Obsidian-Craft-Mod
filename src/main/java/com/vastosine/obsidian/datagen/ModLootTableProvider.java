@@ -17,5 +17,6 @@ public class ModLootTableProvider extends FabricBlockLootSubProvider {
 		// Drops itself when mined with the correct tool
 		this.dropSelf(ModBlocks.OBSIDIAN_BLOCK);
 		this.dropSelf(ModBlocks.ALLOY_FURNACE);
+		this.dropSelf(ModBlocks.ROSE_GOLD_BLOCK);
 	}
 }

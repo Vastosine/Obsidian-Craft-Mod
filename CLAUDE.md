@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-Fabric 模组 "Obsidian Craft"（mod id: `obsidian`），关于黑曜石的内容模组。当前包含：`obsidian_ingot`（物品）、`obsidian_block`（方块）、`obsidian_apple`（食物：金苹果饱食度、抗火 30s/抗性 I 10s/缓慢 I 20s、食用 3.2s，贴图暂缺）、5 件黑曜石工具（铁质数值、钻石挖掘等级、镐对黑曜石 +150% 挖掘速度）、4 件黑曜石盔甲（韧性 1、自带火焰保护 2）、**合金炉**（3 输入/1 燃料/1 输出机器，详见下节）、**玫瑰金锭**（3 金 + 1 铜 → 4 锭，8s）。
+Fabric 模组 "Obsidian Craft"（mod id: `obsidian`），关于黑曜石的内容模组。当前包含：`obsidian_ingot`（物品）、`obsidian_block`（方块）、`obsidian_apple`（食物：金苹果饱食度、抗火 30s/抗性 I 10s/缓慢 I 20s、食用 3.2s，贴图暂缺）、5 件黑曜石工具 + **黑曜石长矛**（铁质数值、钻石挖掘等级、镐对黑曜石 +150% 挖掘速度、全部自带耐久 I）、4 件黑曜石盔甲（韧性 1、自带火焰保护 2）、**合金炉**（3 输入/1 燃料/1 输出机器，详见下节）、**玫瑰金全家桶**：锭（3 金 + 1 铜 → 4 锭，8s，1.0 XP）+ 块/粒（1:9 互转）+ 5 工具 + 长矛（铜质数值）+ 4 盔甲（铁铜均值上取整：耐久 13、防御 {2,4,5,2,5}、附魔 9）、**下界合金锭**（原版合成配方已删除，改为合金炉：4 残骸类 + 4 金类 → 1 锭，12s，2.0 XP，矿石可代替）。
 
 **技术栈（务必不要搞错）**：Minecraft `26.3-snapshot-7`（不是 1.21.x）、Java 25（JAVA_HOME 指向 zulu 25，PATH 上的 java 是 1.8 勿用）、Fabric Loom 1.17、Fabric API 0.156.3、Yarn 映射。官方映射源码位于 `.gradle/loom-cache/minecraftMaven/net/minecraft/minecraft-merged-6974b2190e/26.3-snapshot-7/minecraft-merged-6974b2190e-26.3-snapshot-7-sources.jar`（API 与 1.21.x 差异较大，先查该 jar 再写代码）。
 
@@ -37,7 +37,7 @@ src/main/generated/               # datagen 产物（提交到 git，勿手改�
 
 ## 合金炉（Alloy Furnace）
 
-机器：3 个输入槽（方块左/上/右面漏斗 → 槽 0/1/2）、1 燃料槽（正/背面，燃烧时间**减半**）、1 输出槽（底面，只取）。烧所有原版熔炼配方（cook time = 熔炉的 2/5）+ 自定义合金配方（`obsidian:alloy_furnace` recipe type，槽位无关、按材料种类最多者优先、优先于熔炼回退）。
+机器：3 个输入槽（方块左/上/右面漏斗 → 槽 0/1/2）、1 燃料槽（正/背面，燃烧时间**减半**）、1 输出槽（底面，只取）。烧所有原版熔炼配方（cook time = 熔炉的 2/5）+ 自定义合金配方（`obsidian:alloy_furnace` recipe type，槽位无关、按材料种类最多者优先、优先于熔炼回退）。**输入槽限制**：`canPlaceItem` 与 menu 的 `isIngredient` 都用 `RecipePropertySet.FURNACE_INPUT` 测试 ∨ `ModItemTags.GOLD_MATERIALS` ∨ `COPPER_MATERIALS` ∨ `DEBRIS_MATERIALS`（金锭不可熔炼，tag 判定必须）——不在任何配方内的物品塞不进输入槽。**经验（原版熔炉模式）**：`recipesUsed`（`Reference2IntOpenHashMap<ResourceKey<Recipe<?>>>`，`setRecipeUsed` 每烧成一炉 +1）+ 输出槽自定义 `AlloyFurnaceResultSlot`（extends Slot，仿 `FurnaceResultSlot`：`carried.onCraftedBy(player, removeCount)` + 调 BE 的 `awardUsedRecipesAndPopExperience(ServerPlayer)`，removeCount 在 remove/onQuickCraft 累积）+ `experienceOf(Recipe)`（AlloyFurnaceRecipe→`experience()`，SmeltingRecipe→`experience()`，否则 0）+ `preRemoveSideEffects` 破坏方块时弹 XP 球（不解锁配方）。持久化 `"RecipesUsed"` = `Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT)`。**下界合金锭**：`minecraft:netherite_ingot` 原版合成配方用空 tag（`obsidian:recipe_removed`）shapeless 覆盖删除（空 tag 的 holder set 加载时被跳过、永不匹配）；合金炉配方 4 残骸类（`DEBRIS_MATERIALS`：netherite_scrap + ancient_debris）+ 4 金类 → 1 锭，12s，2.0 XP。
 
 - **配方书**：完整 vanilla 式交互（点击自动填料/Shift 连放/ghost 预览/可合成高亮）。menu extends `RecipeBookMenu`；screen extends `AbstractRecipeBookScreen`（不能 extends AbstractFurnaceScreen——其构造器硬编码 FurnaceRecipeBookComponent）；书组件 extends `RecipeBookComponent<AlloyFurnaceMenu>`，**必须放在 `net.minecraft.client.gui.screens.recipebook` 包**（GhostSlots 的 setInput/setResult 是 protected）。
 - **RecipeBookType 枚举不可扩展**：`getRecipeBookType()` 复用 `RecipeBookType.FURNACE`；自定义 tab 靠自定义 `RecipeBookCategory`（注册进 RECIPE_BOOK_CATEGORY registry）+ `TabInfo(ModBlocks.ALLOY_FURNACE.asItem(), ModRecipeBookCategories.ALLOY)`；无搜索 tab（SearchRecipeBookCategory 也是枚举）。
@@ -45,7 +45,8 @@ src/main/generated/               # datagen 产物（提交到 git，勿手改�
 - **server 端放置逻辑**：`handlePlacement` 手写——合金配方按 per-ingredient counts 从背包贪心移入 3 个输入槽（槽位无关，塞空槽或同物品槽）；熔炼回退走 `ServerPlaceRecipe.placeRecipe`（1x1 网格）。`ServerPlaceRecipe` 只支持每格 1 个，counts>1 必须手写。
 - **多配方选择**：`(FabricRecipeManager) level.recipeAccess()).getAllMatches(ModRecipeTypes.ALLOY_FURNACE, input, level)` 遍历取 `ingredients.size()` 最大者（quickCheck 只返回第一个匹配）；熔炼回退保留 `RecipeManager.createCheck(RecipeType.SMELTING)` 快路径。
 - **燃料减半**：`level.fuelValues()` 已删，用 `ResolvableNumber.getIntFromItem(stack, DataComponents.COOKING_FUEL, CookingFuel::burnTime, this.getLootContext(level), 0) / 2`（`getLootContext` 是 BaseContainerBlockEntity 的 protected 方法）。
-- **配方书贴图**：全局覆盖 `assets/minecraft/textures/gui/recipe_book.png` + `textures/gui/sprites/recipe_book/*`（黑曜石色板重着色，用户已确认）。方块贴图从 26.1 项目复制（`textures/block/alloy_furnace_*`），GUI 贴图 256×256 已在资源里。
+- **配方书贴图**：**不覆盖原版配方书贴图**（做过全局重着色但用户已否决——`RecipeBookComponent.RECIPE_BOOK_LOCATION` 是 `protected static final`、sprites 也是全局的，无法按书定制主题）。配方书按原版棕色，GUI 贴图 256×256（`textures/gui/container/alloy_furnace.png` + `sprites/container/alloy_furnace/{lit_progress,burn_progress}.png`）与方块贴图（`textures/block/alloy_furnace_*`，从 26.1 项目复制）留在资源里。
+- **覆盖原版配方（recipe removal）**：datagen 里 `FabricRecipeProvider.getRecipeIdentifier`（protected）会把**每个**配方的 namespace 重写成 mod id（`Identifier.of(output.getModId(), ...)`）——想覆盖 `minecraft:netherite_ingot` 必须**覆写 `getRecipeIdentifier(Identifier)` 原样返回**，否则覆盖品变成 `obsidian:netherite_ingot` 与合金配方撞 key 报 "Duplicate registration"。覆盖品本身用空 tag ingredient 的 shapeless（`RecipeManager.finalizeRecipeLoading` 对空 ingredient 配方只警告并跳过 property set，永不匹配）→ 功能上删除原版配方。
 
 **注册时序（datagen 双跑，必踩）**：datagen 的 `onInitializeDataGenerator` 在 `onInitialize` **之后**、且所有 registry **已冻结** 时执行，但会重跑同一 init 链。因此：注册必须写成**静态字段**（类初始化发生在 onInitialize 期间的第一次触达）；**显式 register() 方法会被二次调用 → 抛 "Registry is already frozen"**（`AlloyRecipeDisplay.register` 与 `ModCreativeModeTabs` 都踩过此坑——后者已改静态字段，前者用 containsKey guard 幂等）。datagen 入口的 init 链保留，因为静态字段类第二次只是 no-op。
 
@@ -73,5 +74,5 @@ src/main/generated/               # datagen 产物（提交到 git，勿手改�
 
 ## 用户偏好
 
-- **不要主动生成贴图**——除非用户明确要求。贴图程序都在 `C:\Users\Vastosine\AppData\Local\Temp\obsidian-tools\`：`GenToolTextures.java`（黑曜石工具）、`GenRoseGold.java`（玫瑰金锭：gold_ingot → 粉色金 6 停色板 `{0x5A,0x2B,0x3E}…{0xFC,0xD6,0xDE}`）、`GenRecipeBook.java`（配方书黑曜石重着色：recipe_book.png + sprites/recipe_book/*，约 7 停色板 `{0x12,0x0E,0x1E}…{0xA9,0x8F,0xDE}`，输出覆盖 assets/minecraft，overlay_recipe.png.mcmeta 逐字节复制）。**重着色程序必须 clamp 插值系数 f∈[0,1]**——亮度超过最后 break 时插值会越过最亮停靠，通道值溢出 256 绕回（金锭高光 0.986 → 红色通道变 0 出青色）。盔甲贴图明确不生成（equipment asset JSON 已存在，贴图缺失时盔甲渲染为空）。
+- **不要主动生成贴图**——除非用户明确要求。贴图程序都在 `C:\Users\Vastosine\AppData\Local\Temp\obsidian-tools\`：`GenToolTextures.java`（黑曜石工具）、`GenRoseGold.java`（玫瑰金锭：gold_ingot → 粉色金 6 停色板 `{0x5A,0x2B,0x3E}…{0xFC,0xD6,0xDE}`）、`GenRecipeBook.java`（配方书重着色——**已否决，程序作废**）、`GenAdditions.java`（11 个重着色任务：gold_block→rose_gold_block、gold_nugget→rose_gold_nugget、copper_{pickaxe,axe,shovel,hoe,sword}→rose_gold_*、copper_spear(+_in_hand)→rose_gold_spear(+_in_hand)、diamond_spear(+_in_hand)→obsidian_spear(+_in_hand)；玫瑰金色板 6 停 `{0x5A,0x2B,0x3E}…{0xFC,0xD6,0xDE}` breaks `{0,0.18,0.36,0.55,0.75,0.92}`，黑曜石色板 6 停 `{0x1D,0x15,0x35}…{0xA9,0x8F,0xDE}` breaks `{0,0.12,0.30,0.50,0.72,0.90}`）。**重着色程序必须 clamp 插值系数 f∈[0,1]**——亮度超过最后 break 时插值会越过最亮停靠，通道值溢出 256 绕回（金锭高光 0.986 → 红色通道变 0 出青色）。盔甲贴图明确不生成（equipment asset JSON 已存在，贴图缺失时盔甲渲染为空）。
 - 代码注释一律使用英文。

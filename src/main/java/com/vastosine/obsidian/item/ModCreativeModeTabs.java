@@ -37,10 +37,23 @@ public final class ModCreativeModeTabs {
 				output.accept(ModItems.OBSIDIAN_SHOVEL);
 				output.accept(ModItems.OBSIDIAN_HOE);
 				output.accept(ModItems.OBSIDIAN_SWORD);
+				output.accept(ModItems.OBSIDIAN_SPEAR);
 				output.accept(ModItems.OBSIDIAN_HELMET);
 				output.accept(ModItems.OBSIDIAN_CHESTPLATE);
 				output.accept(ModItems.OBSIDIAN_LEGGINGS);
 				output.accept(ModItems.OBSIDIAN_BOOTS);
+				output.accept(ModBlocks.ROSE_GOLD_BLOCK);
+				output.accept(ModItems.ROSE_GOLD_NUGGET);
+				output.accept(ModItems.ROSE_GOLD_PICKAXE);
+				output.accept(ModItems.ROSE_GOLD_AXE);
+				output.accept(ModItems.ROSE_GOLD_SHOVEL);
+				output.accept(ModItems.ROSE_GOLD_HOE);
+				output.accept(ModItems.ROSE_GOLD_SWORD);
+				output.accept(ModItems.ROSE_GOLD_SPEAR);
+				output.accept(ModItems.ROSE_GOLD_HELMET);
+				output.accept(ModItems.ROSE_GOLD_CHESTPLATE);
+				output.accept(ModItems.ROSE_GOLD_LEGGINGS);
+				output.accept(ModItems.ROSE_GOLD_BOOTS);
 			})
 			.build()
 	);

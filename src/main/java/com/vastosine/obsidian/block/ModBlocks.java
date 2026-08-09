@@ -34,6 +34,18 @@ public final class ModBlocks {
 
 	public static final ResourceKey<Block> ALLOY_FURNACE_KEY = ResourceKey.create(Registries.BLOCK, ObsidianCraft.id("alloy_furnace"));
 
+	// Rose gold block: gold block hardness, pink map color, needs an iron pickaxe
+	public static final ResourceKey<Block> ROSE_GOLD_BLOCK_KEY = ResourceKey.create(Registries.BLOCK, ObsidianCraft.id("rose_gold_block"));
+
+	public static final Block ROSE_GOLD_BLOCK = registerBlock(
+		"rose_gold_block",
+		BlockBehaviour.Properties.of()
+			.mapColor(MapColor.COLOR_PINK)
+			.strength(3.0F, 6.0F)
+			.sound(SoundType.METAL)
+			.requiresCorrectToolForDrops()
+	);
+
 	private static final ResourceKey<Item> ALLOY_FURNACE_ITEM_KEY = ResourceKey.create(Registries.ITEM, ObsidianCraft.id("alloy_furnace"));
 
 	// Alloy Furnace: stone-like hardness, needs a correct tool (diamond, via the tags),
