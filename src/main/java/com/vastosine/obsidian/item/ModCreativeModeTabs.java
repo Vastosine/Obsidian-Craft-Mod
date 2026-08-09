@@ -17,31 +17,38 @@ public final class ModCreativeModeTabs {
 		ObsidianCraft.id("obsidian")
 	);
 
+	// Registered as a static field (like the other Mod classes): the datagen init
+	// chain re-runs init(), by which time the registries are already frozen, so the
+	// registration must happen once at class-init during onInitialize
+	public static final CreativeModeTab TAB = Registry.register(
+		BuiltInRegistries.CREATIVE_MODE_TAB,
+		OBSIDIAN,
+		FabricCreativeModeTab.builder()
+			.title(Component.translatable("itemGroup.obsidian"))
+			.icon(() -> new ItemStack(ModItems.OBSIDIAN_INGOT))
+			.displayItems((parameters, output) -> {
+				output.accept(ModBlocks.OBSIDIAN_BLOCK);
+				output.accept(ModBlocks.ALLOY_FURNACE);
+				output.accept(ModItems.ROSE_GOLD_INGOT);
+				output.accept(ModItems.OBSIDIAN_INGOT);
+				output.accept(ModItems.OBSIDIAN_APPLE);
+				output.accept(ModItems.OBSIDIAN_PICKAXE);
+				output.accept(ModItems.OBSIDIAN_AXE);
+				output.accept(ModItems.OBSIDIAN_SHOVEL);
+				output.accept(ModItems.OBSIDIAN_HOE);
+				output.accept(ModItems.OBSIDIAN_SWORD);
+				output.accept(ModItems.OBSIDIAN_HELMET);
+				output.accept(ModItems.OBSIDIAN_CHESTPLATE);
+				output.accept(ModItems.OBSIDIAN_LEGGINGS);
+				output.accept(ModItems.OBSIDIAN_BOOTS);
+			})
+			.build()
+	);
+
 	private ModCreativeModeTabs() {
 	}
 
 	public static void init() {
-		Registry.register(
-			BuiltInRegistries.CREATIVE_MODE_TAB,
-			OBSIDIAN,
-			FabricCreativeModeTab.builder()
-				.title(Component.translatable("itemGroup.obsidian"))
-				.icon(() -> new ItemStack(ModItems.OBSIDIAN_INGOT))
-				.displayItems((parameters, output) -> {
-					output.accept(ModBlocks.OBSIDIAN_BLOCK);
-					output.accept(ModItems.OBSIDIAN_INGOT);
-					output.accept(ModItems.OBSIDIAN_APPLE);
-					output.accept(ModItems.OBSIDIAN_PICKAXE);
-					output.accept(ModItems.OBSIDIAN_AXE);
-					output.accept(ModItems.OBSIDIAN_SHOVEL);
-					output.accept(ModItems.OBSIDIAN_HOE);
-					output.accept(ModItems.OBSIDIAN_SWORD);
-					output.accept(ModItems.OBSIDIAN_HELMET);
-					output.accept(ModItems.OBSIDIAN_CHESTPLATE);
-					output.accept(ModItems.OBSIDIAN_LEGGINGS);
-					output.accept(ModItems.OBSIDIAN_BOOTS);
-				})
-				.build()
-		);
+		// Registration happens in the static field above
 	}
 }

@@ -1,5 +1,12 @@
 {
+  "block.obsidian.alloy_furnace": "Alloy Furnace",
   "block.obsidian.obsidian_block": "Obsidian Block",
+  "container.alloy_furnace": "Alloy Furnace",
+  "item.obsidian.alloy_furnace.slots.fuel": "Front/Back face: Fuel",
+  "item.obsidian.alloy_furnace.slots.left": "Left face: Ingredient slot",
+  "item.obsidian.alloy_furnace.slots.output": "Bottom face: Output",
+  "item.obsidian.alloy_furnace.slots.right": "Right face: Ingredient slot",
+  "item.obsidian.alloy_furnace.slots.top": "Top face: Ingredient slot",
   "item.obsidian.fire_protection.tooltip": "Fire Protection",
   "item.obsidian.obsidian_apple": "Obsidian Apple",
   "item.obsidian.obsidian_axe": "Obsidian Axe",
@@ -14,6 +21,7 @@
   "item.obsidian.obsidian_pickaxe.tooltip": "+150% mining speed on obsidian",
   "item.obsidian.obsidian_shovel": "Obsidian Shovel",
   "item.obsidian.obsidian_sword": "Obsidian Sword",
+  "item.obsidian.rose_gold_ingot": "Rose Gold Ingot",
   "item.obsidian.shift_hint": "Hold Shift for details",
   "item.obsidian.unbreaking.tooltip": "Unbreaking",
   "itemGroup.obsidian": "Obsidian Craft"

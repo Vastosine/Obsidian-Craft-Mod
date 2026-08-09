@@ -1,5 +1,12 @@
 {
+  "block.obsidian.alloy_furnace": "合金炉",
   "block.obsidian.obsidian_block": "黑曜石块",
+  "container.alloy_furnace": "合金炉",
+  "item.obsidian.alloy_furnace.slots.fuel": "正面/背面：燃料槽",
+  "item.obsidian.alloy_furnace.slots.left": "左侧面：材料槽",
+  "item.obsidian.alloy_furnace.slots.output": "底面：输出槽",
+  "item.obsidian.alloy_furnace.slots.right": "右侧面：材料槽",
+  "item.obsidian.alloy_furnace.slots.top": "顶面：材料槽",
   "item.obsidian.fire_protection.tooltip": "抗火",
   "item.obsidian.obsidian_apple": "黑曜石苹果",
   "item.obsidian.obsidian_axe": "黑曜石斧",
@@ -14,6 +21,7 @@
   "item.obsidian.obsidian_pickaxe.tooltip": "对黑曜石的挖掘速度提升150%",
   "item.obsidian.obsidian_shovel": "黑曜石锹",
   "item.obsidian.obsidian_sword": "黑曜石剑",
+  "item.obsidian.rose_gold_ingot": "玫瑰金锭",
   "item.obsidian.shift_hint": "按住Shift查看详情",
   "item.obsidian.unbreaking.tooltip": "持久",
   "itemGroup.obsidian": "黑曜石工艺"

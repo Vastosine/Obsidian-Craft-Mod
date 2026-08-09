@@ -17,9 +17,17 @@ public class ModChineseLanguageProvider extends FabricLanguageProvider {
 	@Override
 	public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
 		translationBuilder.add(ModBlocks.OBSIDIAN_BLOCK, "黑曜石块");
+		translationBuilder.add(ModBlocks.ALLOY_FURNACE, "合金炉");
 		translationBuilder.add(ModItems.OBSIDIAN_INGOT, "黑曜石锭");
+		translationBuilder.add(ModItems.ROSE_GOLD_INGOT, "玫瑰金锭");
 		translationBuilder.add(ModItems.OBSIDIAN_APPLE, "黑曜石苹果");
 		translationBuilder.add(ModCreativeModeTabs.OBSIDIAN, "黑曜石工艺");
+		translationBuilder.add("container.alloy_furnace", "合金炉");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.left", "左侧面：材料槽");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.top", "顶面：材料槽");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.right", "右侧面：材料槽");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.fuel", "正面/背面：燃料槽");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.output", "底面：输出槽");
 
 		translationBuilder.add(ModItems.OBSIDIAN_PICKAXE, "黑曜石镐");
 		translationBuilder.add(ModItems.OBSIDIAN_AXE, "黑曜石斧");

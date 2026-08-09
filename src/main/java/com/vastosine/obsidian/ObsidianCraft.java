@@ -1,8 +1,14 @@
 package com.vastosine.obsidian;
 
 import com.vastosine.obsidian.block.ModBlocks;
+import com.vastosine.obsidian.block.entity.ModBlockEntities;
 import com.vastosine.obsidian.item.ModCreativeModeTabs;
 import com.vastosine.obsidian.item.ModItems;
+import com.vastosine.obsidian.menu.ModMenuTypes;
+import com.vastosine.obsidian.recipe.AlloyRecipeDisplay;
+import com.vastosine.obsidian.recipe.ModRecipeBookCategories;
+import com.vastosine.obsidian.recipe.ModRecipeSerializers;
+import com.vastosine.obsidian.recipe.ModRecipeTypes;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.Identifier;
@@ -24,8 +30,17 @@ public class ObsidianCraft implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 
+		// The order matters: ModBlocks must exist before the block entity type,
+		// and the recipe book category before any recipe codec is used
+		// (the alloy recipe codec serializes its category from the registry).
 		ModBlocks.init();
 		ModItems.init();
+		ModRecipeBookCategories.init();
+		ModRecipeTypes.init();
+		ModRecipeSerializers.init();
+		ModBlockEntities.init();
+		ModMenuTypes.init();
+		AlloyRecipeDisplay.register();
 		ModCreativeModeTabs.init();
 
 		LOGGER.info("Hello Fabric world!");

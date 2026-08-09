@@ -56,6 +56,10 @@ public final class ModItems {
 
 	public static final ResourceKey<Item> OBSIDIAN_APPLE_KEY = key("obsidian_apple");
 
+	// 3 gold + 1 copper -> 4 rose gold ingots (alloy furnace recipe), pinkish gold recolor
+	public static final ResourceKey<Item> ROSE_GOLD_INGOT_KEY = key("rose_gold_ingot");
+	public static final Item ROSE_GOLD_INGOT = registerItem(ROSE_GOLD_INGOT_KEY, new Item.Properties());
+
 	// Golden-apple nutrition/saturation (4 hunger, 9.6 saturation) with obsidian effects:
 	// Fire Resistance 30s, Resistance I 10s, Slowness I 20s. Amplifiers are in-code levels
 	// (game level - 1), so Resistance I and Slowness I are amplifier 0. Eating takes twice

@@ -17,9 +17,17 @@ public class ModEnglishLanguageProvider extends FabricLanguageProvider {
 	@Override
 	public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
 		translationBuilder.add(ModBlocks.OBSIDIAN_BLOCK, "Obsidian Block");
+		translationBuilder.add(ModBlocks.ALLOY_FURNACE, "Alloy Furnace");
 		translationBuilder.add(ModItems.OBSIDIAN_INGOT, "Obsidian Ingot");
+		translationBuilder.add(ModItems.ROSE_GOLD_INGOT, "Rose Gold Ingot");
 		translationBuilder.add(ModItems.OBSIDIAN_APPLE, "Obsidian Apple");
 		translationBuilder.add(ModCreativeModeTabs.OBSIDIAN, "Obsidian Craft");
+		translationBuilder.add("container.alloy_furnace", "Alloy Furnace");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.left", "Left face: Ingredient slot");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.top", "Top face: Ingredient slot");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.right", "Right face: Ingredient slot");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.fuel", "Front/Back face: Fuel");
+		translationBuilder.add("item.obsidian.alloy_furnace.slots.output", "Bottom face: Output");
 
 		translationBuilder.add(ModItems.OBSIDIAN_PICKAXE, "Obsidian Pickaxe");
 		translationBuilder.add(ModItems.OBSIDIAN_AXE, "Obsidian Axe");
