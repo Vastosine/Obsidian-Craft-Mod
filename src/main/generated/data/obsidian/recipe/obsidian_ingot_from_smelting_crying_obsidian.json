@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "experience": 0.1,
+  "group": "obsidian_ingot_from_smelting",
+  "ingredient": "minecraft:crying_obsidian",
+  "result": {
+    "id": "obsidian:obsidian_ingot"
+  }
+}
