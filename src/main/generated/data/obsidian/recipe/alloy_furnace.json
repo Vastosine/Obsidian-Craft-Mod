@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": "minecraft:blast_furnace",
+    "B": "obsidian:obsidian_block",
+    "F": "minecraft:furnace",
+    "I": "obsidian:obsidian_ingot",
+    "O": "minecraft:obsidian"
+  },
+  "pattern": [
+    "IFI",
+    "F#F",
+    "OBO"
+  ],
+  "result": {
+    "id": "obsidian:alloy_furnace"
+  }
+}

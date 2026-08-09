@@ -1,0 +1,17 @@
+{
+  "type": "obsidian:alloy_furnace",
+  "cookingtime": 160,
+  "counts": [
+    3,
+    1
+  ],
+  "experience": 1.5,
+  "ingredients": [
+    "#obsidian:gold_materials",
+    "#obsidian:copper_materials"
+  ],
+  "result": {
+    "count": 4,
+    "id": "obsidian:rose_gold_ingot"
+  }
+}
