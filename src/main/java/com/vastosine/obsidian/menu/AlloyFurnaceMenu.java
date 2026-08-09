@@ -156,9 +156,10 @@ public class AlloyFurnaceMenu extends RecipeBookMenu {
 
 	/**
 	 * Alloy placement: order-insensitive with per-ingredient counts. The ingredient and
-	 * output slots are cleared back into the player inventory, then one fresh copy is
-	 * placed per craft (all that fit when useMaxItems). PLACE_GHOST_RECIPE is returned
-	 * when the materials are insufficient, so the client shows the ghost recipe.
+	 * output slots are cleared back into the player inventory, then the recipe's copies
+	 * are placed: one copy per plain click, one extra copy on a re-click of an already
+	 * placed recipe (vanilla build-up), all that fit for a shift click. PLACE_GHOST_RECIPE
+	 * is returned when the materials are insufficient, so the client shows the ghost recipe.
 	 */
 	private RecipeBookMenu.PostPlaceAction placeAlloyRecipe(
 		final AlloyFurnaceRecipe recipe,
@@ -180,16 +181,37 @@ public class AlloyFurnaceMenu extends RecipeBookMenu {
 		boolean alreadyMatches = recipe.matches(
 			new AlloyRecipeInput(this.container.getItem(0), this.container.getItem(1), this.container.getItem(2)), level
 		);
-		// A plain click on an already-placed recipe adds one more copy (vanilla build-up behavior)
-		if (alreadyMatches && !useMaxItems) {
-			return RecipeBookMenu.PostPlaceAction.NOTHING;
-		}
 
 		int craftable = this.countCraftable(needs, inventory);
 		if (craftable == 0) {
 			return RecipeBookMenu.PostPlaceAction.PLACE_GHOST_RECIPE;
 		}
-		int crafts = useMaxItems ? craftable : Math.min(2, craftable);
+
+		// Copies on the grid after placement: one per plain click, one more on top of what
+		// is already placed for a re-click (vanilla build-up), all that fit for a shift
+		// click. The build-up aborts when a slot is too full or the materials run out.
+		int copiesOnGrid;
+		if (useMaxItems) {
+			copiesOnGrid = craftable;
+		} else if (alreadyMatches) {
+			copiesOnGrid = this.countCopiesOnGrid(needs) + 1;
+			for (int i = 0; i < 3; i++) {
+				ItemStack stack = this.container.getItem(i);
+				if (stack.isEmpty()) {
+					continue;
+				}
+				for (Map.Entry<Ingredient, Integer> entry : needs.entrySet()) {
+					if (entry.getKey().test(stack) && stack.getCount() + entry.getValue() > stack.getMaxStackSize()) {
+						return RecipeBookMenu.PostPlaceAction.NOTHING;
+					}
+				}
+			}
+			if (copiesOnGrid > craftable) {
+				return RecipeBookMenu.PostPlaceAction.NOTHING;
+			}
+		} else {
+			copiesOnGrid = 1;
+		}
 
 		// Return the input slots and the output slot to the player inventory
 		for (int i = 0; i < 3; i++) {
@@ -197,7 +219,7 @@ public class AlloyFurnaceMenu extends RecipeBookMenu {
 		}
 		this.clearSlotBack(this.getSlot(AlloyFurnaceBlockEntity.SLOT_OUTPUT), inventory);
 
-		for (int c = 0; c < crafts; c++) {
+		for (int c = 0; c < copiesOnGrid; c++) {
 			if (!this.placeOneCopy(needs, inventory)) {
 				break;
 			}
@@ -255,6 +277,25 @@ public class AlloyFurnaceMenu extends RecipeBookMenu {
 		ItemStack stackCopy = slot.getItem().copy();
 		inventory.placeItemBackInInventory(stackCopy, false, Prediction.SERVER_ONLY);
 		slot.set(stackCopy);
+	}
+
+	/** Full copies of the recipe currently held in the input slots (floor over per-ingredient totals). */
+	private int countCopiesOnGrid(final Map<Ingredient, Integer> needs) {
+		int copies = Integer.MAX_VALUE;
+		for (Map.Entry<Ingredient, Integer> entry : needs.entrySet()) {
+			int have = 0;
+			for (int i = 0; i < 3; i++) {
+				ItemStack stack = this.container.getItem(i);
+				if (entry.getKey().test(stack)) {
+					have += stack.getCount();
+				}
+			}
+			copies = Math.min(copies, have / entry.getValue());
+			if (copies == 0) {
+				break;
+			}
+		}
+		return copies == Integer.MAX_VALUE ? 0 : copies;
 	}
 
 	/** Total copies craftable from the inventory plus the current input slots (grid items return to the inventory). */
