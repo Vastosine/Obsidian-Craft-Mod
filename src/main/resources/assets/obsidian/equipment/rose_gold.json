@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "obsidian:rose_gold"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "obsidian:rose_gold"
+      }
+    ]
+  }
+}

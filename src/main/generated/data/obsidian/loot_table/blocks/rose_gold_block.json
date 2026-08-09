@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "obsidian:rose_gold_block"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "obsidian:alloy_furnace",
+  "cookingtime": 240,
+  "counts": [
+    4,
+    4
+  ],
+  "experience": 2.0,
+  "ingredients": [
+    "#obsidian:debris_materials",
+    "#obsidian:gold_materials"
+  ],
+  "result": {
+    "id": "minecraft:netherite_ingot"
+  }
+}
