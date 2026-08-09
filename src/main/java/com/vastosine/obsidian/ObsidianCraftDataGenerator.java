@@ -8,10 +8,11 @@ public class ObsidianCraftDataGenerator implements DataGeneratorEntrypoint {
 	@Override
 	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
 		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
-		pack.addProvider(ModEnUsProvider::new);
-		pack.addProvider(ModModelsProvider::new);
-		pack.addProvider(ModRecipesProvider::new);
-		pack.addProvider(ModLootTablesProvider::new);
-		pack.addProvider(ModBlockTagsProvider::new);
+		pack.addProvider(OCEnUsProvider::new);
+		pack.addProvider(OCModelsProvider::new);
+		pack.addProvider(OCRecipesProvider::new);
+		pack.addProvider(OCLootTablesProvider::new);
+		pack.addProvider(OCBlockTagsProvider::new);
+		pack.addProvider(OCItemTagsProvider::new);
 	}
 }
