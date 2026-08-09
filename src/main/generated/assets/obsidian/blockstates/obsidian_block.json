@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "obsidian:block/obsidian_block"
+    }
+  }
+}

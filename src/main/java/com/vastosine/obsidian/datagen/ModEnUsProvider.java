@@ -1,5 +1,6 @@
 package com.vastosine.obsidian.datagen;
 
+import com.vastosine.obsidian.block.ModBlocks;
 import com.vastosine.obsidian.item.ModItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -14,10 +15,13 @@ public class ModEnUsProvider extends FabricLanguageProvider {
 
     @Override
     public void generateTranslations(HolderLookup.Provider registryLookup, TranslationBuilder translationBuilder) {
-        // Item
+        // Items
         translationBuilder.add(ModItems.OBSIDIAN_INGOT, "Obsidian Ingot");
 
-        // itemGroup
+        // Blocks
+        translationBuilder.add(ModBlocks.OBSIDIAN_BLOCK, "Obsidian Block");
+
+        // itemGroups
         translationBuilder.add("itemGroup.obsidian_craft", "Obsidian Craft");
     }
 }

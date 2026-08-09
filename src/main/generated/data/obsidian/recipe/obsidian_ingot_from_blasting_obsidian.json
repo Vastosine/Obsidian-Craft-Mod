@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "experience": 0.1,
+  "group": "obsidian_ingot_from_blasting",
+  "ingredient": "minecraft:obsidian",
+  "result": {
+    "id": "obsidian:obsidian_ingot"
+  }
+}
