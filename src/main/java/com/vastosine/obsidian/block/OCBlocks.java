@@ -1,7 +1,7 @@
 package com.vastosine.obsidian.block;
 
 import com.vastosine.obsidian.ObsidianCraft;
-import com.vastosine.obsidian.item.ModItems;
+import com.vastosine.obsidian.item.OCItems;
 import net.minecraft.references.BlockItemId;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -11,8 +11,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 
 import java.util.function.Function;
 
-public class ModBlocks {
-    public static final Block OBSIDIAN_BLOCK = register(ModBlockItemIds.OBSIDIAN_BLOCK, BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK).strength(5.0f, 800));
+public class OCBlocks {
+    public static final Block OBSIDIAN_BLOCK = register(OCBlockItemIds.OBSIDIAN_BLOCK, BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK).strength(5.0f, 800));
 
     private static Block register(final BlockItemId id, final BlockBehaviour.Properties properties) {
         return register(id, factory -> new Block(properties), properties, true);
@@ -24,7 +24,7 @@ public class ModBlocks {
     private static Block register(final BlockItemId id, final Function<BlockBehaviour.Properties, Block> factory, final BlockBehaviour.Properties properties, boolean needBlockItem) {
         Block block = Blocks.register(id.block(), factory, properties);
         if (needBlockItem) {
-            ModItems.register(id.item(), itemProperties -> new BlockItem(block, itemProperties), new Item.Properties().useBlockDescriptionPrefix().requiredFeatures(block.requiredFeatures()));
+            OCItems.register(id.item(), itemProperties -> new BlockItem(block, itemProperties), new Item.Properties().useBlockDescriptionPrefix().requiredFeatures(block.requiredFeatures()));
         }
         return block;
     }

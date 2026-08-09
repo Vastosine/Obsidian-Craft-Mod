@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "obsidian:obsidian_ingot",
+    "*": "obsidian:obsidian_block",
+    "/": "minecraft:stick"
+  },
+  "pattern": [
+    "#*#",
+    " / ",
+    " / "
+  ],
+  "result": {
+    "id": "obsidian:obsidian_pickaxe"
+  }
+}

@@ -1,8 +1,8 @@
 package com.vastosine.obsidian;
 
-import com.vastosine.obsidian.block.ModBlocks;
-import com.vastosine.obsidian.item.CreativeModeTabs;
-import com.vastosine.obsidian.item.ModItems;
+import com.vastosine.obsidian.block.OCBlocks;
+import com.vastosine.obsidian.item.OCCreativeModeTabs;
+import com.vastosine.obsidian.item.OCItems;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.Identifier;
@@ -25,9 +25,9 @@ public class ObsidianCraft implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Hello Fabric world!");
-		ModItems.onInitialize();
-		ModBlocks.onInitialize();
-		CreativeModeTabs.onInitialize();
+		OCItems.onInitialize();
+		OCBlocks.onInitialize();
+		OCCreativeModeTabs.onInitialize();
 	}
 
 	public static Identifier id(String path) {
