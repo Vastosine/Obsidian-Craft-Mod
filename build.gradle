@@ -12,11 +12,21 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	mavenCentral() // for devlogin (--msa real-account login in runClient)
 }
 
 fabricApi {
 	configureDataGeneration {
 		client = true
+	}
+}
+
+loom {
+	runs {
+		client {
+			// Real-account login in the dev environment (see the devlogin dependency above)
+			programArgs("--msa")
+		}
 	}
 }
 
@@ -27,6 +37,9 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Dev-only: Microsoft-account login for runClient (--msa program arg). Not bundled into the mod jar.
+	implementation "com.ptsmods:devlogin:3.5.1:fabric"
 }
 
 processResources {
