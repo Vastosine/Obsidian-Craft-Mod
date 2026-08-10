@@ -6,13 +6,19 @@ import com.vastosine.obsidian.tags.OCItemTags;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 
+import java.util.Map;
 import java.util.function.Function;
 
 public class OCItems {
+
     // Simple Items
     public static final Item OBSIDIAN_INGOT = register(OCItemIds.OBSIDIAN_INGOT);
 
@@ -24,8 +30,43 @@ public class OCItems {
     public static final Item OBSIDIAN_HOE = register(OCItemIds.OBSIDIAN_HOE, new Item.Properties().hoe(OBSIDIAN_TOOL_MATERIAL, -3.0F, -1.0F));
     public static final Item OBSIDIAN_AXE = register(OCItemIds.OBSIDIAN_AXE, new Item.Properties().axe(OBSIDIAN_TOOL_MATERIAL, 6.0F, -3.0F));
 
+    // Armor
+    public static final ArmorMaterial OBSIDIAN_ARMOR_MATERIAL = new ArmorMaterial(
+            30,
+            Map.of(
+                    ArmorType.BOOTS, 2,
+                    ArmorType.LEGGINGS, 5,
+                    ArmorType.CHESTPLATE, 7,
+                    ArmorType.HELMET, 3
+            ),
+            14,
+            SoundEvents.ARMOR_EQUIP_IRON,
+            0.5F,
+            0.1F,
+            OCItemTags.OBSIDIAN_ARMOR_MATERIALS,
+            ResourceKey.create(EquipmentAssets.ROOT_ID, ObsidianCraft.id("obsidian"))
+    );
+    public static final Item OBSIDIAN_HELMET = register(OCItemIds.OBSIDIAN_HELMET, new Item.Properties().humanoidArmor(OBSIDIAN_ARMOR_MATERIAL, ArmorType.HELMET));
+    public static final Item OBSIDIAN_CHESTPLATE = register(OCItemIds.OBSIDIAN_CHESTPLATE, new Item.Properties().humanoidArmor(OBSIDIAN_ARMOR_MATERIAL, ArmorType.CHESTPLATE));
+    public static final Item OBSIDIAN_LEGGINGS = register(OCItemIds.OBSIDIAN_LEGGINGS, new Item.Properties().humanoidArmor(OBSIDIAN_ARMOR_MATERIAL, ArmorType.LEGGINGS));
+    public static final Item OBSIDIAN_BOOTS = register(OCItemIds.OBSIDIAN_BOOTS, new Item.Properties().humanoidArmor(OBSIDIAN_ARMOR_MATERIAL, ArmorType.BOOTS));
+
     // Custom(Special) Items
 //    public static final Item TEST_ITEM = register(OCItemIds.TEST_ITEM, ObsidianPickaxe::new, new ObsidianPickaxe.Properties());
+
+    // Items
+    public static final Item[] Items = {
+            OBSIDIAN_INGOT,
+            OBSIDIAN_SWORD,
+            OBSIDIAN_PICKAXE,
+            OBSIDIAN_SHOVEL,
+            OBSIDIAN_HOE,
+            OBSIDIAN_AXE,
+            OBSIDIAN_HELMET,
+            OBSIDIAN_CHESTPLATE,
+            OBSIDIAN_LEGGINGS,
+            OBSIDIAN_BOOTS
+    };
 
     // Functions
     public static Item register(final ResourceKey<Item> id) {

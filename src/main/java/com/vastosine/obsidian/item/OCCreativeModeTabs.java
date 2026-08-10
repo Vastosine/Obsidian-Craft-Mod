@@ -9,24 +9,46 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 
 public class OCCreativeModeTabs {
     public static final ResourceKey<CreativeModeTab> OBSIDIAN_CRAFT_KEY =
             ResourceKey.create(Registries.CREATIVE_MODE_TAB, ObsidianCraft.id("obsidian_craft"));
 
+    @SafeVarargs
+    public static <T> void accept(CreativeModeTab.Output output, T... itemOrBlocks) {
+        for (T itemOrBlock : itemOrBlocks) {
+            if (itemOrBlock instanceof Item item) {
+                output.accept(item);
+            } else if (itemOrBlock instanceof Block block) {
+                output.accept(block);
+            } else if (itemOrBlock instanceof Item[] items) {
+                for (Item item : items) {
+                    output.accept(item);
+                }
+            } else if (itemOrBlock instanceof Block[] blocks) {
+                for (Block block : blocks) {
+                    output.accept(block);
+                }
+            }
+        }
+    }
+
     public static final CreativeModeTab OBSIDIAN_CRAFT = FabricCreativeModeTab.builder()
             .icon(() -> new ItemStack(OCItems.OBSIDIAN_INGOT))
             .title(Component.translatable("itemGroup.obsidian_craft"))
             .displayItems((context, output) -> {
-                output.accept(OCItems.OBSIDIAN_INGOT);
-                output.accept(OCBlocks.OBSIDIAN_BLOCK);
-                output.accept(OCItems.OBSIDIAN_SWORD);
-                output.accept(OCItems.OBSIDIAN_PICKAXE);
-                output.accept(OCItems.OBSIDIAN_SHOVEL);
-                output.accept(OCItems.OBSIDIAN_HOE);
-                output.accept(OCItems.OBSIDIAN_AXE);
-            }).build();
+                        accept(output,
+                                // Items
+                                OCItems.Items,
+
+                                // Blocks
+                                OCBlocks.OBSIDIAN_BLOCK
+                        );
+                    }
+            ).build();
 
     public static void onInitialize() {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, OBSIDIAN_CRAFT_KEY, OBSIDIAN_CRAFT);

@@ -34,5 +34,6 @@ public class OCItemTagsProvider extends FabricTagsProvider.ItemTagsProvider {
 
         // custom
         tag(OCItemTags.OBSIDIAN_TOOL_MATERIALS).add(OCItemIds.OBSIDIAN_INGOT);
+        tag(OCItemTags.OBSIDIAN_ARMOR_MATERIALS).add(OCItemIds.OBSIDIAN_INGOT);
     }
 }

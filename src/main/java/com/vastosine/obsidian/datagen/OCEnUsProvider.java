@@ -22,6 +22,10 @@ public class OCEnUsProvider extends FabricLanguageProvider {
         translationBuilder.add(OCItems.OBSIDIAN_SHOVEL, "Obsidian Shovel");
         translationBuilder.add(OCItems.OBSIDIAN_HOE, "Obsidian Hoe");
         translationBuilder.add(OCItems.OBSIDIAN_AXE, "Obsidian Axe");
+        translationBuilder.add(OCItems.OBSIDIAN_HELMET, "Obsidian Helmet");
+        translationBuilder.add(OCItems.OBSIDIAN_CHESTPLATE, "Obsidian Chestplate");
+        translationBuilder.add(OCItems.OBSIDIAN_LEGGINGS, "Obsidian Leggings");
+        translationBuilder.add(OCItems.OBSIDIAN_BOOTS, "Obsidian Boots");
 
         // Blocks
         translationBuilder.add(OCBlocks.OBSIDIAN_BLOCK, "Obsidian Block");
