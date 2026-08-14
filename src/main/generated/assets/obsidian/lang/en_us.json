@@ -10,5 +10,8 @@
   "item.obsidian.obsidian_pickaxe": "Obsidian Pickaxe",
   "item.obsidian.obsidian_shovel": "Obsidian Shovel",
   "item.obsidian.obsidian_sword": "Obsidian Sword",
-  "itemGroup.obsidian_craft": "Obsidian Craft"
+  "itemGroup.obsidian_craft": "Obsidian Craft",
+  "tooltip.obsidiancraft.obsidian_pickaxe": "Press [§aShift§r] to learn more.",
+  "tooltip.obsidiancraft.obsidian_pickaxe.shift.1": "Mine blocks like §5Obsidian§r to repair it!",
+  "tooltip.obsidiancraft.obsidian_pickaxe.shift.2": "More efficiency when mining blocks like §5Obsidian§r!"
 }

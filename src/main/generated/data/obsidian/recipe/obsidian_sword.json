@@ -2,14 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": "obsidian:obsidian_ingot",
-    "*": "obsidian:obsidian_block",
-    "/": "minecraft:stick"
+    "B": "obsidian:obsidian_block",
+    "I": "obsidian:obsidian_ingot",
+    "S": "minecraft:stick"
   },
   "pattern": [
-    " # ",
-    " * ",
-    " / "
+    " I ",
+    " B ",
+    " S "
   ],
   "result": {
     "id": "obsidian:obsidian_sword"

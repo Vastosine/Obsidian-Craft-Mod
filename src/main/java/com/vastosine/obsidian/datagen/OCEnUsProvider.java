@@ -27,6 +27,11 @@ public class OCEnUsProvider extends FabricLanguageProvider {
         translationBuilder.add(OCItems.OBSIDIAN_LEGGINGS, "Obsidian Leggings");
         translationBuilder.add(OCItems.OBSIDIAN_BOOTS, "Obsidian Boots");
 
+        // Tooltips
+        translationBuilder.add("tooltip.obsidiancraft.obsidian_pickaxe", "Press [§aShift§r] to learn more.");
+        translationBuilder.add("tooltip.obsidiancraft.obsidian_pickaxe.shift.1", "Mine blocks like §5Obsidian§r to repair it!");
+        translationBuilder.add("tooltip.obsidiancraft.obsidian_pickaxe.shift.2", "More efficiency when mining blocks like §5Obsidian§r!");
+
         // Blocks
         translationBuilder.add(OCBlocks.OBSIDIAN_BLOCK, "Obsidian Block");
 

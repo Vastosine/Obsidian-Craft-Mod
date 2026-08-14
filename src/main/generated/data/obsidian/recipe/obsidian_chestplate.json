@@ -3,15 +3,14 @@
   "category": "equipment",
   "key": {
     "B": "obsidian:obsidian_block",
-    "I": "obsidian:obsidian_ingot",
-    "S": "minecraft:stick"
+    "I": "obsidian:obsidian_ingot"
   },
   "pattern": [
-    "IB ",
-    " S ",
-    " S "
+    "I I",
+    "IBI",
+    "III"
   ],
   "result": {
-    "id": "obsidian:obsidian_hoe"
+    "id": "obsidian:obsidian_chestplate"
   }
 }

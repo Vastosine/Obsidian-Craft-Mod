@@ -7,6 +7,8 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -50,6 +52,18 @@ public class OCItems {
     public static final Item OBSIDIAN_CHESTPLATE = register(OCItemIds.OBSIDIAN_CHESTPLATE, new Item.Properties().humanoidArmor(OBSIDIAN_ARMOR_MATERIAL, ArmorType.CHESTPLATE));
     public static final Item OBSIDIAN_LEGGINGS = register(OCItemIds.OBSIDIAN_LEGGINGS, new Item.Properties().humanoidArmor(OBSIDIAN_ARMOR_MATERIAL, ArmorType.LEGGINGS));
     public static final Item OBSIDIAN_BOOTS = register(OCItemIds.OBSIDIAN_BOOTS, new Item.Properties().humanoidArmor(OBSIDIAN_ARMOR_MATERIAL, ArmorType.BOOTS));
+
+    public static int countObsidianArmor(LivingEntity livingEntity) {
+        int pieces = 0;
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (slot.getType() == EquipmentSlot.Type.HUMANOID_ARMOR) {
+                if (livingEntity.getItemBySlot(slot).is(OCItemTags.OBSIDIAN_ARMORS)) {
+                    pieces++;
+                }
+            }
+        }
+        return pieces;
+    }
 
     // Custom(Special) Items
 //    public static final Item TEST_ITEM = register(OCItemIds.TEST_ITEM, ObsidianPickaxe::new, new ObsidianPickaxe.Properties());
