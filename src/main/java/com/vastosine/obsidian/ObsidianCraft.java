@@ -1,6 +1,7 @@
 package com.vastosine.obsidian;
 
 import com.vastosine.obsidian.block.OCBlocks;
+import com.vastosine.obsidian.block.entity.OCBlockEntityTypes;
 import com.vastosine.obsidian.item.OCCreativeModeTabs;
 import com.vastosine.obsidian.item.OCItems;
 import net.fabricmc.api.ModInitializer;
@@ -28,6 +29,7 @@ public class ObsidianCraft implements ModInitializer {
 		OCItems.onInitialize();
 		OCBlocks.onInitialize();
 		OCCreativeModeTabs.onInitialize();
+		OCBlockEntityTypes.onInitialize();
 	}
 
 	public static Identifier id(String path) {

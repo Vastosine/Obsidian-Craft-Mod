@@ -7,6 +7,7 @@ import org.jspecify.annotations.NonNull;
 
 public class OCBlockItemIds {
     public static final BlockItemId OBSIDIAN_BLOCK = create("obsidian_block");
+    public static final BlockItemId COUNTER_BLOCK = create("counter_block");
 
     private static @NonNull BlockItemId create(String name) {
         Identifier id = ObsidianCraft.id(name);
