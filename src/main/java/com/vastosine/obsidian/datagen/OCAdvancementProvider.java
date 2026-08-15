@@ -1,6 +1,7 @@
 package com.vastosine.obsidian.datagen;
 
 import com.vastosine.obsidian.ObsidianCraft;
+import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.item.OCItems;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricAdvancementProvider;
@@ -119,5 +120,6 @@ public class OCAdvancementProvider extends FabricAdvancementProvider {
                 OCItems.OBSIDIAN_CHESTPLATE,
                 OCItems.OBSIDIAN_HELMET
         );
+        AdvancementHolder obtainObsidianFurnace = addGetItemAdvancement(consumer, "obsidian_furnace", smeltObsidian, OCBlocks.OBSIDIAN_FURNACE.asItem());
     }
 }

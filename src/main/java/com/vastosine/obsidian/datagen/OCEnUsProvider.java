@@ -1,12 +1,12 @@
 package com.vastosine.obsidian.datagen;
 
-import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.datagen.custom.OCLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.core.HolderLookup;
 
 import java.util.concurrent.CompletableFuture;
 
+import static com.vastosine.obsidian.block.OCBlocks.*;
 import static com.vastosine.obsidian.item.OCItems.*;
 
 public class OCEnUsProvider extends OCLanguageProvider {
@@ -35,7 +35,8 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 "tooltip.obsidiancraft.obsidian_pickaxe.shift.2", "More efficiency when mining blocks like §5Obsidian§r!",
 
                 // Blocks
-                OCBlocks.OBSIDIAN_BLOCK, "Obsidian Block",
+                OBSIDIAN_BLOCK, "Obsidian Block",
+                OBSIDIAN_FURNACE, "Obsidian Furnace",
 
                 // itemGroups
                 "itemGroup.obsidian_craft", "Obsidian Craft"
@@ -47,7 +48,8 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 "root", "Obsidian Craft", "Welcome to Obsidian Craft Mod!",
                 "smelt_obsidian", "Harder", "Smelt an Obsidian Ingot",
                 "obsidian_pickaxe", "Obsidian Miner", "Craft an Obsidian Pickaxe",
-                "obsidian_armor", "More Fire Protection", "Protect yourself with an piece of Obsidian Armor"
+                "obsidian_armor", "More Fire Protection", "Protect yourself with an piece of Obsidian Armor",
+                "obsidian_furnace", "Faster Smelting", "Craft an Obsidian Furnace"
         );
     }
 }

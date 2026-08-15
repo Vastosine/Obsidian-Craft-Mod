@@ -68,20 +68,6 @@ public class OCItems {
     // Custom(Special) Items
 //    public static final Item TEST_ITEM = register(OCItemIds.TEST_ITEM, ObsidianPickaxe::new, new ObsidianPickaxe.Properties());
 
-    // Items
-    public static final Item[] Items = {
-            OBSIDIAN_INGOT,
-            OBSIDIAN_SWORD,
-            OBSIDIAN_PICKAXE,
-            OBSIDIAN_SHOVEL,
-            OBSIDIAN_HOE,
-            OBSIDIAN_AXE,
-            OBSIDIAN_HELMET,
-            OBSIDIAN_CHESTPLATE,
-            OBSIDIAN_LEGGINGS,
-            OBSIDIAN_BOOTS
-    };
-
     // Functions
     public static Item register(final ResourceKey<Item> id) {
         return register(id, Item::new, new Item.Properties());

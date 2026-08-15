@@ -1,6 +1,5 @@
 package com.vastosine.obsidian.datagen;
 
-import com.vastosine.obsidian.block.OCBlockItemIds;
 import com.vastosine.obsidian.tags.OCBlockTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
@@ -14,6 +13,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 import java.util.concurrent.CompletableFuture;
+
+import static com.vastosine.obsidian.block.OCBlockItemIds.*;
 
 public class OCBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider {
     public OCBlockTagsProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture) {
@@ -32,15 +33,20 @@ public class OCBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider registries) {
         // vanilla
-        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(OCBlockItemIds.OBSIDIAN_BLOCK);
-        tag(BlockTags.NEEDS_DIAMOND_TOOL).add(OCBlockItemIds.OBSIDIAN_BLOCK);
+        tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
+                OBSIDIAN_BLOCK,
+                OBSIDIAN_FURNACE
+        );
+        tag(BlockTags.NEEDS_DIAMOND_TOOL).add(
+                OBSIDIAN_BLOCK
+        );
 
         // custom
         tag(OCBlockTags.INCORRECT_FOR_OBSIDIAN_TOOL);
         tag(OCBlockTags.OBSIDIAN_BLOCK).add(
                 BlockItemIds.OBSIDIAN,
                 BlockItemIds.CRYING_OBSIDIAN,
-                OCBlockItemIds.OBSIDIAN_BLOCK
+                OBSIDIAN_BLOCK
         );
     }
 }

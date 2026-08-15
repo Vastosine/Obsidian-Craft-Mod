@@ -1,7 +1,6 @@
 package com.vastosine.obsidian.item;
 
 import com.vastosine.obsidian.ObsidianCraft;
-import com.vastosine.obsidian.block.OCBlocks;
 import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,6 +11,9 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+
+import static com.vastosine.obsidian.block.OCBlocks.*;
+import static com.vastosine.obsidian.item.OCItems.*;
 
 public class OCCreativeModeTabs {
     public static final ResourceKey<CreativeModeTab> OBSIDIAN_CRAFT_KEY =
@@ -42,10 +44,20 @@ public class OCCreativeModeTabs {
             .displayItems((context, output) -> {
                         accept(output,
                                 // Items
-                                OCItems.Items,
+                                OBSIDIAN_INGOT,
+                                OBSIDIAN_SWORD,
+                                OBSIDIAN_PICKAXE,
+                                OBSIDIAN_SHOVEL,
+                                OBSIDIAN_HOE,
+                                OBSIDIAN_AXE,
+                                OBSIDIAN_HELMET,
+                                OBSIDIAN_CHESTPLATE,
+                                OBSIDIAN_LEGGINGS,
+                                OBSIDIAN_BOOTS,
 
                                 // Blocks
-                                OCBlocks.OBSIDIAN_BLOCK
+                                OBSIDIAN_BLOCK,
+                                OBSIDIAN_FURNACE
                         );
                     }
             ).build();

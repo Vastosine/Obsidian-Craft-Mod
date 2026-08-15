@@ -1,6 +1,8 @@
 {
   "advancements.oc.obsidian_armor.description": "Protect yourself with an piece of Obsidian Armor",
   "advancements.oc.obsidian_armor.title": "More Fire Protection",
+  "advancements.oc.obsidian_furnace.description": "Craft an Obsidian Furnace",
+  "advancements.oc.obsidian_furnace.title": "Faster Smelting",
   "advancements.oc.obsidian_pickaxe.description": "Craft an Obsidian Pickaxe",
   "advancements.oc.obsidian_pickaxe.title": "Obsidian Miner",
   "advancements.oc.root.description": "Welcome to Obsidian Craft Mod!",
@@ -8,6 +10,7 @@
   "advancements.oc.smelt_obsidian.description": "Smelt an Obsidian Ingot",
   "advancements.oc.smelt_obsidian.title": "Harder",
   "block.obsidian.obsidian_block": "Obsidian Block",
+  "block.obsidian.obsidian_furnace": "Obsidian Furnace",
   "item.obsidian.obsidian_axe": "Obsidian Axe",
   "item.obsidian.obsidian_boots": "Obsidian Boots",
   "item.obsidian.obsidian_chestplate": "Obsidian Chestplate",

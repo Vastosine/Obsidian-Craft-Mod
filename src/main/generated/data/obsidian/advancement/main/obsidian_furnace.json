@@ -1,0 +1,32 @@
+{
+  "parent": "obsidian:main/smelt_obsidian",
+  "criteria": {
+    "obsidian:obsidian_furnace": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obsidian:obsidian_furnace"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.oc.obsidian_furnace.description"
+    },
+    "icon": {
+      "id": "obsidian:obsidian_furnace"
+    },
+    "title": {
+      "translate": "advancements.oc.obsidian_furnace.title"
+    }
+  },
+  "requirements": [
+    [
+      "obsidian:obsidian_furnace"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

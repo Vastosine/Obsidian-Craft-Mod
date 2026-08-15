@@ -13,10 +13,17 @@ import java.util.function.Function;
 
 public class OCBlocks {
     public static final Block OBSIDIAN_BLOCK = register(OCBlockItemIds.OBSIDIAN_BLOCK, BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK).strength(5.0f, 800));
+
+    // Entity Blocks
     public static final Block COUNTER_BLOCK = register(
             OCBlockItemIds.COUNTER_BLOCK,
             CounterBlock::new,
             BlockBehaviour.Properties.of()
+    );
+    public static final Block OBSIDIAN_FURNACE = register(
+            OCBlockItemIds.OBSIDIAN_FURNACE,
+            ObsidianFurnaceBlock::new,
+            BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
     );
 
     private static Block register(final BlockItemId id, final BlockBehaviour.Properties properties) {

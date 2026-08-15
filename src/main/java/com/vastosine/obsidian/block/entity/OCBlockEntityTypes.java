@@ -13,6 +13,7 @@ import java.util.Set;
 
 public class OCBlockEntityTypes {
     public static final BlockEntityType<CounterBlockEntity> COUNTER_BLOCK = register(OCBlockEntityTypeIds.COUNTER_BLOCK, CounterBlockEntity::new, OCBlocks.COUNTER_BLOCK);
+    public static final BlockEntityType<ObsidianFurnaceBlockEntity> OBSIDIAN_FURNACE = register(OCBlockEntityTypeIds.OBSIDIAN_FURNACE, ObsidianFurnaceBlockEntity::new, OCBlocks.OBSIDIAN_FURNACE);
 
     private static <T extends BlockEntity> BlockEntityType<T> register(
             final ResourceKey<BlockEntityType<?>> key, final BlockEntityType.BlockEntitySupplier<? extends T> factory, final Block... validBlocks

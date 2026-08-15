@@ -1,14 +1,15 @@
 package com.vastosine.obsidian.datagen;
 
-import com.vastosine.obsidian.block.OCBlocks;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.ModelTemplates;
+import net.minecraft.client.data.models.model.TexturedModel;
 import net.minecraft.world.item.Item;
 
+import static com.vastosine.obsidian.block.OCBlocks.*;
 import static com.vastosine.obsidian.item.OCItems.*;
 
 public class OCModelsProvider extends FabricModelProvider {
@@ -18,7 +19,8 @@ public class OCModelsProvider extends FabricModelProvider {
 
     @Override
     public void generateBlockStateModels(BlockModelGenerators blockModelGenerators) {
-        blockModelGenerators.createTrivialCube(OCBlocks.OBSIDIAN_BLOCK);
+        blockModelGenerators.createTrivialCube(OBSIDIAN_BLOCK);
+        blockModelGenerators.createFurnace(OBSIDIAN_FURNACE, TexturedModel.ORIENTABLE_ONLY_TOP);
     }
 
     public static void generateFlatItem(ItemModelGenerators itemModelGenerators, ModelTemplate modelTemplate, Item...items) {

@@ -125,7 +125,14 @@ public class OCRecipesProvider extends FabricRecipeProvider {
                         .pattern("I I")
                         .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
                         .save(this.output);
-
+                shaped(RecipeCategory.MISC, OCBlocks.OBSIDIAN_FURNACE)
+                        .define('I', OCItems.OBSIDIAN_INGOT)
+                        .define('F', Items.FURNACE)
+                        .pattern("III")
+                        .pattern("IFI")
+                        .pattern("III")
+                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .save(this.output);
             }
         };
     }
