@@ -1,0 +1,65 @@
+{
+  "parent": "obsidian:main/smelt_obsidian",
+  "criteria": {
+    "obsidian:obsidian_boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obsidian:obsidian_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "obsidian:obsidian_chestplate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obsidian:obsidian_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "obsidian:obsidian_helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obsidian:obsidian_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "obsidian:obsidian_leggings": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obsidian:obsidian_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.oc.obsidian_armor.description"
+    },
+    "icon": {
+      "id": "obsidian:obsidian_chestplate"
+    },
+    "title": {
+      "translate": "advancements.oc.obsidian_armor.title"
+    }
+  },
+  "requirements": [
+    [
+      "obsidian:obsidian_boots",
+      "obsidian:obsidian_leggings",
+      "obsidian:obsidian_chestplate",
+      "obsidian:obsidian_helmet"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

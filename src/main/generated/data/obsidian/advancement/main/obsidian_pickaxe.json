@@ -1,0 +1,32 @@
+{
+  "parent": "obsidian:main/smelt_obsidian",
+  "criteria": {
+    "obsidian:obsidian_pickaxe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obsidian:obsidian_pickaxe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.oc.obsidian_pickaxe.description"
+    },
+    "icon": {
+      "id": "obsidian:obsidian_pickaxe"
+    },
+    "title": {
+      "translate": "advancements.oc.obsidian_pickaxe.title"
+    }
+  },
+  "requirements": [
+    [
+      "obsidian:obsidian_pickaxe"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

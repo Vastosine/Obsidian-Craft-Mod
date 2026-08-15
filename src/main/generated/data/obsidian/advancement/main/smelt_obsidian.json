@@ -1,0 +1,32 @@
+{
+  "parent": "obsidian:main/root",
+  "criteria": {
+    "obsidian:obsidian_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obsidian:obsidian_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.oc.smelt_obsidian.description"
+    },
+    "icon": {
+      "id": "obsidian:obsidian_ingot"
+    },
+    "title": {
+      "translate": "advancements.oc.smelt_obsidian.title"
+    }
+  },
+  "requirements": [
+    [
+      "obsidian:obsidian_ingot"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

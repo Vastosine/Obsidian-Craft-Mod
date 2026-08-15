@@ -14,5 +14,6 @@ public class ObsidianCraftDataGenerator implements DataGeneratorEntrypoint {
 		pack.addProvider(OCLootTablesProvider::new);
 		pack.addProvider(OCBlockTagsProvider::new);
 		pack.addProvider(OCItemTagsProvider::new);
+		pack.addProvider(OCAdvancementProvider::new);
 	}
 }

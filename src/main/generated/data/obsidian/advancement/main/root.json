@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "minecraft:obsidian": {
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:obsidian"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "obsidian:gui/advancements/background",
+    "description": {
+      "translate": "advancements.oc.root.description"
+    },
+    "icon": {
+      "id": "minecraft:obsidian"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.oc.root.title"
+    }
+  },
+  "requirements": [
+    [
+      "minecraft:obsidian"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
