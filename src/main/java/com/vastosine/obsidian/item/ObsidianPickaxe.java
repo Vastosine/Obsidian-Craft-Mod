@@ -38,8 +38,8 @@ public class ObsidianPickaxe extends Item {
     @Override
     public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
         if (Minecraft.getInstance().hasShiftDown()) {
+            builder.accept(Component.translatable("tooltip.obsidian.obsidian_pickaxe.shift.0"));
             builder.accept(Component.translatable("tooltip.obsidian.obsidian_pickaxe.shift.1"));
-            builder.accept(Component.translatable("tooltip.obsidian.obsidian_pickaxe.shift.2"));
         } else {
             builder.accept(Component.translatable("tooltip.obsidian.obsidian_pickaxe"));
         }

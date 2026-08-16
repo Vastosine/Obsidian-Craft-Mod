@@ -33,8 +33,8 @@ public class OCEnUsProvider extends OCLanguageProvider {
 
                 // Tooltips
                 "tooltip.obsidian.obsidian_pickaxe", "Press [§aShift§r] to learn more.",
-                "tooltip.obsidian.obsidian_pickaxe.shift.1", "Mine blocks like §5Obsidian§r to repair it!",
-                "tooltip.obsidian.obsidian_pickaxe.shift.2", "More efficiency when mining blocks like §5Obsidian§r!",
+                "tooltip.obsidian.obsidian_pickaxe.shift.0", "Mine blocks like §5Obsidian§r to repair it!",
+                "tooltip.obsidian.obsidian_pickaxe.shift.1", "More efficiency when mining blocks like §5Obsidian§r!",
 
                 // Blocks
                 OBSIDIAN_BLOCK, "Obsidian Block",
