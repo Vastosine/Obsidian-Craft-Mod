@@ -1,6 +1,8 @@
 package com.vastosine.obsidian.datagen;
 
 import com.vastosine.obsidian.datagen.custom.OCLanguageProvider;
+import com.vastosine.obsidian.item.OCCreativeModeTabs;
+import com.vastosine.obsidian.stats.OCStats;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.core.HolderLookup;
 
@@ -30,17 +32,21 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 OBSIDIAN_BOOTS, "Obsidian Boots",
 
                 // Tooltips
-                "tooltip.obsidiancraft.obsidian_pickaxe", "Press [§aShift§r] to learn more.",
-                "tooltip.obsidiancraft.obsidian_pickaxe.shift.1", "Mine blocks like §5Obsidian§r to repair it!",
-                "tooltip.obsidiancraft.obsidian_pickaxe.shift.2", "More efficiency when mining blocks like §5Obsidian§r!",
+                "tooltip.obsidian.obsidian_pickaxe", "Press [§aShift§r] to learn more.",
+                "tooltip.obsidian.obsidian_pickaxe.shift.1", "Mine blocks like §5Obsidian§r to repair it!",
+                "tooltip.obsidian.obsidian_pickaxe.shift.2", "More efficiency when mining blocks like §5Obsidian§r!",
 
                 // Blocks
                 OBSIDIAN_BLOCK, "Obsidian Block",
                 OBSIDIAN_FURNACE, "Obsidian Furnace",
 
-                // itemGroups
-                "itemGroup.obsidian_craft", "Obsidian Craft"
+                // Block Entities
+                "container.obsidian.obsidian_furnace", "Obsidian Furnace",
+                OCStats.INTERACT_WITH_OBSIDIAN_FURNACE, "Interact With Obsidian Furnace"
         );
+
+        // itemGroups
+        translationBuilder.add(OCCreativeModeTabs.OBSIDIAN_CRAFT_KEY, "Obsidian Craft");
 
         // Advancement
         addAdvancement(

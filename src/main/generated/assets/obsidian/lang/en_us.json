@@ -11,6 +11,7 @@
   "advancements.oc.smelt_obsidian.title": "Harder",
   "block.obsidian.obsidian_block": "Obsidian Block",
   "block.obsidian.obsidian_furnace": "Obsidian Furnace",
+  "container.obsidian.obsidian_furnace": "Obsidian Furnace",
   "item.obsidian.obsidian_axe": "Obsidian Axe",
   "item.obsidian.obsidian_boots": "Obsidian Boots",
   "item.obsidian.obsidian_chestplate": "Obsidian Chestplate",
@@ -22,7 +23,8 @@
   "item.obsidian.obsidian_shovel": "Obsidian Shovel",
   "item.obsidian.obsidian_sword": "Obsidian Sword",
   "itemGroup.obsidian_craft": "Obsidian Craft",
-  "tooltip.obsidiancraft.obsidian_pickaxe": "Press [§aShift§r] to learn more.",
-  "tooltip.obsidiancraft.obsidian_pickaxe.shift.1": "Mine blocks like §5Obsidian§r to repair it!",
-  "tooltip.obsidiancraft.obsidian_pickaxe.shift.2": "More efficiency when mining blocks like §5Obsidian§r!"
+  "obsidian.interact_with_obsidian_furnace": "Interact With Obsidian Furnace",
+  "tooltip.obsidian.obsidian_pickaxe": "Press [§aShift§r] to learn more.",
+  "tooltip.obsidian.obsidian_pickaxe.shift.1": "Mine blocks like §5Obsidian§r to repair it!",
+  "tooltip.obsidian.obsidian_pickaxe.shift.2": "More efficiency when mining blocks like §5Obsidian§r!"
 }

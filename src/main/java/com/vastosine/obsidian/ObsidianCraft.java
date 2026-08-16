@@ -4,6 +4,7 @@ import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.block.entity.OCBlockEntityTypes;
 import com.vastosine.obsidian.item.OCCreativeModeTabs;
 import com.vastosine.obsidian.item.OCItems;
+import com.vastosine.obsidian.stats.OCStats;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.resources.Identifier;
@@ -30,6 +31,7 @@ public class ObsidianCraft implements ModInitializer {
 		OCBlocks.onInitialize();
 		OCCreativeModeTabs.onInitialize();
 		OCBlockEntityTypes.onInitialize();
+		OCStats.onInitialize();
 	}
 
 	public static Identifier id(String path) {
