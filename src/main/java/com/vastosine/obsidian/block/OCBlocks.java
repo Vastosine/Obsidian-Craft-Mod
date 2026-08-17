@@ -27,7 +27,7 @@ public class OCBlocks {
     );
     public static final Block ALLOY_SMELTER = register(
             OCBlockItemIds.ALLOY_SMELTER,
-            ObsidianFurnaceBlock::new,
+            AlloySmelterBlock::new,
             BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)
     );
 

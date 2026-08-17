@@ -1,4 +1,6 @@
 {
+  "advancements.oc.alloy_smelter.description": "Craft an Alloy Smelter",
+  "advancements.oc.alloy_smelter.title": "Fusing!",
   "advancements.oc.obsidian_armor.description": "Protect yourself with an piece of Obsidian Armor",
   "advancements.oc.obsidian_armor.title": "More Fire Protection",
   "advancements.oc.obsidian_furnace.description": "Craft an Obsidian Furnace",
@@ -12,6 +14,7 @@
   "block.obsidian.alloy_smelter": "Alloy Smelter",
   "block.obsidian.obsidian_block": "Obsidian Block",
   "block.obsidian.obsidian_furnace": "Obsidian Furnace",
+  "container.obsidian.alloy_smelter": "Alloy Smelter",
   "container.obsidian.obsidian_furnace": "Obsidian Furnace",
   "item.obsidian.obsidian_axe": "Obsidian Axe",
   "item.obsidian.obsidian_boots": "Obsidian Boots",
@@ -24,6 +27,7 @@
   "item.obsidian.obsidian_shovel": "Obsidian Shovel",
   "item.obsidian.obsidian_sword": "Obsidian Sword",
   "itemGroup.obsidian_craft": "Obsidian Craft",
+  "obsidian.interact_with_alloy_smelter": "Interact With Alloy Smelter",
   "obsidian.interact_with_obsidian_furnace": "Interact With Obsidian Furnace",
   "tooltip.obsidian.obsidian_pickaxe": "Press [§aShift§r] to learn more.",
   "tooltip.obsidian.obsidian_pickaxe.shift.0": "Mine blocks like §5Obsidian§r to repair it!",

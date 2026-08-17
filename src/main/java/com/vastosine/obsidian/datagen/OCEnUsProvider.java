@@ -43,7 +43,10 @@ public class OCEnUsProvider extends OCLanguageProvider {
 
                 // Block Entities
                 "container.obsidian.obsidian_furnace", "Obsidian Furnace",
-                OCStats.INTERACT_WITH_OBSIDIAN_FURNACE, "Interact With Obsidian Furnace"
+                "container.obsidian.alloy_smelter", "Alloy Smelter",
+
+                OCStats.INTERACT_WITH_OBSIDIAN_FURNACE, "Interact With Obsidian Furnace",
+                OCStats.INTERACT_WITH_ALLOY_SMELTER, "Interact With Alloy Smelter"
         );
 
         // itemGroups
@@ -56,7 +59,8 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 "smelt_obsidian", "Harder", "Smelt an Obsidian Ingot",
                 "obsidian_pickaxe", "Obsidian Miner", "Craft an Obsidian Pickaxe",
                 "obsidian_armor", "More Fire Protection", "Protect yourself with an piece of Obsidian Armor",
-                "obsidian_furnace", "Faster Smelting", "Craft an Obsidian Furnace"
+                "obsidian_furnace", "Faster Smelting", "Craft an Obsidian Furnace",
+                "alloy_smelter", "Fusing!", "Craft an Alloy Smelter"
         );
     }
 }

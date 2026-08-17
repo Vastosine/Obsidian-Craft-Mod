@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 public class OCBlockEntityTypeIds {
     public static final ResourceKey<BlockEntityType<?>> COUNTER_BLOCK = create("counter_block");
     public static final ResourceKey<BlockEntityType<?>> OBSIDIAN_FURNACE = create("obsidian_furnace");
+    public static final ResourceKey<BlockEntityType<?>> ALLOY_SMELTER = create("alloy_smelter");
 
     private static ResourceKey<BlockEntityType<?>> create(final String name) {
         return ResourceKey.create(Registries.BLOCK_ENTITY_TYPE, ObsidianCraft.id(name));

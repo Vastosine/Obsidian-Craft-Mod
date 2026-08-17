@@ -11,6 +11,7 @@ import net.minecraft.stats.Stats;
 
 public class OCStats {
     public static final Identifier INTERACT_WITH_OBSIDIAN_FURNACE = makeCustomStat("interact_with_obsidian_furnace");
+    public static final Identifier INTERACT_WITH_ALLOY_SMELTER = makeCustomStat("interact_with_alloy_smelter");
 
     private static Identifier makeCustomStat(final String id) {
         return makeCustomStat(id, StatFormatter.DEFAULT);
