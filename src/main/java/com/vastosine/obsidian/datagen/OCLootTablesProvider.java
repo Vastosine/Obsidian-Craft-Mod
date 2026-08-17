@@ -14,13 +14,18 @@ public class OCLootTablesProvider extends FabricBlockLootSubProvider {
         super(packOutput, registriesFuture);
     }
 
-    public void addNameableBlockEntityTable(Block block) {
-        add(block, this::createNameableBlockEntityTable);
+    public void addNameableBlockEntityTable(Block... blocks) {
+        for (Block block : blocks) {
+            add(block, this::createNameableBlockEntityTable);
+        }
     }
 
     @Override
     public void generate() {
         dropSelf(OBSIDIAN_BLOCK);
-        addNameableBlockEntityTable(OBSIDIAN_FURNACE);
+        addNameableBlockEntityTable(
+                OBSIDIAN_FURNACE,
+                ALLOY_SMELTER
+        );
     }
 }

@@ -1,0 +1,32 @@
+{
+  "parent": "obsidian:main/obsidian_furnace",
+  "criteria": {
+    "obsidian:alloy_smelter": {
+      "conditions": {
+        "items": [
+          {
+            "items": "obsidian:alloy_smelter"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancements.oc.alloy_smelter.description"
+    },
+    "icon": {
+      "id": "obsidian:alloy_smelter"
+    },
+    "title": {
+      "translate": "advancements.oc.alloy_smelter.title"
+    }
+  },
+  "requirements": [
+    [
+      "obsidian:alloy_smelter"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

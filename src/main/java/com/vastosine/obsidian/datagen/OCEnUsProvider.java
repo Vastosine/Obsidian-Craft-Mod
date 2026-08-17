@@ -39,6 +39,7 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 // Blocks
                 OBSIDIAN_BLOCK, "Obsidian Block",
                 OBSIDIAN_FURNACE, "Obsidian Furnace",
+                ALLOY_SMELTER, "Alloy Smelter",
 
                 // Block Entities
                 "container.obsidian.obsidian_furnace", "Obsidian Furnace",

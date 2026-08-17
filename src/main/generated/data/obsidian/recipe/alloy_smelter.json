@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "B": "obsidian:obsidian_block",
+    "C": "minecraft:crying_obsidian",
+    "F": "minecraft:furnace",
+    "I": "obsidian:obsidian_ingot",
+    "b": "minecraft:blast_furnace",
+    "f": "obsidian:obsidian_furnace"
+  },
+  "pattern": [
+    "IbI",
+    "FfF",
+    "BCB"
+  ],
+  "result": {
+    "id": "obsidian:alloy_smelter"
+  }
+}

@@ -25,9 +25,14 @@ public class OCBlocks {
             ObsidianFurnaceBlock::new,
             BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE)
     );
+    public static final Block ALLOY_SMELTER = register(
+            OCBlockItemIds.ALLOY_SMELTER,
+            ObsidianFurnaceBlock::new,
+            BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)
+    );
 
     private static Block register(final BlockItemId id, final BlockBehaviour.Properties properties) {
-        return register(id, factory -> new Block(properties), properties, true);
+        return register(id, Block::new, properties, true);
     }
     private static Block register(final BlockItemId id, final Function<BlockBehaviour.Properties, Block> factory, final BlockBehaviour.Properties properties) {
         return register(id, factory, properties, true);

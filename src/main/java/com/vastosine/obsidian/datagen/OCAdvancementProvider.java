@@ -121,5 +121,6 @@ public class OCAdvancementProvider extends FabricAdvancementProvider {
                 OCItems.OBSIDIAN_HELMET
         );
         AdvancementHolder obtainObsidianFurnace = addGetItemAdvancement(consumer, "obsidian_furnace", smeltObsidian, OCBlocks.OBSIDIAN_FURNACE.asItem());
+        AdvancementHolder obtainAlloySmelter = addGetItemAdvancement(consumer, "alloy_smelter", obtainObsidianFurnace, OCBlocks.ALLOY_SMELTER.asItem());
     }
 }

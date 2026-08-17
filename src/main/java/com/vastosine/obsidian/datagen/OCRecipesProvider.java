@@ -1,7 +1,8 @@
 package com.vastosine.obsidian.datagen;
 
-import com.vastosine.obsidian.block.OCBlocks;
-import com.vastosine.obsidian.item.OCItems;
+import static com.vastosine.obsidian.item.OCItems.*;
+import static com.vastosine.obsidian.block.OCBlocks.*;
+
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.advancements.Advancement;
@@ -49,89 +50,101 @@ public class OCRecipesProvider extends FabricRecipeProvider {
 
             @Override
             public void buildRecipes() {
-                oreSmelting(OBSIDIAN_ITEMS, RecipeCategory.MISC, CookingBookCategory.MISC, OCItems.OBSIDIAN_INGOT, 0.1f, 200, "obsidian_ingot_from_smelting");
-                oreBlasting(OBSIDIAN_ITEMS, RecipeCategory.MISC, CookingBookCategory.MISC, OCItems.OBSIDIAN_INGOT, 0.1f, 100, "obsidian_ingot_from_blasting");
-                fourBlockStorageRecipes(RecipeCategory.MISC, OCItems.OBSIDIAN_INGOT, RecipeCategory.MISC, OCBlocks.OBSIDIAN_BLOCK);
-                shaped(RecipeCategory.COMBAT, OCItems.OBSIDIAN_SWORD)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
-                        .define('B', OCBlocks.OBSIDIAN_BLOCK)
+                oreSmelting(OBSIDIAN_ITEMS, RecipeCategory.MISC, CookingBookCategory.MISC, OBSIDIAN_INGOT, 0.1f, 200, "obsidian_ingot_from_smelting");
+                oreBlasting(OBSIDIAN_ITEMS, RecipeCategory.MISC, CookingBookCategory.MISC, OBSIDIAN_INGOT, 0.1f, 100, "obsidian_ingot_from_blasting");
+                fourBlockStorageRecipes(RecipeCategory.MISC, OBSIDIAN_INGOT, RecipeCategory.MISC, OBSIDIAN_BLOCK);
+                shaped(RecipeCategory.COMBAT, OBSIDIAN_SWORD)
+                        .define('I', OBSIDIAN_INGOT)
+                        .define('B', OBSIDIAN_BLOCK)
                         .define('S', Items.STICK)
                         .pattern(" I ")
                         .pattern(" B ")
                         .pattern(" S ")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.TOOLS, OCItems.OBSIDIAN_PICKAXE)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
-                        .define('B', OCBlocks.OBSIDIAN_BLOCK)
+                shaped(RecipeCategory.TOOLS, OBSIDIAN_PICKAXE)
+                        .define('I', OBSIDIAN_INGOT)
+                        .define('B', OBSIDIAN_BLOCK)
                         .define('S', Items.STICK)
                         .pattern("IBI")
                         .pattern(" S ")
                         .pattern(" S ")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.TOOLS, OCItems.OBSIDIAN_SHOVEL)
-                        .define('B', OCBlocks.OBSIDIAN_BLOCK)
+                shaped(RecipeCategory.TOOLS, OBSIDIAN_SHOVEL)
+                        .define('B', OBSIDIAN_BLOCK)
                         .define('S', Items.STICK)
                         .pattern(" B ")
                         .pattern(" S ")
                         .pattern(" S ")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.TOOLS, OCItems.OBSIDIAN_HOE)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
-                        .define('B', OCBlocks.OBSIDIAN_BLOCK)
+                shaped(RecipeCategory.TOOLS, OBSIDIAN_HOE)
+                        .define('I', OBSIDIAN_INGOT)
+                        .define('B', OBSIDIAN_BLOCK)
                         .define('S', Items.STICK)
                         .pattern("IB ")
                         .pattern(" S ")
                         .pattern(" S ")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.TOOLS, OCItems.OBSIDIAN_AXE)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
-                        .define('B', OCBlocks.OBSIDIAN_BLOCK)
+                shaped(RecipeCategory.TOOLS, OBSIDIAN_AXE)
+                        .define('I', OBSIDIAN_INGOT)
+                        .define('B', OBSIDIAN_BLOCK)
                         .define('S', Items.STICK)
                         .pattern("IB ")
                         .pattern("IS ")
                         .pattern(" S ")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.COMBAT, OCItems.OBSIDIAN_BOOTS)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
+                shaped(RecipeCategory.COMBAT, OBSIDIAN_BOOTS)
+                        .define('I', OBSIDIAN_INGOT)
                         .pattern("I I")
                         .pattern("I I")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.COMBAT, OCItems.OBSIDIAN_LEGGINGS)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
-                        .define('B', OCBlocks.OBSIDIAN_BLOCK)
+                shaped(RecipeCategory.COMBAT, OBSIDIAN_LEGGINGS)
+                        .define('I', OBSIDIAN_INGOT)
+                        .define('B', OBSIDIAN_BLOCK)
                         .pattern("IBI")
                         .pattern("I I")
                         .pattern("I I")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.COMBAT, OCItems.OBSIDIAN_CHESTPLATE)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
-                        .define('B', OCBlocks.OBSIDIAN_BLOCK)
+                shaped(RecipeCategory.COMBAT, OBSIDIAN_CHESTPLATE)
+                        .define('I', OBSIDIAN_INGOT)
+                        .define('B', OBSIDIAN_BLOCK)
                         .pattern("I I")
                         .pattern("IBI")
                         .pattern("III")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.COMBAT, OCItems.OBSIDIAN_HELMET)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
-                        .define('B', OCBlocks.OBSIDIAN_BLOCK)
+                shaped(RecipeCategory.COMBAT, OBSIDIAN_HELMET)
+                        .define('I', OBSIDIAN_INGOT)
+                        .define('B', OBSIDIAN_BLOCK)
                         .pattern("IBI")
                         .pattern("I I")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
                         .save(this.output);
-                shaped(RecipeCategory.MISC, OCBlocks.OBSIDIAN_FURNACE)
-                        .define('I', OCItems.OBSIDIAN_INGOT)
+                shaped(RecipeCategory.MISC, OBSIDIAN_FURNACE)
+                        .define('I', OBSIDIAN_INGOT)
                         .define('F', Items.FURNACE)
                         .pattern("III")
                         .pattern("IFI")
                         .pattern("III")
-                        .unlockedBy(getHasName(OCItems.OBSIDIAN_INGOT), this.has(OCItems.OBSIDIAN_INGOT))
+                        .unlockedBy(getHasName(OBSIDIAN_INGOT), this.has(OBSIDIAN_INGOT))
+                        .save(this.output);
+                shaped(RecipeCategory.MISC, ALLOY_SMELTER)
+                        .define('I', OBSIDIAN_INGOT)
+                        .define('B', OBSIDIAN_BLOCK)
+                        .define('F', Items.FURNACE)
+                        .define('b', Items.BLAST_FURNACE)
+                        .define('f', OBSIDIAN_FURNACE)
+                        .define('C', Items.CRYING_OBSIDIAN)
+                        .pattern("IbI")
+                        .pattern("FfF")
+                        .pattern("BCB")
+                        .unlockedBy(getHasName(OBSIDIAN_FURNACE), this.has(OBSIDIAN_FURNACE))
                         .save(this.output);
             }
         };
