@@ -2,6 +2,7 @@ package com.vastosine.obsidian;
 
 import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.block.entity.OCBlockEntityTypes;
+import com.vastosine.obsidian.inventory.OCMenuTypes;
 import com.vastosine.obsidian.item.OCCreativeModeTabs;
 import com.vastosine.obsidian.item.OCItems;
 import com.vastosine.obsidian.stats.OCStats;
@@ -32,6 +33,7 @@ public class ObsidianCraft implements ModInitializer {
 		OCCreativeModeTabs.onInitialize();
 		OCBlockEntityTypes.onInitialize();
 		OCStats.onInitialize();
+		OCMenuTypes.onInitialize();
 	}
 
 	public static Identifier id(String path) {
