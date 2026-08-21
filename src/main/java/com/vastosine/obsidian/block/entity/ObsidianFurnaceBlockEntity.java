@@ -1,6 +1,6 @@
 package com.vastosine.obsidian.block.entity;
 
-import com.vastosine.obsidian.inventory.menu.ObsidianFurnaceMenu;
+import com.vastosine.obsidian.gui.menu.ObsidianFurnaceMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;

@@ -1,8 +1,7 @@
-package com.vastosine.obsidian.inventory;
+package com.vastosine.obsidian.gui.screen;
 
 import com.vastosine.obsidian.ObsidianCraft;
-import com.vastosine.obsidian.inventory.screen.AlloySmelterScreen;
-import com.vastosine.obsidian.inventory.screen.ObsidianFurnaceScreen;
+import com.vastosine.obsidian.gui.menu.OCMenuTypes;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.MenuScreens;

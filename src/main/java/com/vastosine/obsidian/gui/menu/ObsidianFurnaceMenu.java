@@ -1,6 +1,5 @@
-package com.vastosine.obsidian.inventory.menu;
+package com.vastosine.obsidian.gui.menu;
 
-import com.vastosine.obsidian.inventory.OCMenuTypes;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractFurnaceMenu;

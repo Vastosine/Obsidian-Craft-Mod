@@ -1,8 +1,6 @@
-package com.vastosine.obsidian.inventory;
+package com.vastosine.obsidian.gui.menu;
 
 import com.vastosine.obsidian.ObsidianCraft;
-import com.vastosine.obsidian.inventory.menu.AlloySmelterMenu;
-import com.vastosine.obsidian.inventory.menu.ObsidianFurnaceMenu;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.flag.FeatureFlags;
