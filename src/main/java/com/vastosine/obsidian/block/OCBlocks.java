@@ -47,6 +47,6 @@ public class OCBlocks {
     }
 
     public static void onInitialize() {
-        ObsidianCraft.LOGGER.info("Registering Mod Blocks for " + ObsidianCraft.MOD_ID);
+        ObsidianCraft.onInitializeInfo("Blocks");
     }
 }

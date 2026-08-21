@@ -41,29 +41,27 @@ public class OCCreativeModeTabs {
     public static final CreativeModeTab OBSIDIAN_CRAFT = FabricCreativeModeTab.builder()
             .icon(() -> new ItemStack(OCItems.OBSIDIAN_INGOT))
             .title(Component.translatable("itemGroup.obsidian_craft"))
-            .displayItems((context, output) -> {
-                        accept(output,
-                                // Items
-                                OBSIDIAN_INGOT,
-                                OBSIDIAN_SWORD,
-                                OBSIDIAN_PICKAXE,
-                                OBSIDIAN_SHOVEL,
-                                OBSIDIAN_HOE,
-                                OBSIDIAN_AXE,
-                                OBSIDIAN_HELMET,
-                                OBSIDIAN_CHESTPLATE,
-                                OBSIDIAN_LEGGINGS,
-                                OBSIDIAN_BOOTS,
+            .displayItems((context, output) -> accept(output,
+                    // Items
+                    OBSIDIAN_INGOT,
+                    OBSIDIAN_SWORD,
+                    OBSIDIAN_PICKAXE,
+                    OBSIDIAN_SHOVEL,
+                    OBSIDIAN_HOE,
+                    OBSIDIAN_AXE,
+                    OBSIDIAN_HELMET,
+                    OBSIDIAN_CHESTPLATE,
+                    OBSIDIAN_LEGGINGS,
+                    OBSIDIAN_BOOTS,
 
-                                // Blocks
-                                OBSIDIAN_BLOCK,
-                                OBSIDIAN_FURNACE,
-                                ALLOY_SMELTER
-                        );
-                    }
-            ).build();
+                    // Blocks
+                    OBSIDIAN_BLOCK,
+                    OBSIDIAN_FURNACE,
+                    ALLOY_SMELTER
+            )).build();
 
     public static void onInitialize() {
         Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, OBSIDIAN_CRAFT_KEY, OBSIDIAN_CRAFT);
+        ObsidianCraft.onInitializeInfo("Creative Mode Tabs");
     }
 }

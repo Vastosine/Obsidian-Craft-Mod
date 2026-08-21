@@ -1,12 +1,16 @@
 package com.vastosine.obsidian.inventory.screen;
 
 import com.vastosine.obsidian.inventory.menu.AlloySmelterMenu;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
+import org.jspecify.annotations.NonNull;
 
+@Environment(EnvType.CLIENT)
 public class AlloySmelterScreen extends AbstractAlloySmelterScreen<AlloySmelterMenu> {
 
 
@@ -22,7 +26,7 @@ public class AlloySmelterScreen extends AbstractAlloySmelterScreen<AlloySmelterM
     }
 
     @Override
-    public void extractBackground(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
+    public void extractBackground(final @NonNull GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
         super.extractBackground(graphics, mouseX, mouseY, a);
         int xo = (this.width - this.imageWidth) / 2;
         int yo = (this.height - this.imageHeight) / 2;

@@ -90,6 +90,6 @@ public class OCItems {
     }
 
     public static void onInitialize() {
-        ObsidianCraft.LOGGER.info("Registering Mod Items for " + ObsidianCraft.MOD_ID);
+        ObsidianCraft.onInitializeInfo("Items");
     }
 }

@@ -30,6 +30,6 @@ public class OCStats {
     }
 
     public static void onInitialize() {
-        ObsidianCraft.LOGGER.info("Registering Mod Stats for " + ObsidianCraft.MOD_ID);
+        ObsidianCraft.onInitializeInfo("Stats");
     }
 }

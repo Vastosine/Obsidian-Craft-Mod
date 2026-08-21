@@ -23,6 +23,6 @@ public class OCBlockEntityTypes {
     }
 
     public static void onInitialize() {
-        ObsidianCraft.LOGGER.info("Registering Mod Block Entities for " + ObsidianCraft.MOD_ID);
+        ObsidianCraft.onInitializeInfo("Block Entity Types");
     }
 }
