@@ -26,10 +26,10 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CookingFuel;
 import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.level.storage.loot.providers.number.ResolvableNumber;
@@ -40,21 +40,22 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, StackedContentsCompatible, RecipeCraftingHolder {
-    protected final int SLOT_INPUT_COUNT = 2;
-    protected final int SLOT_FUEL_COUNT = 1;
-    protected final int SLOT_RESULT_COUNT = 1;
+    protected final int slotInputCount = 2;
+    protected final int slotFuelCount = 1;
+    protected final int slotResultCount = 1;
 
-    protected final int[] SLOT_INPUT = get_sequence(0, SLOT_INPUT_COUNT);
-    protected final int[] SLOT_FUEL = get_sequence(SLOT_INPUT_COUNT, SLOT_FUEL_COUNT);
-    protected final int[] SLOT_RESULT = get_sequence(SLOT_INPUT_COUNT + SLOT_FUEL_COUNT, SLOT_RESULT_COUNT);
+    protected final int[] slotInput = get_sequence(0, slotInputCount);
+    protected final int[] slotFuel = get_sequence(slotInputCount, slotFuelCount);
+    protected final int[] slotResult = get_sequence(slotInputCount + slotFuelCount, slotResultCount);
 
-    private final int[] SLOTS_FOR_UP = SLOT_INPUT;
-    private final int[] SLOTS_FOR_FRONT = SLOT_FUEL;
-    private final int[] SLOTS_FOR_BACK = SLOT_FUEL;
-    private final int[] SLOTS_FOR_LEFT = new int[]{0};
-    private final int[] SLOTS_FOR_RIGHT = new int[]{1};
-    private final int[] SLOTS_FOR_DOWN = ArrayUtils.addAll(SLOT_RESULT, SLOT_FUEL);
+    private final int[] slotsForUp = slotInput;
+    private final int[] slotsForFront = slotFuel;
+    private final int[] slotsForBack = slotFuel;
+    private final int[] slotsForLeft = new int[]{0};
+    private final int[] slotsForRight = new int[]{1};
+    private final int[] slotsForDown = ArrayUtils.addAll(slotResult, slotFuel);
 
+    public static final int DATA_LIT_TIME = 0;
     public static final int DATA_LIT_DURATION = 1;
     public static final int DATA_COOKING_PROGRESS = 2;
     public static final int DATA_COOKING_TOTAL_TIME = 3;
@@ -62,17 +63,19 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
     public static final int BURN_TIME_STANDARD = 200;
     public static final int BURN_COOL_SPEED = 2;
     private static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USED_CODEC = Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
-    private static final int DEFAULT_COOKING_TIMER = 0;
-    private static final int DEFAULT_COOKING_TOTAL_TIME = 0;
-    private static final int DEFAULT_LIT_TIME_REMAINING = 0;
-    private static final int DEFAULT_LIT_TOTAL_TIME = 0;
+    private static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USING_CODEC = Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
+    private static final Codec<List<ItemStack>> RECIPE_RESULTS = Codec.list(ItemStack.CODEC);
     private static final float DEFAULT_SPEED_MULTIPLIER = 1.0F;
-    protected NonNullList<ItemStack> items = NonNullList.withSize(SLOT_INPUT_COUNT + SLOT_FUEL_COUNT + SLOT_RESULT_COUNT, ItemStack.EMPTY);
+    protected NonNullList<ItemStack> items = NonNullList.withSize(slotInputCount + slotFuelCount + slotResultCount, ItemStack.EMPTY);
     private int litTimeRemaining;
     private int litTotalTime;
     private int cookingTimer;
     private int cookingTotalTime;
     private float speedMultiplier = 1.0F;
+
+    private final float smeltingSpeed = 2.5F;
+    private final float alloyingSpeed = 1.0F;
+    private final float fuelConsumingSpeed = 2.0F;
 
     public static int[] get_sequence(int start, int len) {
         int[] ans = new int[len];
@@ -86,10 +89,10 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         @Override
         public int get(final int dataId) {
             return switch (dataId) {
-                case 0 -> AbstractAlloySmelterBlockEntity.this.litTimeRemaining;
-                case 1 -> AbstractAlloySmelterBlockEntity.this.litTotalTime;
-                case 2 -> AbstractAlloySmelterBlockEntity.this.cookingTimer;
-                case 3 -> AbstractAlloySmelterBlockEntity.this.cookingTotalTime;
+                case DATA_LIT_TIME -> AbstractAlloySmelterBlockEntity.this.litTimeRemaining;
+                case DATA_LIT_DURATION -> AbstractAlloySmelterBlockEntity.this.litTotalTime;
+                case DATA_COOKING_PROGRESS -> AbstractAlloySmelterBlockEntity.this.cookingTimer;
+                case DATA_COOKING_TOTAL_TIME -> AbstractAlloySmelterBlockEntity.this.cookingTotalTime;
                 default -> 0;
             };
         }
@@ -97,28 +100,30 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         @Override
         public void set(final int dataId, final int value) {
             switch (dataId) {
-                case 0 -> AbstractAlloySmelterBlockEntity.this.litTimeRemaining = value;
-                case 1 -> AbstractAlloySmelterBlockEntity.this.litTotalTime = value;
-                case 2 -> AbstractAlloySmelterBlockEntity.this.cookingTimer = value;
-                case 3 -> AbstractAlloySmelterBlockEntity.this.cookingTotalTime = value;
+                case DATA_LIT_TIME -> AbstractAlloySmelterBlockEntity.this.litTimeRemaining = value;
+                case DATA_LIT_DURATION -> AbstractAlloySmelterBlockEntity.this.litTotalTime = value;
+                case DATA_COOKING_PROGRESS -> AbstractAlloySmelterBlockEntity.this.cookingTimer = value;
+                case DATA_COOKING_TOTAL_TIME -> AbstractAlloySmelterBlockEntity.this.cookingTotalTime = value;
             }
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return NUM_DATA_VALUES;
         }
     };
     private final Reference2IntOpenHashMap<ResourceKey<Recipe<?>>> recipesUsed = new Reference2IntOpenHashMap<>();
+    private final Reference2IntOpenHashMap<ResourceKey<Recipe<?>>> recipesUsing = new Reference2IntOpenHashMap<>();
+    private final List<ItemStack> recipeResults = new ArrayList<>();
     private final RecipeManager.CachedCheck<SingleRecipeInput, ? extends AbstractCookingRecipe> quickCheck;
 
-    private final Direction FACE;
+    private final Direction face;
 
     @SafeVarargs
     protected AbstractAlloySmelterBlockEntity(BlockEntityType<?> type, BlockPos worldPosition, BlockState blockState, Direction face, final RecipeType<? extends AbstractCookingRecipe>... recipeTypes) {
         super(type, worldPosition, blockState);
         this.quickCheck = RecipeManager.createCheck(recipeTypes[0]);
-        FACE = face;
+        this.face = face;
     }
 
     @Override
@@ -130,9 +135,13 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         this.cookingTotalTime = input.getIntOr("cooking_total_time", 0);
         this.litTimeRemaining = input.getIntOr("lit_time_remaining", 0);
         this.litTotalTime = input.getIntOr("lit_total_time", 0);
-        this.speedMultiplier = input.getFloatOr("speed_multiplier", 1.0F);
+        this.speedMultiplier = input.getFloatOr("speed_multiplier", DEFAULT_SPEED_MULTIPLIER);
         this.recipesUsed.clear();
         this.recipesUsed.putAll(input.read("RecipesUsed", RECIPES_USED_CODEC).orElse(Map.of()));
+        this.recipesUsing.clear();
+        this.recipesUsing.putAll(input.read("RecipesUsing", RECIPES_USING_CODEC).orElse(Map.of()));
+        this.recipeResults.clear();
+        this.recipeResults.addAll(input.read("CookingRecipeResults", RECIPE_RESULTS).orElse(new ArrayList<>()));
     }
 
     @Override
@@ -145,6 +154,8 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         output.putFloat("speed_multiplier", this.speedMultiplier);
         ContainerHelper.saveAllItems(output, this.items);
         output.store("RecipesUsed", RECIPES_USED_CODEC, this.recipesUsed);
+        output.store("RecipesUsing", RECIPES_USING_CODEC, this.recipesUsing);
+        output.store("CookingRecipeResults", RECIPE_RESULTS, this.recipeResults);
     }
 
     public static void serverTick(final ServerLevel level, final BlockPos pos, BlockState state, final AbstractAlloySmelterBlockEntity entity) {
@@ -161,80 +172,72 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         }
 
         ItemStack fuel = null;
-        for (int slot : entity.SLOT_FUEL) {
+        for (int slot : entity.slotFuel) {
             fuel = entity.items.get(slot);
             if (entity.getBurnDuration(level, fuel) > 0) break;
         }
         ArrayList<ItemStack> ingredients = new ArrayList<>();
-        for (int slot : entity.SLOT_INPUT) {
+        for (int slot : entity.slotInput) {
             ItemStack itemStack = entity.items.get(slot);
             if (!itemStack.isEmpty()) ingredients.add(itemStack);
         }
-        boolean hasIngredient = !ingredients.isEmpty();
+        boolean isCooking = !entity.recipeResults.isEmpty();
         boolean hasFuel = fuel != null && !fuel.isEmpty();
-        if (isLit || hasFuel && hasIngredient) {
-            if (hasIngredient) {
-                SingleRecipeInput input = new SingleRecipeInput(ingredients.getFirst());
-                RecipeHolder<? extends AbstractCookingRecipe> recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
+        if (!isCooking) {
+            if (isLit || hasFuel) {
+                // TODO Alloy Smelt Recipes
                 for (ItemStack ingredient : ingredients) {
-                    input = new SingleRecipeInput(ingredient);
-                    recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
+                    SingleRecipeInput input = new SingleRecipeInput(ingredient);
+                    RecipeHolder<? extends AbstractCookingRecipe> recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
                     if (recipe == null) continue;
-
-                    int maxStackSize = entity.getMaxStackSize();
-                    ItemStack burnResult = recipe.value().assemble(input);
-                    if (!burnResult.isEmpty() && canBurn(entity, maxStackSize, burnResult)) {
-                        if (!isLit) {
-                            int newLitTime = entity.getBurnDuration(level, fuel);
-                            float newSpeedMultiplier = entity.getSpeedMultiplier(level, fuel);
-                            entity.litTimeRemaining = newLitTime;
-                            entity.litTotalTime = newLitTime;
-                            entity.speedMultiplier = newSpeedMultiplier;
-                            if (entity.cookingTotalTime > 0 && entity.cookingTimer < entity.cookingTotalTime) {
-                                float completionRatio = (float)entity.cookingTimer / entity.cookingTotalTime;
-                                entity.cookingTotalTime = getTotalCookTime(recipe, entity);
-                                entity.cookingTimer = (int)Math.ceil(completionRatio * entity.cookingTotalTime);
-                            }
-
-                            if (newLitTime > 0) {
-                                consumeFuel(entity, fuel);
-                                isLit = true;
-                                changed = true;
-                            }
-                        }
-
-                        if (isLit) {
-                            entity.cookingTimer++;
-                            if (entity.cookingTimer >= entity.cookingTotalTime) {
-                                entity.cookingTimer = 0;
-                                entity.cookingTotalTime = getTotalCookTime(recipe, entity);
-//                                burn(entity, ingredient, burnResult);
-                                entity.setRecipeUsed(recipe);
-                                changed = true;
-                            }
-                        } else {
-                            entity.cookingTimer = 0;
-                        }
-                    } else {
-                        entity.cookingTimer = 0;
-                    }
+                    ItemStack result = recipe.value().assemble(input);
+                    if (!canBurn(entity, entity.getMaxStackSize(), result)) continue;
+                    entity.cookingTotalTime = getTotalCookTime(recipe, entity);
+                    entity.recipeResults.add(result);
+                    ingredient.shrink(1);
+                    entity.recipesUsing.clear();
+                    entity.recipesUsing.addTo(recipe.id(), 1);
                     break;
                 }
-            } else {
-                entity.cookingTimer = 0;
             }
-        } else if (entity.cookingTimer > 0) {
-            entity.cookingTimer = Mth.clamp(entity.cookingTimer - 2, 0, entity.cookingTotalTime);
         }
-
-        if (wasLit != isLit) {
-            changed = true;
-            state = state.setValue(AbstractFurnaceBlock.LIT, isLit);
-            level.setBlockAndUpdate(pos, state);
+        isCooking = !entity.recipeResults.isEmpty();
+        if (isCooking) {
+            if (!isLit && hasFuel) {
+                entity.litTotalTime = entity.litTimeRemaining = (int) (entity.getBurnDuration(level, fuel) / entity.fuelConsumingSpeed);
+                entity.speedMultiplier = entity.getSpeedMultiplier(level, fuel);
+                if (entity.cookingTotalTime > 0 && entity.cookingTimer < entity.cookingTotalTime) {
+                    float completionRatio = (float) entity.cookingTimer / entity.cookingTotalTime;
+                    entity.cookingTotalTime = (int) (entity.cookingTotalTime / (entity.speedMultiplier > 0 ? entity.speedMultiplier : 1.0));
+                    entity.cookingTimer = (int) Math.ceil(completionRatio * entity.cookingTotalTime);
+                }
+                if (entity.litTotalTime > 0) {
+                    isLit = true;
+                    changed = true;
+                    consumeFuel(entity, fuel);
+                }
+            }
+            if (isLit) {
+                entity.cookingTimer++;
+                if (entity.cookingTimer >= entity.cookingTotalTime) {
+                    entity.cookingTimer -= entity.cookingTotalTime;
+                    for (ResourceKey<Recipe<?>> recipe : entity.recipesUsing.keySet()) {
+                        entity.recipesUsed.addTo(recipe, entity.recipesUsing.getInt(recipe));
+                    }
+                    changed = true;
+                    burn(entity);
+                }
+            } else if (entity.cookingTimer > 0) {
+                entity.cookingTimer = Mth.clamp(entity.cookingTimer - BURN_COOL_SPEED, 0, entity.cookingTotalTime);
+            }
         }
-
         if (changed) {
             setChanged(level, pos, state);
+        }
+        if (wasLit != isLit) {
+            changed = true;
+            state = state.setValue(BlockStateProperties.LIT, isLit);
+            level.setBlockAndUpdate(pos, state);
         }
     }
 
@@ -244,7 +247,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         ItemStackTemplate remainder = fuelItem.getCraftingRemainder();
 //        entity.items.set(entity.SLOT_FUEL[0], remainder != null ? remainder.create() : ItemStack.EMPTY);
         if (remainder != null) {
-            for (int slot : entity.SLOT_FUEL) {
+            for (int slot : entity.slotFuel) {
                 if (entity.items.get(slot).isEmpty()) {
                     entity.items.set(slot, remainder.create());
                     return;
@@ -254,34 +257,42 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
     }
 
     private static boolean canBurn(final AbstractAlloySmelterBlockEntity entity, final int maxStackSize, final ItemStack burnResult) {
-        ItemStack resultItemStack = entity.items.get(3);
-        if (resultItemStack.isEmpty()) {
-            return true;
-        }
+        for (int slot : entity.slotResult) {
+            ItemStack resultItemStack = entity.items.get(slot);
+            if (resultItemStack.isEmpty()) {
+                return true;
+            }
 
-        if (!ItemStack.isSameItemSameComponents(resultItemStack, burnResult)) {
-            return false;
-        }
+            if (!ItemStack.isSameItemSameComponents(resultItemStack, burnResult)) {
+                continue;
+            }
 
-        int resultCount = resultItemStack.getCount() + burnResult.count();
-        int maxResultCount = Math.min(maxStackSize, burnResult.getMaxStackSize());
-        return resultCount <= maxResultCount;
+            int resultCount = resultItemStack.getCount() + burnResult.count();
+            int maxResultCount = Math.min(maxStackSize, burnResult.getMaxStackSize());
+            if (resultCount <= maxResultCount) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    private static void burn(final AbstractAlloySmelterBlockEntity entity, final ItemStack inputItemStack, final ItemStack result, int fuel) {
+    private static void burn(final AbstractAlloySmelterBlockEntity entity) {
         final NonNullList<ItemStack> items = entity.items;
-        ItemStack resultItemStack = items.get(2);
-        if (resultItemStack.isEmpty()) {
-            items.set(2, result.copy());
-        } else {
-            resultItemStack.grow(result.getCount());
+        final List<ItemStack> results = entity.recipeResults;
+        for (ItemStack result : results) {
+            for (int slot = 0; slot < entity.slotResultCount; slot++) {
+                int resultSlot = slot + entity.slotInputCount + entity.slotFuelCount;
+                ItemStack resultItemStack = items.get(resultSlot);
+                if (resultItemStack.isEmpty()) {
+                    items.set(resultSlot, result.copy());
+                } else {
+                    if (resultItemStack.getItem() != result.getItem()) continue;
+                    resultItemStack.grow(result.getCount());
+                }
+                break;
+            }
         }
-
-        if (inputItemStack.is(Items.WET_SPONGE) && !items.get(1).isEmpty() && items.get(1).is(Items.BUCKET)) {
-            items.set(1, new ItemStack(Items.WATER_BUCKET));
-        }
-
-        inputItemStack.shrink(1);
+        entity.recipeResults.clear();
     }
 
     protected int getBurnDuration(final ServerLevel level, final ItemStack fuelItem) {
@@ -293,26 +304,17 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
     }
 
     private static int getTotalCookTime(final RecipeHolder<? extends AbstractCookingRecipe> recipe, final AbstractAlloySmelterBlockEntity entity) {
-        int cookingTotalTime = recipe.value().cookingTime();
-        return entity.speedMultiplier > 0.0F ? (int)Math.ceil(cookingTotalTime / entity.speedMultiplier) : cookingTotalTime;
+        return Mth.ceil(recipe.value().cookingTime() / entity.smeltingSpeed / (entity.speedMultiplier > 0.0F ? entity.speedMultiplier : 1.0F));
     }
 
-    private static int getTotalCookTime(final ServerLevel level, final AbstractAlloySmelterBlockEntity entity) {
-        SingleRecipeInput input = new SingleRecipeInput(entity.getItem(0));
-        return entity.quickCheck
-                .getRecipeFor(input, level)
-                .map(recipeHolder -> getTotalCookTime((RecipeHolder<? extends AbstractCookingRecipe>)recipeHolder, entity))
-                .orElse(200);
-    }
-
-    public final int[][] intToDirection = {SLOTS_FOR_FRONT, SLOTS_FOR_LEFT, SLOTS_FOR_BACK, SLOTS_FOR_RIGHT};
+    public final int[][] intToDirection = {slotsForFront, slotsForLeft, slotsForBack, slotsForRight};
 
     @Override
     public int[] getSlotsForFace(final Direction direction) {
         int x = directionToInt(direction);
-        int y = directionToInt(FACE);
-        if (x == -1) return SLOTS_FOR_DOWN;
-        if (x == -2) return SLOTS_FOR_UP;
+        int y = directionToInt(face);
+        if (x == -1) return slotsForDown;
+        if (x == -2) return slotsForUp;
         int z = x - y;
         return intToDirection[(z + 4) % 4];
     }
@@ -323,7 +325,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
             case SOUTH -> 1;
             case WEST -> 2;
             case NORTH -> 3;
-            case DOWN-> -1;
+            case DOWN -> -1;
             case UP -> -2;
         };
     }
@@ -335,7 +337,8 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
 
     @Override
     public boolean canTakeItemThroughFace(final int slot, final ItemStack itemStack, final Direction direction) {
-        return direction != Direction.DOWN || Arrays.stream(SLOT_FUEL).anyMatch(x -> x == slot) || itemStack.is(Items.WATER_BUCKET) || itemStack.is(Items.BUCKET);
+//        return direction != Direction.DOWN || slot != 1 || itemStack.is(Items.WATER_BUCKET) || itemStack.is(Items.BUCKET);
+        return direction != Direction.DOWN || Arrays.stream(slotFuel).noneMatch(x -> x == slot) || itemStack.is(Items.WATER_BUCKET) || itemStack.is(Items.BUCKET);
     }
 
     @Override
@@ -359,20 +362,15 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         boolean same = !itemStack.isEmpty() && ItemStack.isSameItemSameComponents(oldStack, itemStack);
         this.items.set(slot, itemStack);
         itemStack.limitSize(this.getMaxStackSize(itemStack));
-        if (Arrays.stream(SLOT_INPUT).anyMatch(x -> x == slot) && !same && this.level instanceof ServerLevel serverLevel) {
-            this.cookingTotalTime = getTotalCookTime(serverLevel, this);
-            this.cookingTimer = 0;
-            this.setChanged();
-        }
     }
 
     @Override
     public boolean canPlaceItem(final int slot, final ItemStack itemStack) {
-        if (Arrays.stream(SLOT_RESULT).anyMatch(x -> x == slot)) {
+        if (Arrays.stream(slotResult).anyMatch(x -> x == slot)) {
             return false;
         }
 
-        if (!Arrays.stream(SLOT_FUEL).anyMatch(x -> x == slot)) {
+        if (!Arrays.stream(slotFuel).anyMatch(x -> x == slot)) {
             return true;
         }
 
@@ -413,8 +411,8 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
 
         for (Reference2IntMap.Entry<ResourceKey<Recipe<?>>> entry : this.recipesUsed.reference2IntEntrySet()) {
             level.recipeAccess().byKey(entry.getKey()).ifPresent(recipe -> {
-                recipesToAward.add((RecipeHolder<?>)recipe);
-                createExperience(level, position, entry.getIntValue(), ((AbstractCookingRecipe)recipe.value()).experience());
+                recipesToAward.add(recipe);
+                createExperience(level, position, entry.getIntValue(), ((AbstractCookingRecipe) recipe.value()).experience());
             });
         }
 

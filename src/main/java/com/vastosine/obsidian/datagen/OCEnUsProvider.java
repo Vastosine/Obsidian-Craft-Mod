@@ -45,8 +45,8 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 "container.obsidian.obsidian_furnace", "Obsidian Furnace",
                 "container.obsidian.alloy_smelter", "Alloy Smelter",
 
-                OCStats.INTERACT_WITH_OBSIDIAN_FURNACE, "Interact With Obsidian Furnace",
-                OCStats.INTERACT_WITH_ALLOY_SMELTER, "Interact With Alloy Smelter"
+                OCStats.INTERACT_WITH_OBSIDIAN_FURNACE.toLanguageKey("stat"), "Interactions With Obsidian Furnace",
+                OCStats.INTERACT_WITH_ALLOY_SMELTER.toLanguageKey("stat"), "Interactions With Alloy Smelter"
         );
 
         // itemGroups

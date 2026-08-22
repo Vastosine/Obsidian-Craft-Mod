@@ -27,8 +27,8 @@
   "item.obsidian.obsidian_shovel": "Obsidian Shovel",
   "item.obsidian.obsidian_sword": "Obsidian Sword",
   "itemGroup.obsidian_craft": "Obsidian Craft",
-  "obsidian.interact_with_alloy_smelter": "Interact With Alloy Smelter",
-  "obsidian.interact_with_obsidian_furnace": "Interact With Obsidian Furnace",
+  "stat.obsidian.interact_with_alloy_smelter": "Interactions With Alloy Smelter",
+  "stat.obsidian.interact_with_obsidian_furnace": "Interactions With Obsidian Furnace",
   "tooltip.obsidian.obsidian_pickaxe": "Press [§aShift§r] to learn more.",
   "tooltip.obsidian.obsidian_pickaxe.shift.0": "Mine blocks like §5Obsidian§r to repair it!",
   "tooltip.obsidian.obsidian_pickaxe.shift.1": "More efficiency when mining blocks like §5Obsidian§r!"

@@ -1,6 +1,7 @@
 package com.vastosine.obsidian.gui.menu;
 
 import com.vastosine.obsidian.gui.slot.AlloySmelterFuelSlot;
+import com.vastosine.obsidian.gui.slot.AlloySmelterResultSlot;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -71,9 +72,9 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
         for (int slot = 0; slot < slotFuelCount; slot++) {
             this.addSlot(new AlloySmelterFuelSlot(this, container, slotInputCount + slot, 56 + (2 * slot + 1 - slotFuelCount) * 9, 53));
         }
-        this.addSlot(new FurnaceResultSlot(inventory.player, container, slotInputCount + slotFuelCount, 116, 35));
+        this.addSlot(new AlloySmelterResultSlot(inventory.player, container, slotInputCount + slotFuelCount, 116, 35));
         for (int slot = 1; slot < slotResultCount; slot++) {
-            this.addSlot(new FurnaceResultSlot(inventory.player, container, slotInputCount + slotFuelCount + slot, 122 + 18 * slot, 36 + slotCount));
+            this.addSlot(new AlloySmelterResultSlot(inventory.player, container, slotInputCount + slotFuelCount + slot, 122 + 18 * slot, 36 + slotCount));
         }
         this.addStandardInventorySlots(inventory, 8, 84);
         this.addDataSlots(data);

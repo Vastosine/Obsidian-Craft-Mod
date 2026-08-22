@@ -22,6 +22,11 @@ public class ObsidianFurnaceBlockEntity extends AbstractFurnaceBlockEntity {
         return super.getSpeedMultiplier(level, fuelItem) * 2;
     }
 
+    @Override
+    protected int getBurnDuration(ServerLevel level, ItemStack fuelItem) {
+        return super.getBurnDuration(level, fuelItem) / 2;
+    }
+
     public static final Component DEFAULT_NAME = Component.translatable("container.obsidian.obsidian_furnace");
 
     @Override

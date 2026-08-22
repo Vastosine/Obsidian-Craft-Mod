@@ -19,14 +19,14 @@ public class OCStats {
 
     private static Identifier makeCustomStat(final String id, final StatFormatter formatter) {
         Identifier location = ObsidianCraft.id(id);
-        Registry.register(BuiltInRegistries.CUSTOM_STAT, id, location);
+        Registry.register(BuiltInRegistries.CUSTOM_STAT, location, location);
         Stats.CUSTOM.get(location, formatter);
         return location;
     }
 
     private static <T> StatType<T> makeRegistryStatType(final String name, final Registry<T> registry) {
         Component displayName = Component.translatable("stat_type.obsidiann." + name);
-        return Registry.register(BuiltInRegistries.STAT_TYPE, name, new StatType<>(registry, displayName));
+        return Registry.register(BuiltInRegistries.STAT_TYPE, ObsidianCraft.id(name), new StatType<>(registry, displayName));
     }
 
     public static void onInitialize() {
