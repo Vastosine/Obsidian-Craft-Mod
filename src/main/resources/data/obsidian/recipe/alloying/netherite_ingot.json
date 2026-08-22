@@ -3,14 +3,14 @@
   "experience": 1.0,
   "group": "netherite_ingot",
   "ingredients": [
-    "minecraft:netherite_scrap",
-    "minecraft:netherite_scrap",
-    "minecraft:netherite_scrap",
-    "minecraft:netherite_scrap",
-    "minecraft:gold_ingot",
-    "minecraft:gold_ingot",
-    "minecraft:gold_ingot",
-    "minecraft:gold_ingot"
+    {
+      "id": "minecraft:netherite_scrap",
+      "count": 4
+    },
+    {
+      "id": "minecraft:gold_ingot",
+      "count": 4
+    }
   ],
   "result": {
     "id": "minecraft:netherite_ingot"

@@ -2,6 +2,9 @@ package com.vastosine.obsidian.block.entity;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
+import com.vastosine.obsidian.item.crafting.AlloyingInput;
+import com.vastosine.obsidian.item.crafting.AlloyingRecipe;
+import com.vastosine.obsidian.item.crafting.OCRecipeTypes;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -115,14 +118,17 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
     private final Reference2IntOpenHashMap<ResourceKey<Recipe<?>>> recipesUsed = new Reference2IntOpenHashMap<>();
     private final Reference2IntOpenHashMap<ResourceKey<Recipe<?>>> recipesUsing = new Reference2IntOpenHashMap<>();
     private final List<ItemStack> recipeResults = new ArrayList<>();
-    private final RecipeManager.CachedCheck<SingleRecipeInput, ? extends AbstractCookingRecipe> quickCheck;
+    private final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> smeltingQuickCheck = RecipeManager.createCheck(RecipeType.SMELTING);
+    private final RecipeManager.CachedCheck<AlloyingInput, AlloyingRecipe> alloyingQuickCheck = RecipeManager.createCheck(OCRecipeTypes.ALLOYING);
 
     private final Direction face;
 
-    @SafeVarargs
-    protected AbstractAlloySmelterBlockEntity(BlockEntityType<?> type, BlockPos worldPosition, BlockState blockState, Direction face, final RecipeType<? extends AbstractCookingRecipe>... recipeTypes) {
+    protected AbstractAlloySmelterBlockEntity(
+            BlockEntityType<?> type, BlockPos worldPosition,
+            BlockState blockState,
+            Direction face
+    ) {
         super(type, worldPosition, blockState);
-        this.quickCheck = RecipeManager.createCheck(recipeTypes[0]);
         this.face = face;
     }
 
@@ -186,18 +192,28 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         if (!isCooking) {
             if (isLit || hasFuel) {
                 // TODO Alloy Smelt Recipes
-                for (ItemStack ingredient : ingredients) {
-                    SingleRecipeInput input = new SingleRecipeInput(ingredient);
-                    RecipeHolder<? extends AbstractCookingRecipe> recipe = entity.quickCheck.getRecipeFor(input, level).orElse(null);
-                    if (recipe == null) continue;
-                    ItemStack result = recipe.value().assemble(input);
-                    if (!canBurn(entity, entity.getMaxStackSize(), result)) continue;
-                    entity.cookingTotalTime = getTotalCookTime(recipe, entity);
-                    entity.recipeResults.add(result);
-                    ingredient.shrink(1);
+                AlloyingInput alloyingInput = new AlloyingInput(ingredients);
+                RecipeHolder<AlloyingRecipe> alloyingRecipe = entity.alloyingQuickCheck.getRecipeFor(alloyingInput, level).orElse(null);
+                ItemStack alloyingResult;
+                if (alloyingRecipe != null && canBurn(entity, entity.getMaxStackSize(), alloyingResult = alloyingRecipe.value().assemble(alloyingInput))) {
+                    entity.cookingTotalTime = getTotalAlloyTime(alloyingRecipe, entity);
+                    entity.recipeResults.add(alloyingResult);
                     entity.recipesUsing.clear();
-                    entity.recipesUsing.addTo(recipe.id(), 1);
-                    break;
+                    entity.recipesUsing.addTo(alloyingRecipe.id(), 1);
+                } else {
+                    for (ItemStack ingredient : ingredients) {
+                        SingleRecipeInput input = new SingleRecipeInput(ingredient);
+                        RecipeHolder<SmeltingRecipe> recipe = entity.smeltingQuickCheck.getRecipeFor(input, level).orElse(null);
+                        if (recipe == null) continue;
+                        ItemStack result = recipe.value().assemble(input);
+                        if (!canBurn(entity, entity.getMaxStackSize(), result)) continue;
+                        entity.cookingTotalTime = getTotalSmeltTime(recipe, entity);
+                        entity.recipeResults.add(result);
+                        ingredient.shrink(1);
+                        entity.recipesUsing.clear();
+                        entity.recipesUsing.addTo(recipe.id(), 1);
+                        break;
+                    }
                 }
             }
         }
@@ -303,8 +319,12 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         return ResolvableNumber.getFloatFromItem(fuelItem, DataComponents.COOKING_FUEL, CookingFuel::speedMultiplier, this.getLootContext(level), 1.0F);
     }
 
-    private static int getTotalCookTime(final RecipeHolder<? extends AbstractCookingRecipe> recipe, final AbstractAlloySmelterBlockEntity entity) {
+    private static int getTotalSmeltTime(final RecipeHolder<SmeltingRecipe> recipe, final AbstractAlloySmelterBlockEntity entity) {
         return Mth.ceil(recipe.value().cookingTime() / entity.smeltingSpeed / (entity.speedMultiplier > 0.0F ? entity.speedMultiplier : 1.0F));
+    }
+
+    private static int getTotalAlloyTime(final RecipeHolder<AlloyingRecipe> recipe, final AbstractAlloySmelterBlockEntity entity) {
+        return Mth.ceil(recipe.value().cookingTime() / entity.alloyingSpeed / (entity.speedMultiplier > 0.0F ? entity.speedMultiplier : 1.0F));
     }
 
     public final int[][] intToDirection = {slotsForFront, slotsForLeft, slotsForBack, slotsForRight};
