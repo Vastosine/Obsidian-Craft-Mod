@@ -5,6 +5,8 @@ import com.vastosine.obsidian.block.entity.OCBlockEntityTypes;
 import com.vastosine.obsidian.gui.menu.OCMenuTypes;
 import com.vastosine.obsidian.item.OCCreativeModeTabs;
 import com.vastosine.obsidian.item.OCItems;
+import com.vastosine.obsidian.item.crafting.OCRecipeSerializers;
+import com.vastosine.obsidian.item.crafting.OCRecipeTypes;
 import com.vastosine.obsidian.stats.OCStats;
 import net.fabricmc.api.ModInitializer;
 
@@ -34,6 +36,8 @@ public class ObsidianCraft implements ModInitializer {
         OCBlockEntityTypes.onInitialize();
         OCStats.onInitialize();
         OCMenuTypes.onInitialize();
+        OCRecipeSerializers.onInitialize();
+        OCRecipeTypes.onInitialize();
     }
 
 	public static final String INFO = "Registering {} for {}";
