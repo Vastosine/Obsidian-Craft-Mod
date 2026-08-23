@@ -12,6 +12,6 @@ public class AlloySmelterMenu extends AbstractAlloySmelterMenu{
     }
 
     public AlloySmelterMenu(final int containerId, final Inventory inventory, final Container container, final ContainerData data) {
-        super(OCMenuTypes.ALLOY_SMELTER, RecipePropertySet.FURNACE_INPUT, RecipeBookType.FURNACE, containerId, inventory, container, data, 2, 1, 1);
+        super(OCMenuTypes.ALLOY_SMELTER, RecipePropertySet.FURNACE_INPUT, RecipeBookType.FURNACE, containerId, inventory, container, data, 3, 1, 1);
     }
 }

@@ -43,20 +43,20 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, StackedContentsCompatible, RecipeCraftingHolder {
-    protected final int slotInputCount = 2;
-    protected final int slotFuelCount = 1;
-    protected final int slotResultCount = 1;
+    protected final int slotInputCount;
+    protected final int slotFuelCount;
+    protected final int slotResultCount;
 
-    protected final int[] slotInput = get_sequence(0, slotInputCount);
-    protected final int[] slotFuel = get_sequence(slotInputCount, slotFuelCount);
-    protected final int[] slotResult = get_sequence(slotInputCount + slotFuelCount, slotResultCount);
+    protected final int[] slotInput;
+    protected final int[] slotFuel;
+    protected final int[] slotResult;
 
-    private final int[] slotsForUp = slotInput;
-    private final int[] slotsForFront = slotFuel;
-    private final int[] slotsForBack = slotFuel;
-    private final int[] slotsForLeft = new int[]{0};
-    private final int[] slotsForRight = new int[]{1};
-    private final int[] slotsForDown = ArrayUtils.addAll(slotResult, slotFuel);
+    private final int[] slotsForUp;
+    private final int[] slotsForFront;
+    private final int[] slotsForBack;
+    private final int[] slotsForLeft;
+    private final int[] slotsForRight;
+    private final int[] slotsForDown;
 
     public static final int DATA_LIT_TIME = 0;
     public static final int DATA_LIT_DURATION = 1;
@@ -69,7 +69,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
     private static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USING_CODEC = Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
     private static final Codec<List<ItemStack>> RECIPE_RESULTS = Codec.list(ItemStack.CODEC);
     private static final float DEFAULT_SPEED_MULTIPLIER = 1.0F;
-    protected NonNullList<ItemStack> items = NonNullList.withSize(slotInputCount + slotFuelCount + slotResultCount, ItemStack.EMPTY);
+    protected NonNullList<ItemStack> items;
     private int litTimeRemaining;
     private int litTotalTime;
     private int cookingTimer;
@@ -122,14 +122,56 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
     private final RecipeManager.CachedCheck<AlloyingInput, AlloyingRecipe> alloyingQuickCheck = RecipeManager.createCheck(OCRecipeTypes.ALLOYING);
 
     private final Direction face;
+    private int[][] intToDirection;
+
+    protected AbstractAlloySmelterBlockEntity(
+            BlockEntityType<?> type, BlockPos worldPosition,
+            BlockState blockState,
+            Direction face,
+            int slotInputCount
+    ) {
+        this(type, worldPosition, blockState, face, slotInputCount, 1, 1);
+    }
+
+    protected AbstractAlloySmelterBlockEntity(
+            BlockEntityType<?> type, BlockPos worldPosition,
+            BlockState blockState,
+            Direction face,
+            int slotInputCount,
+            int slotResultCount
+    ) {
+        this(type, worldPosition, blockState, face, slotInputCount, 1, slotResultCount);
+    }
 
     protected AbstractAlloySmelterBlockEntity(
             BlockEntityType<?> type, BlockPos worldPosition,
             BlockState blockState,
             Direction face
     ) {
+        this(type, worldPosition, blockState, face, 2, 1, 1);
+    }
+
+    protected AbstractAlloySmelterBlockEntity(
+            BlockEntityType<?> type, BlockPos worldPosition,
+            BlockState blockState,
+            Direction face,
+            int slotInputCount, int slotFuelCount, int slotResultCount
+    ) {
         super(type, worldPosition, blockState);
         this.face = face;
+        this.slotInputCount = slotInputCount;
+        this.slotFuelCount = slotFuelCount;
+        this.slotResultCount = slotResultCount;
+        this.slotInput = get_sequence(0, slotInputCount);
+        this.slotFuel = get_sequence(slotInputCount, slotFuelCount);
+        this.slotResult = get_sequence(slotInputCount + slotFuelCount, slotResultCount);
+        this.slotsForUp = slotInput;
+        this.slotsForFront = slotFuel;
+        this.slotsForBack = slotFuel;
+        this.slotsForLeft = new int[]{0};
+        this.slotsForRight = new int[]{1};
+        this.slotsForDown = ArrayUtils.addAll(slotResult, slotFuel);
+        this.items = NonNullList.withSize(slotInputCount + slotFuelCount + slotResultCount, ItemStack.EMPTY);
     }
 
     @Override
@@ -148,6 +190,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         this.recipesUsing.putAll(input.read("RecipesUsing", RECIPES_USING_CODEC).orElse(Map.of()));
         this.recipeResults.clear();
         this.recipeResults.addAll(input.read("CookingRecipeResults", RECIPE_RESULTS).orElse(new ArrayList<>()));
+        this.intToDirection = new int[][]{slotsForFront, slotsForLeft, slotsForBack, slotsForRight};
     }
 
     @Override
@@ -328,8 +371,6 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         return Mth.ceil(recipe.value().cookingTime() / entity.alloyingSpeed / (entity.speedMultiplier > 0.0F ? entity.speedMultiplier : 1.0F));
     }
 
-    public final int[][] intToDirection = {slotsForFront, slotsForLeft, slotsForBack, slotsForRight};
-
     @Override
     public int[] getSlotsForFace(final Direction direction) {
         int x = directionToInt(direction);
@@ -433,7 +474,11 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         for (Reference2IntMap.Entry<ResourceKey<Recipe<?>>> entry : this.recipesUsed.reference2IntEntrySet()) {
             level.recipeAccess().byKey(entry.getKey()).ifPresent(recipe -> {
                 recipesToAward.add(recipe);
-                createExperience(level, position, entry.getIntValue(), ((AbstractCookingRecipe) recipe.value()).experience());
+                if (recipe.value() instanceof AbstractCookingRecipe cookingRecipe) {
+                    createExperience(level, position, entry.getIntValue(), cookingRecipe.experience());
+                } else if (recipe.value() instanceof AlloyingRecipe alloyingRecipe) {
+                    createExperience(level, position, entry.getIntValue(), alloyingRecipe.experience());
+                }
             });
         }
 
