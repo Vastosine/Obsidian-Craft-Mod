@@ -200,6 +200,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
                     entity.recipeResults.add(alloyingResult);
                     entity.recipesUsing.clear();
                     entity.recipesUsing.addTo(alloyingRecipe.id(), 1);
+                    alloyingRecipe.value().consume(alloyingInput);
                 } else {
                     for (ItemStack ingredient : ingredients) {
                         SingleRecipeInput input = new SingleRecipeInput(ingredient);

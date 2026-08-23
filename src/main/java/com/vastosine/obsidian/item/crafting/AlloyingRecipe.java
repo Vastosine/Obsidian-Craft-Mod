@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.vastosine.obsidian.utils.RecipeMatches;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -62,28 +62,19 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     // input will be consumed
     @Override
     public boolean matches(AlloyingInput input, Level level) {
-        // TODO better matches
-        List<Integer> afterConsumed = new ArrayList<>();
-        input.getItemStack().forEach(x -> afterConsumed.add(x.count()));
-        for (IngredientWithCount ingredient : ingredients) {
-            int count = ingredient.count();
-            for (int i = 0; i < input.size(); i++) {
-                ItemStack itemStack = input.getItem(i);
-                int itemCount = afterConsumed.get(i);
-                if (itemCount > 0 && ingredient.test(itemStack)) {
-                    int x = Math.min(itemCount, count);
-                    count -= x;
-                    afterConsumed.set(i, itemCount - x);
-                }
-                if (count <= 0) break;
-            }
-            if (count > 0) return false;
-            afterConsumed.add(count);
+        return get_match(input) != null;
+    }
+
+    private int[] get_match(AlloyingInput input) {
+        return RecipeMatches.getMatches(ingredients, input);
+    }
+
+    public void consume(AlloyingInput input) {
+        int[] match = get_match(input);
+        for (int i = 0; i < input.size() && i < match.length; i++) {
+            ItemStack itemStack = input.getItem(i);
+            itemStack.setCount(itemStack.count() - match[i]);
         }
-        for (int i = 0; i < input.size(); i++) {
-            input.getItem(i).setCount(afterConsumed.get(i));
-        }
-        return true;
     }
 
     @Override
