@@ -1,6 +1,5 @@
 package com.vastosine.obsidian.block;
 
-import com.vastosine.obsidian.block.entity.AbstractAlloySmelterBlockEntity;
 import com.vastosine.obsidian.block.entity.AlloySmelterBlockEntity;
 import com.vastosine.obsidian.block.entity.OCBlockEntityTypes;
 import com.vastosine.obsidian.stats.OCStats;
@@ -24,7 +23,7 @@ public class AlloySmelterBlock extends AbstractFurnaceBlock {
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> type) {
         return level instanceof ServerLevel serverLevel
-                ? createTickerHelper(type, OCBlockEntityTypes.ALLOY_SMELTER, (innerLevel, pos, state, entity) -> AbstractAlloySmelterBlockEntity.serverTick(serverLevel, pos, state, entity))
+                ? createTickerHelper(type, OCBlockEntityTypes.ALLOY_SMELTER, (innerLevel, pos, state, entity) -> entity.tick(serverLevel, pos, state))
                 : null;
     }
 

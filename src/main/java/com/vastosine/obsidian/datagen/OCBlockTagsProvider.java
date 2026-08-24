@@ -35,7 +35,8 @@ public class OCBlockTagsProvider extends FabricTagsProvider.BlockTagsProvider {
         // vanilla
         tag(BlockTags.MINEABLE_WITH_PICKAXE).add(
                 OBSIDIAN_BLOCK,
-                OBSIDIAN_FURNACE
+                OBSIDIAN_FURNACE,
+                ALLOY_SMELTER
         );
         tag(BlockTags.NEEDS_DIAMOND_TOOL).add(
                 OBSIDIAN_BLOCK

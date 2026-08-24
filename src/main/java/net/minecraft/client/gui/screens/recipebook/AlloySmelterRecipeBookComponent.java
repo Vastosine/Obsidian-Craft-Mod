@@ -47,7 +47,7 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
     protected void fillGhostRecipe(final GhostSlots ghostSlots, final RecipeDisplay recipe, final ContextMap context) {
         ghostSlots.setResult(this.menu.getResultSlots()[0], context, recipe.result());
         if (recipe instanceof FurnaceRecipeDisplay furnaceRecipe) {
-            ghostSlots.setInput(this.menu.slots.get(0), context, furnaceRecipe.ingredient());
+            ghostSlots.setInput(this.menu.slots.getFirst(), context, furnaceRecipe.ingredient());
             Slot fuelSlot = this.menu.getFuelSlots()[0];
             if (fuelSlot.getItem().isEmpty()) {
                 ghostSlots.setInput(fuelSlot, context, furnaceRecipe.fuel());
