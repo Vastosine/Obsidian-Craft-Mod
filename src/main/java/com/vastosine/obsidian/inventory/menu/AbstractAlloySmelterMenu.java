@@ -1,7 +1,7 @@
-package com.vastosine.obsidian.gui.menu;
+package com.vastosine.obsidian.inventory.menu;
 
-import com.vastosine.obsidian.gui.slot.AlloySmelterFuelSlot;
-import com.vastosine.obsidian.gui.slot.AlloySmelterResultSlot;
+import com.vastosine.obsidian.inventory.slot.AlloySmelterFuelSlot;
+import com.vastosine.obsidian.inventory.slot.AlloySmelterResultSlot;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.recipebook.ServerPlaceRecipe;
 import net.minecraft.resources.ResourceKey;

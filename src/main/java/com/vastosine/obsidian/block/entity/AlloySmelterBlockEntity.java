@@ -1,6 +1,6 @@
 package com.vastosine.obsidian.block.entity;
 
-import com.vastosine.obsidian.gui.menu.AlloySmelterMenu;
+import com.vastosine.obsidian.inventory.menu.AlloySmelterMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

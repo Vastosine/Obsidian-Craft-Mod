@@ -1,7 +1,7 @@
 package net.minecraft.client.gui.screens.recipebook;
 
 
-import com.vastosine.obsidian.gui.menu.AbstractAlloySmelterMenu;
+import com.vastosine.obsidian.inventory.menu.AbstractAlloySmelterMenu;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.components.WidgetSprites;

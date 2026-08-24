@@ -1,4 +1,4 @@
-package com.vastosine.obsidian.gui.menu;
+package com.vastosine.obsidian.inventory.menu;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;

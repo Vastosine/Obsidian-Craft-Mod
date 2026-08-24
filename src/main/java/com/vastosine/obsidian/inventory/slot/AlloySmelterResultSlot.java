@@ -1,4 +1,4 @@
-package com.vastosine.obsidian.gui.slot;
+package com.vastosine.obsidian.inventory.slot;
 
 import com.vastosine.obsidian.block.entity.AbstractAlloySmelterBlockEntity;
 import net.minecraft.server.level.ServerPlayer;

@@ -1,6 +1,6 @@
 package com.vastosine.obsidian;
 
-import com.vastosine.obsidian.gui.screen.OCMenuScreens;
+import com.vastosine.obsidian.client.screen.OCMenuScreens;
 import net.fabricmc.api.ClientModInitializer;
 
 public class ObsidianCraftClient implements ClientModInitializer {

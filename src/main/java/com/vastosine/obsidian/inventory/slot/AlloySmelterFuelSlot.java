@@ -1,7 +1,7 @@
-package com.vastosine.obsidian.gui.slot;
+package com.vastosine.obsidian.inventory.slot;
 
 import net.minecraft.world.Container;
-import com.vastosine.obsidian.gui.menu.AbstractAlloySmelterMenu;
+import com.vastosine.obsidian.inventory.menu.AbstractAlloySmelterMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

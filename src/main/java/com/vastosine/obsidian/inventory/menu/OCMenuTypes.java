@@ -1,4 +1,4 @@
-package com.vastosine.obsidian.gui.menu;
+package com.vastosine.obsidian.inventory.menu;
 
 import com.vastosine.obsidian.ObsidianCraft;
 import net.minecraft.core.Registry;
