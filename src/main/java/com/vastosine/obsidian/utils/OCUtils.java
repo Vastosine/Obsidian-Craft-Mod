@@ -20,4 +20,8 @@ public class OCUtils {
     public static int[] getSequence(int begin, int size) {
         return getSequence(begin, size, 1);
     }
+
+    public static int[] getSequence(int size) {
+        return getSequence(0, size, 1);
+    }
 }

@@ -145,9 +145,13 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         this.slotFuelCount = slotFuelCount;
         this.slotResultCount = slotResultCount;
         this.items = NonNullList.withSize(slotInputCount + slotFuelCount + slotResultCount, ItemStack.EMPTY);
-        this.inputs = items.subList(0, slotInputCount);
-        this.fuels = items.subList(slotInputCount, slotInputCount + slotFuelCount);
-        this.results = items.subList(slotInputCount + slotFuelCount, slotInputCount + slotFuelCount + slotResultCount);
+        initializeItems();
+    }
+
+    private void initializeItems() {
+        inputs = items.subList(0, slotInputCount);
+        fuels = items.subList(slotInputCount, slotInputCount + slotFuelCount);
+        results = items.subList(slotInputCount + slotFuelCount, slotInputCount + slotFuelCount + slotResultCount);
     }
 
     @Override
@@ -155,6 +159,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         super.loadAdditional(input);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
         ContainerHelper.loadAllItems(input, this.items);
+        initializeItems();
         this.cookingTimer = input.getIntOr("cooking_time_spent", 0);
         this.cookingTotalTime = input.getIntOr("cooking_total_time", 0);
         this.litTimeRemaining = input.getIntOr("lit_time_remaining", 0);

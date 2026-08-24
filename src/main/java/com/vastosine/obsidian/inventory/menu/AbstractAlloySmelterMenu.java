@@ -1,7 +1,10 @@
 package com.vastosine.obsidian.inventory.menu;
 
+import com.vastosine.obsidian.ObsidianCraft;
 import com.vastosine.obsidian.inventory.slot.AlloySmelterFuelSlot;
 import com.vastosine.obsidian.inventory.slot.AlloySmelterResultSlot;
+import com.vastosine.obsidian.item.crafting.AlloyingInput;
+import com.vastosine.obsidian.item.crafting.AlloyingRecipe;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.recipebook.ServerPlaceRecipe;
 import net.minecraft.resources.ResourceKey;
@@ -14,12 +17,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipePropertySet;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
@@ -83,6 +84,7 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
         }
         this.addStandardInventorySlots(inventory, 8, 84);
         this.addDataSlots(data);
+        ObsidianCraft.LOGGER.info("{}", getItems().size());
     }
 
     public boolean isInputSlot(int slot) {
@@ -189,24 +191,49 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
 
     @Override
     public PostPlaceAction handlePlacement(boolean useMaxItems, boolean allowDroppingItemsToClear, RecipeHolder<?> recipe, ServerLevel level, Inventory inventory) {
-        final List<Slot> slotsToClear = List.of(this.getSlot(0), this.getSlot(slotInputCount + slotFuelCount));
-        RecipeHolder<AbstractCookingRecipe> typedRecipe = (RecipeHolder<AbstractCookingRecipe>)recipe;
-        return ServerPlaceRecipe.placeRecipe(new ServerPlaceRecipe.CraftingMenuAccess<AbstractCookingRecipe>() {
-            @Override
-            public void fillCraftSlotsStackedContents(final StackedItemContents stackedContents) {
-                AbstractAlloySmelterMenu.this.fillCraftSlotsStackedContents(stackedContents);
-            }
+        if (recipe.value() instanceof AbstractCookingRecipe) {
+            final List<Slot> slotsToClear = List.of(this.getSlot(0), this.getSlot(slotInputCount + slotFuelCount));
+            RecipeHolder<AbstractCookingRecipe> typedRecipe = (RecipeHolder<AbstractCookingRecipe>) recipe;
+            return ServerPlaceRecipe.placeRecipe(new ServerPlaceRecipe.CraftingMenuAccess<>() {
+                @Override
+                public void fillCraftSlotsStackedContents(final StackedItemContents stackedContents) {
+                    AbstractAlloySmelterMenu.this.fillCraftSlotsStackedContents(stackedContents);
+                }
 
-            @Override
-            public void clearCraftingContent() {
-                slotsToClear.forEach(s -> s.set(ItemStack.EMPTY));
-            }
+                @Override
+                public void clearCraftingContent() {
+                    slotsToClear.forEach(s -> s.set(ItemStack.EMPTY));
+                }
 
-            @Override
-            public boolean recipeMatches(final RecipeHolder<AbstractCookingRecipe> recipe) {
-                return recipe.value().matches(new SingleRecipeInput(AbstractAlloySmelterMenu.this.container.getItem(0)), level);
-            }
-        }, 1, 1, List.of(this.getSlot(0)), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
+                @Override
+                public boolean recipeMatches(final RecipeHolder<AbstractCookingRecipe> recipe) {
+                    return recipe.value().matches(new SingleRecipeInput(AbstractAlloySmelterMenu.this.container.getItem(0)), level);
+                }
+            }, 1, 1, List.of(this.getSlot(0)), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
+        } else if (recipe.value() instanceof AlloyingRecipe) {
+            final List<Slot> slotsToClear = new ArrayList<>();
+            slotsToClear.addAll(slots.subList(0, slotInputCount));
+            final List<ItemStack> inputs = new ArrayList<>();
+            slotsToClear.forEach(p -> inputs.add(container.getItem(p.index)));
+            slotsToClear.addAll(slots.subList(slotInputCount + slotFuelCount, slotCount));
+            RecipeHolder<AlloyingRecipe> typedRecipe = (RecipeHolder<AlloyingRecipe>) recipe;
+            return  ServerPlaceRecipe.placeRecipe(new ServerPlaceRecipe.CraftingMenuAccess<>() {
+                @Override
+                public void fillCraftSlotsStackedContents(StackedItemContents stackedContents) {
+                    AbstractAlloySmelterMenu.this.fillCraftSlotsStackedContents(stackedContents);
+                }
+
+                @Override
+                public void clearCraftingContent() {
+                    slotsToClear.forEach(s -> s.set(ItemStack.EMPTY));
+                }
+
+                @Override
+                public boolean recipeMatches(RecipeHolder<AlloyingRecipe> recipe) {
+                    return recipe.value().matches(new AlloyingInput(inputs), level);
+                }
+            }, 1, 1, slots.subList(0, slotInputCount), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
+        } else throw new RuntimeException();
     }
 
     @Override

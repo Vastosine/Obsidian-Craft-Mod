@@ -8,6 +8,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 
 public record IngredientWithCount(Ingredient ingredient, int count) {
     public static final MapCodec<IngredientWithCount> MAP_CODEC = RecordCodecBuilder.mapCodec(
@@ -30,5 +31,9 @@ public record IngredientWithCount(Ingredient ingredient, int count) {
 
     public boolean test(final ItemStack itemStack) {
         return ingredient.test(itemStack);
+    }
+
+    public SlotDisplay display() {
+        return ingredient.display();
     }
 }

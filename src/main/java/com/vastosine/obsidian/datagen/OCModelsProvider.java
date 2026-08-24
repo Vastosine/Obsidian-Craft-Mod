@@ -20,6 +20,7 @@ public class OCModelsProvider extends FabricModelProvider {
     @Override
     public void generateBlockStateModels(BlockModelGenerators blockModelGenerators) {
         blockModelGenerators.createTrivialCube(OBSIDIAN_BLOCK);
+        blockModelGenerators.createTrivialCube(COUNTER_BLOCK);
         blockModelGenerators.createFurnace(OBSIDIAN_FURNACE, TexturedModel.ORIENTABLE_ONLY_TOP);
         blockModelGenerators.createFurnace(ALLOY_SMELTER, TexturedModel.ORIENTABLE_ONLY_TOP);
     }

@@ -2,6 +2,8 @@ package net.minecraft.client.gui.screens.recipebook;
 
 
 import com.vastosine.obsidian.inventory.menu.AbstractAlloySmelterMenu;
+import com.vastosine.obsidian.item.crafting.display.AlloyingRecipeDisplay;
+import com.vastosine.obsidian.utils.OCUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -13,6 +15,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.display.FurnaceRecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
@@ -24,10 +27,18 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
             Identifier.withDefaultNamespace("recipe_book/furnace_filter_disabled_highlighted")
     );
     private final Component recipeFilterName;
+    private final int slotCount;
+    private final int slotInputCount;
+    private final int slotFuelCount;
+    private final int slotResultCount;
 
-    public AlloySmelterRecipeBookComponent(final AbstractAlloySmelterMenu menu, final Component recipeFilterName, final List<TabInfo> tabInfos) {
+    public AlloySmelterRecipeBookComponent(final AbstractAlloySmelterMenu menu, final Component recipeFilterName, final List<TabInfo> tabInfos, int slotInputCount, int slotFuelCount, int slotResultCount) {
         super(menu, tabInfos);
         this.recipeFilterName = recipeFilterName;
+        this.slotInputCount = slotInputCount;
+        this.slotFuelCount = slotFuelCount;
+        this.slotResultCount = slotResultCount;
+        this.slotCount = slotInputCount + slotFuelCount + slotResultCount;
     }
 
     @Override
@@ -48,10 +59,20 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
         ghostSlots.setResult(this.menu.getResultSlots()[0], context, recipe.result());
         if (recipe instanceof FurnaceRecipeDisplay furnaceRecipe) {
             ghostSlots.setInput(this.menu.slots.getFirst(), context, furnaceRecipe.ingredient());
-            Slot fuelSlot = this.menu.getFuelSlots()[0];
-            if (fuelSlot.getItem().isEmpty()) {
-                ghostSlots.setInput(fuelSlot, context, furnaceRecipe.fuel());
+            Slot[] fuelSlot = menu.getFuelSlots();
+            for (Slot slot : fuelSlot) {
+                if (!slot.getItem().isEmpty()) return;
             }
+            ghostSlots.setInput(fuelSlot[0], context, furnaceRecipe.fuel());
+        } else if (recipe instanceof AlloyingRecipeDisplay alloyingRecipe) {
+            for (int slot : OCUtils.getSequence(slotInputCount)) {
+                ghostSlots.setInput(menu.slots.get(slot), context, alloyingRecipe.ingredients().get(slot));
+            }
+            Slot[] fuelSlot = menu.getFuelSlots();
+            for (Slot slot : fuelSlot) {
+                if (!slot.getItem().isEmpty()) return;
+            }
+            ghostSlots.setInput(fuelSlot[0], context, alloyingRecipe.fuel());
         }
     }
 
@@ -62,6 +83,7 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
 
     @Override
     protected void selectMatchingRecipes(final RecipeCollection collection, final StackedItemContents stackedContents) {
+        collection.selectRecipes(stackedContents, display -> display instanceof AlloyingRecipeDisplay);
         collection.selectRecipes(stackedContents, display -> display instanceof FurnaceRecipeDisplay);
     }
 }

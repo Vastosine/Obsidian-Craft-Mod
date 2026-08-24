@@ -8,6 +8,7 @@ import com.vastosine.obsidian.item.OCItems;
 import com.vastosine.obsidian.item.crafting.OCRecipeBookCategories;
 import com.vastosine.obsidian.item.crafting.OCRecipeSerializers;
 import com.vastosine.obsidian.item.crafting.OCRecipeTypes;
+import com.vastosine.obsidian.item.crafting.display.OCRecipeDisplays;
 import com.vastosine.obsidian.stats.OCStats;
 import net.fabricmc.api.ModInitializer;
 
@@ -40,6 +41,7 @@ public class ObsidianCraft implements ModInitializer {
         OCRecipeSerializers.onInitialize();
         OCRecipeTypes.onInitialize();
         OCRecipeBookCategories.onInitialize();
+        OCRecipeDisplays.onInitialize();
     }
 
 	public static final String INFO = "Registering {} for {}";

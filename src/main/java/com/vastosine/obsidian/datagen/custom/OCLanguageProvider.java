@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.Identifier;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -41,6 +42,8 @@ public abstract class OCLanguageProvider extends FabricLanguageProvider {
             translationBuilder.add(block, translation);
         } else if (translationKey instanceof Identifier id) {
             translationBuilder.add(id, translation);
+        } else if (translationKey instanceof TagKey<?> tagKey) {
+            translationBuilder.add(tagKey, translation);
         }
     }
 

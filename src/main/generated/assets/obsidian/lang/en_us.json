@@ -29,6 +29,11 @@
   "itemGroup.obsidian_craft": "Obsidian Craft",
   "stat.obsidian.interact_with_alloy_smelter": "Interactions With Alloy Smelter",
   "stat.obsidian.interact_with_obsidian_furnace": "Interactions With Obsidian Furnace",
+  "tag.block.obsidian.incorrect_for_obsidian_tool": "Incorrect for Obsidian Tool",
+  "tag.block.obsidian.obsidian_block": "Obsidian Block",
+  "tag.item.obsidian.obsidian_armor_materials": "Obsidian Armor Materials",
+  "tag.item.obsidian.obsidian_armors": "Obsidian Armor",
+  "tag.item.obsidian.obsidian_tool_materials": "Obsidian Tool Materials",
   "tooltip.obsidian.obsidian_pickaxe": "Press [§aShift§r] to learn more.",
   "tooltip.obsidian.obsidian_pickaxe.shift.0": "Mine blocks like §5Obsidian§r to repair it!",
   "tooltip.obsidian.obsidian_pickaxe.shift.1": "More efficiency when mining blocks like §5Obsidian§r!"

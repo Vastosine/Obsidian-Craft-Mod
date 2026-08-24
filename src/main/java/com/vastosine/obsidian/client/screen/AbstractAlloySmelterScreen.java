@@ -22,6 +22,10 @@ public abstract class AbstractAlloySmelterScreen<T extends AbstractAlloySmelterM
     private final Identifier texture;
     private final Identifier litProgressSprite;
     private final Identifier burnProgressSprite;
+    private final int slotCount;
+    private final int slotInputCount;
+    private final int slotFuelCount;
+    private final int slotResultCount;
 
     public AbstractAlloySmelterScreen(
             final T menu,
@@ -31,12 +35,17 @@ public abstract class AbstractAlloySmelterScreen<T extends AbstractAlloySmelterM
             final Identifier texture,
             final Identifier litProgressSprite,
             final Identifier burnProgressSprite,
-            final List<RecipeBookComponent.TabInfo> tabInfos
+            final List<RecipeBookComponent.TabInfo> tabInfos,
+            int slotInputCount, int slotFuelCount, int slotResultCount
     ) {
-        super(menu, new AlloySmelterRecipeBookComponent(menu, recipeFilterName, tabInfos), inventory, title);
+        super(menu, new AlloySmelterRecipeBookComponent(menu, recipeFilterName, tabInfos, slotInputCount, slotFuelCount, slotResultCount), inventory, title);
         this.texture = texture;
         this.litProgressSprite = litProgressSprite;
         this.burnProgressSprite = burnProgressSprite;
+        this.slotInputCount = slotInputCount;
+        this.slotFuelCount = slotFuelCount;
+        this.slotResultCount = slotResultCount;
+        this.slotCount = slotInputCount + slotFuelCount + slotResultCount;
     }
 
     @Override

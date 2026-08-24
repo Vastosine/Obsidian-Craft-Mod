@@ -3,6 +3,8 @@ package com.vastosine.obsidian.datagen;
 import com.vastosine.obsidian.datagen.custom.OCLanguageProvider;
 import com.vastosine.obsidian.item.OCCreativeModeTabs;
 import com.vastosine.obsidian.stats.OCStats;
+import com.vastosine.obsidian.tags.OCBlockTags;
+import com.vastosine.obsidian.tags.OCItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.minecraft.core.HolderLookup;
 
@@ -36,6 +38,11 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 "tooltip.obsidian.obsidian_pickaxe.shift.0", "Mine blocks like §5Obsidian§r to repair it!",
                 "tooltip.obsidian.obsidian_pickaxe.shift.1", "More efficiency when mining blocks like §5Obsidian§r!",
 
+                // Item Tags
+                OCItemTags.OBSIDIAN_ARMOR_MATERIALS, "Obsidian Armor Materials",
+                OCItemTags.OBSIDIAN_ARMORS, "Obsidian Armor",
+                OCItemTags.OBSIDIAN_TOOL_MATERIALS, "Obsidian Tool Materials",
+
                 // Blocks
                 OBSIDIAN_BLOCK, "Obsidian Block",
                 OBSIDIAN_FURNACE, "Obsidian Furnace",
@@ -46,7 +53,11 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 "container.obsidian.alloy_smelter", "Alloy Smelter",
 
                 OCStats.INTERACT_WITH_OBSIDIAN_FURNACE.toLanguageKey("stat"), "Interactions With Obsidian Furnace",
-                OCStats.INTERACT_WITH_ALLOY_SMELTER.toLanguageKey("stat"), "Interactions With Alloy Smelter"
+                OCStats.INTERACT_WITH_ALLOY_SMELTER.toLanguageKey("stat"), "Interactions With Alloy Smelter",
+
+                // Block Tags
+                OCBlockTags.INCORRECT_FOR_OBSIDIAN_TOOL, "Incorrect for Obsidian Tool",
+                OCBlockTags.OBSIDIAN_BLOCK, "Obsidian Block"
         );
 
         // itemGroups

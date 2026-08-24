@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "obsidian:block/counter_block"
+    }
+  }
+}
