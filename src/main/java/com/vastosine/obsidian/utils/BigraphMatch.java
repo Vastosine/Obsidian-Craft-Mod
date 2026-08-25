@@ -10,6 +10,10 @@ public class BigraphMatch {
     private int[] matches;
     private final int ln, rn;
 
+    public interface CheckValid {
+        boolean isValid(int leftNode, int rightNode);
+    }
+
     public BigraphMatch(int[] lCount, int[] rCount) {
         this.lCount = lCount;
         this.rCount = rCount;
@@ -22,6 +26,21 @@ public class BigraphMatch {
         }
         for (int i = 0; i < rn; i++) {
             r.add(new ArrayList<>());
+        }
+    }
+
+    public BigraphMatch(int[] lCount, int[] rCount, CheckValid checker) {
+        this(lCount, rCount);
+        loadChecker(checker);
+    }
+
+    void loadChecker(CheckValid checker) {
+        for (int i = 0; i < ln; i++) {
+            for (int j = 0; j < rn; j++) {
+                if (checker.isValid(i, j)) {
+                    addEdge(i, j);
+                }
+            }
         }
     }
 

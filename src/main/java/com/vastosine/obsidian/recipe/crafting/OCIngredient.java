@@ -81,7 +81,11 @@ public record OCIngredient(HolderSet<Item> values, int count) implements CustomI
 
     @Override
     public boolean test(ItemStack stack) {
-        return false;
+        return toVanilla().test(stack) && stack.count() >= count;
+    }
+
+    public boolean testWithoutCount(ItemStack stack) {
+        return toVanilla().test(stack);
     }
 
     @Override
