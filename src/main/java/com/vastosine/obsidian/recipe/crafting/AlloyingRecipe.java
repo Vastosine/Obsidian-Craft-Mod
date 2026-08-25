@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vastosine.obsidian.block.OCBlocks;
+import com.vastosine.obsidian.recipe.crafting.display.AlloyingRecipeDisplay;
 import com.vastosine.obsidian.utils.RecipeMatches;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -125,22 +126,22 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
         resultDisplay.add(new SlotDisplay.ItemStackSlotDisplay(result));
 //        ingredients.forEach(p -> resultDisplay.add(p.ingredient().display()));
         return List.of(
-                new FurnaceRecipeDisplay(
-                        ingredientsDisplay.getFirst(),
+//                new FurnaceRecipeDisplay(
+//                        ingredientsDisplay.getFirst(),
+//                        SlotDisplay.AnyFuel.INSTANCE,
+//                        new SlotDisplay.ItemStackSlotDisplay(result),
+//                        new SlotDisplay.ItemSlotDisplay(OCBlocks.ALLOY_SMELTER.asItem()),
+//                        cookingTime,
+//                        experience
+//                ),
+                new AlloyingRecipeDisplay(
+                        ingredientsDisplay,
                         SlotDisplay.AnyFuel.INSTANCE,
-                        new SlotDisplay.ItemStackSlotDisplay(result),
+                        resultDisplay,
                         new SlotDisplay.ItemSlotDisplay(OCBlocks.ALLOY_SMELTER.asItem()),
                         cookingTime,
                         experience
                 )
-//                new AlloyingRecipeDisplay(
-//                        ingredientsDisplay,
-//                        SlotDisplay.AnyFuel.INSTANCE,
-//                        resultDisplay,
-//                        new SlotDisplay.ItemSlotDisplay(OCBlocks.ALLOY_SMELTER.asItem()),
-//                        cookingTime,
-//                        experience
-//                )
         );
     }
 
@@ -148,4 +149,7 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     public RecipeBookCategory recipeBookCategory() {
         return OCRecipeBookCategories.ALLOYING;
     }
+//    public RecipeBookCategory recipeBookCategory() {
+//        return RecipeBookCategories.FURNACE_MISC;
+//    }
 }

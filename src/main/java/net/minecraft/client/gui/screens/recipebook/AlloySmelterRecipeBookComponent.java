@@ -65,7 +65,7 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
             ghostSlots.setInput(fuelSlot[0], context, furnaceRecipe.fuel());
         } else if (recipe instanceof AlloyingRecipeDisplay alloyingRecipe) {
             for (int slot : OCUtils.getSequence(slotInputCount)) {
-                ghostSlots.setInput(menu.slots.get(slot), context, alloyingRecipe.ingredients().get(slot));
+//                ghostSlots.setInput(menu.slots.get(slot), context, alloyingRecipe.ingredients().get(slot));
             }
             Slot[] fuelSlot = menu.getFuelSlots();
             for (Slot slot : fuelSlot) {
