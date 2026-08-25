@@ -4,11 +4,11 @@
   "group": "netherite_ingot",
   "ingredients": [
     {
-      "id": "minecraft:netherite_scrap",
+      "value": "minecraft:netherite_scrap",
       "count": 4
     },
     {
-      "id": "minecraft:gold_ingot",
+      "value": "minecraft:gold_ingot",
       "count": 4
     }
   ],

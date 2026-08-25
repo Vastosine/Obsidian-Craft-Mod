@@ -17,7 +17,6 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.item.crafting.display.FurnaceRecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
@@ -25,7 +24,7 @@ import net.minecraft.world.level.Level;
 public class AlloyingRecipe implements Recipe<AlloyingInput> {
     public static final MapCodec<AlloyingRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(
             i -> i.group(
-                            IngredientWithCount.CODEC.listOf().fieldOf("ingredients").forGetter(o -> o.ingredients),
+                            OCIngredient.CODEC.listOf().fieldOf("ingredients").forGetter(o -> o.ingredients),
                             ItemStackTemplate.CODEC.fieldOf("results").forGetter(o -> o.result),
                             Codec.INT.optionalFieldOf("cookingTime", 200).forGetter(o -> o.cookingTime),
                             Codec.FLOAT.optionalFieldOf("experience", 0.0F).forGetter(o -> o.experience)
@@ -33,7 +32,7 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
                     .apply(i, AlloyingRecipe::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, AlloyingRecipe> STREAM_CODEC = StreamCodec.composite(
-            IngredientWithCount.STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.ingredients,
+            OCIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.ingredients,
             ItemStackTemplate.STREAM_CODEC, o -> o.result,
             ByteBufCodecs.INT, o -> o.cookingTime,
             ByteBufCodecs.FLOAT, o -> o.experience,
@@ -41,14 +40,14 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     );
     public static final RecipeSerializer<AlloyingRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
 
-    private final List<IngredientWithCount> ingredients;
+    private final List<OCIngredient> ingredients;
     private final ItemStackTemplate result;
     private final int cookingTime;
     private final float experience;
     private PlacementInfo placementInfo;
 
     public AlloyingRecipe(
-            List<IngredientWithCount> ingredients,
+            List<OCIngredient> ingredients,
             ItemStackTemplate result,
             int cookingTime,
             float experience) {
@@ -113,7 +112,7 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     public PlacementInfo placementInfo() {
         if (placementInfo == null) {
             List<Ingredient> ingredientList = new ArrayList<>();
-            ingredients.forEach(p -> ingredientList.add(p.ingredient()));
+            ingredients.forEach(p -> ingredientList.add(Ingredient.of(p.values())));
             placementInfo = PlacementInfo.create(ingredientList);
         }
         return placementInfo;

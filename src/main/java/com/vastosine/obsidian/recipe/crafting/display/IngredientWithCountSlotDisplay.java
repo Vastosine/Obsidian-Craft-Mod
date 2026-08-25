@@ -2,22 +2,21 @@ package com.vastosine.obsidian.recipe.crafting.display;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.vastosine.obsidian.recipe.crafting.IngredientWithCount;
+import com.vastosine.obsidian.recipe.crafting.OCIngredient;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.context.ContextMap;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.display.DisplayContentsFactory;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 
 import java.util.stream.Stream;
 
-public record IngredientWithCountSlotDisplay(IngredientWithCount ingredient) implements SlotDisplay {
+public record IngredientWithCountSlotDisplay(OCIngredient ingredient) implements SlotDisplay {
     public static final MapCodec<IngredientWithCountSlotDisplay> MAP_CODEC = RecordCodecBuilder.mapCodec(
-            i -> i.group(IngredientWithCount.CODEC.fieldOf("item").forGetter(IngredientWithCountSlotDisplay::ingredient)).apply(i, IngredientWithCountSlotDisplay::new)
+            i -> i.group(OCIngredient.MAP_CODEC.fieldOf("item").forGetter(IngredientWithCountSlotDisplay::ingredient)).apply(i, IngredientWithCountSlotDisplay::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, IngredientWithCountSlotDisplay> STREAM_CODEC = StreamCodec.composite(
-            IngredientWithCount.STREAM_CODEC, IngredientWithCountSlotDisplay::ingredient, IngredientWithCountSlotDisplay::new
+            OCIngredient.STREAM_CODEC, IngredientWithCountSlotDisplay::ingredient, IngredientWithCountSlotDisplay::new
     );
     public static final SlotDisplay.Type<IngredientWithCountSlotDisplay> TYPE = new SlotDisplay.Type<>(MAP_CODEC, STREAM_CODEC);
 
