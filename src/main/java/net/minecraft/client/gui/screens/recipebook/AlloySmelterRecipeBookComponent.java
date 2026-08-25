@@ -6,6 +6,7 @@ import com.vastosine.obsidian.recipe.crafting.display.AlloyingRecipeDisplay;
 import com.vastosine.obsidian.utils.OCUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.display.FurnaceRecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
-import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
 
 import java.util.List;
 
@@ -42,6 +42,11 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
     }
 
     @Override
+    public void extractGhostRecipe(GuiGraphicsExtractor graphics, boolean isResultSlotBig) {
+        super.extractGhostRecipe(graphics, false);
+    }
+
+    @Override
     protected WidgetSprites getFilterButtonTextures() {
         return FILTER_SPRITES;
     }
@@ -66,7 +71,7 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
             ghostSlots.setInput(fuelSlot[0], context, furnaceRecipe.fuel());
         } else if (recipe instanceof AlloyingRecipeDisplay alloyingRecipe) {
             for (int slot : OCUtils.getSequence(slotInputCount)) {
-                ghostSlots.setInput(menu.slots.get(slot), context, alloyingRecipe.ingredients().get(slot));
+                ghostSlots.setResult(menu.slots.get(slot), context, alloyingRecipe.ingredients().get(slot));
             }
             Slot[] fuelSlot = menu.getFuelSlots();
             for (Slot slot : fuelSlot) {

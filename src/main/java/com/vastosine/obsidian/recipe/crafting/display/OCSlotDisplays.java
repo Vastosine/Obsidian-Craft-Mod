@@ -12,6 +12,6 @@ public class OCSlotDisplays {
 
     public static void onInitialize() {
         ObsidianCraft.onInitializeInfo("Slot Displays");
-        register("ingredient_with_count", IngredientWithCountSlotDisplay.TYPE);
+        register("ingredient_with_count", OCIngredientSlotDisplay.TYPE);
     }
 }

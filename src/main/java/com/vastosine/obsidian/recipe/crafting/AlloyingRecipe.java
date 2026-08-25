@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.recipe.crafting.display.AlloyingRecipeDisplay;
-import com.vastosine.obsidian.recipe.crafting.display.IngredientWithCountSlotDisplay;
+import com.vastosine.obsidian.recipe.crafting.display.OCIngredientSlotDisplay;
 import com.vastosine.obsidian.utils.RecipeMatches;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -121,7 +121,7 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     @Override
     public List<RecipeDisplay> display() {
         List<SlotDisplay> ingredientsDisplay = new ArrayList<>();
-        ingredients.forEach(p -> ingredientsDisplay.add(new IngredientWithCountSlotDisplay(p)));
+        ingredients.forEach(p -> ingredientsDisplay.add(new OCIngredientSlotDisplay(p)));
         List<SlotDisplay> resultDisplay = new ArrayList<>();
         resultDisplay.add(new SlotDisplay.ItemStackSlotDisplay(result));
         return List.of(

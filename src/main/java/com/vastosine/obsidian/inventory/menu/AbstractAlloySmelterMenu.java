@@ -1,6 +1,5 @@
 package com.vastosine.obsidian.inventory.menu;
 
-import com.vastosine.obsidian.ObsidianCraft;
 import com.vastosine.obsidian.inventory.slot.AlloySmelterFuelSlot;
 import com.vastosine.obsidian.inventory.slot.AlloySmelterResultSlot;
 import com.vastosine.obsidian.recipe.crafting.AlloyingInput;
@@ -210,7 +209,30 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
                 }
             }, 1, 1, List.of(this.getSlot(0)), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
         } else if (recipe.value() instanceof AlloyingRecipe) {
-            return PostPlaceAction.PLACE_GHOST_RECIPE;
+            final List<Slot> slotsToClear = new ArrayList<>();
+            slotsToClear.addAll(slots.subList(0, slotInputCount));
+            final List<ItemStack> inputs = new ArrayList<>();
+            slotsToClear.forEach(p -> inputs.add(container.getItem(p.index)));
+            slotsToClear.addAll(slots.subList(slotInputCount + slotFuelCount, slotCount));
+            RecipeHolder<AlloyingRecipe> typedRecipe = (RecipeHolder<AlloyingRecipe>) recipe;
+            return ServerPlaceRecipe.placeRecipe(new ServerPlaceRecipe.CraftingMenuAccess<>() {
+                @Override
+                public void fillCraftSlotsStackedContents(StackedItemContents stackedContents) {
+                    stackedContents.clear();
+//                    AbstractAlloySmelterMenu.this.fillCraftSlotsStackedContents(stackedContents);
+                }
+
+                @Override
+                public void clearCraftingContent() {
+                    slotsToClear.forEach(s -> s.set(ItemStack.EMPTY));
+                }
+
+                @Override
+                public boolean recipeMatches(RecipeHolder<AlloyingRecipe> recipe) {
+                    return recipe.value().matches(new AlloyingInput(inputs), level);
+                }
+            }, slotInputCount, 1, slots.subList(0, slotInputCount), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
+
         } else return PostPlaceAction.NOTHING;
     }
 
