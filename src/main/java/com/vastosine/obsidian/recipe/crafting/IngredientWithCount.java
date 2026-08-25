@@ -1,4 +1,4 @@
-package com.vastosine.obsidian.item.crafting;
+package com.vastosine.obsidian.recipe.crafting;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;

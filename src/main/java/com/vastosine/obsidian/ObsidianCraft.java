@@ -5,10 +5,10 @@ import com.vastosine.obsidian.block.entity.OCBlockEntityTypes;
 import com.vastosine.obsidian.inventory.menu.OCMenuTypes;
 import com.vastosine.obsidian.item.OCCreativeModeTabs;
 import com.vastosine.obsidian.item.OCItems;
-import com.vastosine.obsidian.item.crafting.OCRecipeBookCategories;
-import com.vastosine.obsidian.item.crafting.OCRecipeSerializers;
-import com.vastosine.obsidian.item.crafting.OCRecipeTypes;
-import com.vastosine.obsidian.item.crafting.display.OCRecipeDisplays;
+import com.vastosine.obsidian.recipe.crafting.OCRecipeBookCategories;
+import com.vastosine.obsidian.recipe.crafting.OCRecipeSerializers;
+import com.vastosine.obsidian.recipe.crafting.OCRecipeTypes;
+import com.vastosine.obsidian.recipe.crafting.display.OCRecipeDisplays;
 import com.vastosine.obsidian.stats.OCStats;
 import net.fabricmc.api.ModInitializer;
 

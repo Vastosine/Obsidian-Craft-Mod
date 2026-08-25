@@ -1,6 +1,6 @@
 package com.vastosine.obsidian.utils;
 
-import com.vastosine.obsidian.item.crafting.IngredientWithCount;
+import com.vastosine.obsidian.recipe.crafting.IngredientWithCount;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeInput;

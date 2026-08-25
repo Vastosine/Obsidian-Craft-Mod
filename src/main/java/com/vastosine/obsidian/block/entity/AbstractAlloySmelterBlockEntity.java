@@ -2,9 +2,9 @@ package com.vastosine.obsidian.block.entity;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import com.vastosine.obsidian.item.crafting.AlloyingInput;
-import com.vastosine.obsidian.item.crafting.AlloyingRecipe;
-import com.vastosine.obsidian.item.crafting.OCRecipeTypes;
+import com.vastosine.obsidian.recipe.crafting.AlloyingInput;
+import com.vastosine.obsidian.recipe.crafting.AlloyingRecipe;
+import com.vastosine.obsidian.recipe.crafting.OCRecipeTypes;
 import com.vastosine.obsidian.utils.OCUtils;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;

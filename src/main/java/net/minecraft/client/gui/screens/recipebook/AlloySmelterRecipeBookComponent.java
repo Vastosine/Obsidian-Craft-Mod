@@ -2,7 +2,7 @@ package net.minecraft.client.gui.screens.recipebook;
 
 
 import com.vastosine.obsidian.inventory.menu.AbstractAlloySmelterMenu;
-import com.vastosine.obsidian.item.crafting.display.AlloyingRecipeDisplay;
+import com.vastosine.obsidian.recipe.crafting.display.AlloyingRecipeDisplay;
 import com.vastosine.obsidian.utils.OCUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,7 +15,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.display.FurnaceRecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)

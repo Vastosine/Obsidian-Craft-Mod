@@ -1,4 +1,4 @@
-package com.vastosine.obsidian.item.crafting;
+package com.vastosine.obsidian.recipe.crafting;
 
 import com.vastosine.obsidian.ObsidianCraft;
 import net.minecraft.core.Registry;

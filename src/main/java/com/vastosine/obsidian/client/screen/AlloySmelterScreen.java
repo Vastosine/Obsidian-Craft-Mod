@@ -3,7 +3,7 @@ package com.vastosine.obsidian.client.screen;
 import com.vastosine.obsidian.ObsidianCraft;
 import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.inventory.menu.AlloySmelterMenu;
-import com.vastosine.obsidian.item.crafting.OCRecipeBookCategories;
+import com.vastosine.obsidian.recipe.crafting.OCRecipeBookCategories;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;

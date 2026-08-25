@@ -1,4 +1,4 @@
-package com.vastosine.obsidian.item.crafting;
+package com.vastosine.obsidian.recipe.crafting;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeInput;
