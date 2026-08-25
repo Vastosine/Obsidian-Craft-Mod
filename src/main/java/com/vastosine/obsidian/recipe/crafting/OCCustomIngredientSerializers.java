@@ -1,8 +1,7 @@
-package com.vastosine.obsidian.registry;
+package com.vastosine.obsidian.recipe.crafting;
 
 import com.mojang.serialization.MapCodec;
 import com.vastosine.obsidian.ObsidianCraft;
-import com.vastosine.obsidian.recipe.crafting.OCIngredient;
 import net.fabricmc.fabric.api.recipe.v1.ingredient.CustomIngredientSerializer;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;

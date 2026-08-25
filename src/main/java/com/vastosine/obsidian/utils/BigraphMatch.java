@@ -10,9 +10,11 @@ public class BigraphMatch {
     private int[] matches;
     private final int ln, rn;
 
-    public BigraphMatch(int ln, int rn) {
-        this.ln = ln;
-        this.rn = rn;
+    public BigraphMatch(int[] lCount, int[] rCount) {
+        this.lCount = lCount;
+        this.rCount = rCount;
+        this.ln = lCount.length;
+        this.rn = rCount.length;
         l = new ArrayList<>();
         r = new ArrayList<>();
         for (int i = 0; i < ln; i++) {
@@ -21,8 +23,6 @@ public class BigraphMatch {
         for (int i = 0; i < rn; i++) {
             r.add(new ArrayList<>());
         }
-        lCount = new int[ln];
-        rCount = new int[rn];
     }
 
     public void addEdge(int u, int v) {

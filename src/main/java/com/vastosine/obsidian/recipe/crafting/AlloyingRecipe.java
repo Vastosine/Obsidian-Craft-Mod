@@ -6,6 +6,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.recipe.crafting.display.AlloyingRecipeDisplay;
@@ -22,10 +23,14 @@ import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
 
 public class AlloyingRecipe implements Recipe<AlloyingInput> {
+    public static final Codec<List<ItemStackTemplate>> RESULT_CODEC = Codec.withAlternative(
+            ItemStackTemplate.CODEC.listOf(), ItemStackTemplate.CODEC, List::of
+    );
+
     public static final MapCodec<AlloyingRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(
             i -> i.group(
                             OCIngredient.CODEC.listOf().fieldOf("ingredients").forGetter(o -> o.ingredients),
-                            ItemStackTemplate.CODEC.fieldOf("results").forGetter(o -> o.result),
+                            RESULT_CODEC.fieldOf("results").forGetter(o -> o.results),
                             Codec.INT.optionalFieldOf("cookingTime", 200).forGetter(o -> o.cookingTime),
                             Codec.FLOAT.optionalFieldOf("experience", 0.0F).forGetter(o -> o.experience)
                     )
@@ -33,7 +38,7 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, AlloyingRecipe> STREAM_CODEC = StreamCodec.composite(
             OCIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.ingredients,
-            ItemStackTemplate.STREAM_CODEC, o -> o.result,
+            ItemStackTemplate.STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.results,
             ByteBufCodecs.INT, o -> o.cookingTime,
             ByteBufCodecs.FLOAT, o -> o.experience,
             AlloyingRecipe::new
@@ -41,7 +46,7 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     public static final RecipeSerializer<AlloyingRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
 
     private final List<OCIngredient> ingredients;
-    private final ItemStackTemplate result;
+    private final List<ItemStackTemplate> results;
     private final int cookingTime;
     private final float experience;
     private PlacementInfo placementInfo;
@@ -51,8 +56,16 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
             ItemStackTemplate result,
             int cookingTime,
             float experience) {
+        this(ingredients, List.of(result), cookingTime, experience);
+    }
+
+    public AlloyingRecipe(
+            List<OCIngredient> ingredients,
+            List<ItemStackTemplate> result,
+            int cookingTime,
+            float experience) {
         this.ingredients = ingredients;
-        this.result = result;
+        this.results = result;
         this.cookingTime = cookingTime;
         this.experience = experience;
     }
@@ -85,7 +98,7 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
 
     @Override
     public ItemStack assemble(AlloyingInput input) {
-        return this.result.create();
+        return this.results.getFirst().create();
     }
 
     @Override
@@ -120,10 +133,8 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
 
     @Override
     public List<RecipeDisplay> display() {
-        List<SlotDisplay> ingredientsDisplay = new ArrayList<>();
-        ingredients.forEach(p -> ingredientsDisplay.add(new OCIngredientSlotDisplay(p)));
-        List<SlotDisplay> resultDisplay = new ArrayList<>();
-        resultDisplay.add(new SlotDisplay.ItemStackSlotDisplay(result));
+        List<SlotDisplay> ingredientsDisplay = ingredients.stream().map(OCIngredientSlotDisplay::new).collect(Collectors.toUnmodifiableList());
+        List<SlotDisplay> resultDisplay = results.stream().map(SlotDisplay.ItemStackSlotDisplay::new).collect(Collectors.toUnmodifiableList());
         return List.of(
                 new AlloyingRecipeDisplay(
                         ingredientsDisplay,

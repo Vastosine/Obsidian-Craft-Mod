@@ -9,10 +9,13 @@ import java.util.List;
 
 public class RecipeMatches {
 
-    public static <I extends RecipeInput> int[] getMatches(final List<OCIngredient> ingredients, final I inputs) {
+    public static <I extends RecipeInput> int[] getMatches(final List<OCIngredient> ingredients, I inputs) {
         int n = ingredients.size();
         int m = inputs.size();
-        BigraphMatch graph = new BigraphMatch(n, m);
+        BigraphMatch graph = new BigraphMatch(
+                ingredients.stream().mapToInt(OCIngredient::count).toArray(),
+                ingredients.stream().mapToInt(OCIngredient::count).toArray()
+        );
         for (int i = 0; i < n; i++) {
             Ingredient ingredient = ingredients.get(i).toVanilla();
             graph.setCount(false, i, ingredients.get(i).count());

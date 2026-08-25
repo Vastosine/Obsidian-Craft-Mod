@@ -3,16 +3,16 @@ package com.vastosine.obsidian.datagen;
 import static com.vastosine.obsidian.item.OCItems.*;
 import static com.vastosine.obsidian.block.OCBlocks.*;
 
+import com.vastosine.obsidian.datagen.custom.OCCustomRecipeProvider;
+import com.vastosine.obsidian.recipe.crafting.OCIngredient;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Recipe;
@@ -27,26 +27,16 @@ public class OCRecipesProvider extends FabricRecipeProvider {
     }
 
     @Override
+    protected Identifier getRecipeIdentifier(Identifier identifier) {
+        return identifier;
+    }
+
+    @Override
     protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, BootstrapContext<Recipe<?>> recipes, BootstrapContext<Advancement> advancements) {
-        return new RecipeProvider(recipes, advancements) {
+        return new OCCustomRecipeProvider(recipes, advancements) {
             public static final List<ItemLike> OBSIDIAN_ITEMS = List.of(Items.OBSIDIAN, Items.CRYING_OBSIDIAN);
 
-            public void fourBlockStorageRecipes(
-                    final RecipeCategory unpackedFormCategory, final ItemLike unpackedForm, final RecipeCategory packedFormCategory, final ItemLike packedForm
-            ) {
-                String packingRecipeId = getItemName(packedForm) + "_from_" + getItemName(unpackedForm);
-                String unpackingRecipeId = getItemName(unpackedForm) + "_from_" + getItemName(packedForm);
-                shapeless(unpackedFormCategory, unpackedForm, 4)
-                        .requires(packedForm)
-                        .unlockedBy(getHasName(packedForm), this.has(packedForm))
-                        .save(this.output, ResourceKey.create(Registries.RECIPE, Identifier.parse(unpackingRecipeId)));
-                shaped(packedFormCategory, packedForm)
-                        .define('I', unpackedForm)
-                        .pattern("II")
-                        .pattern("II")
-                        .unlockedBy(getHasName(unpackedForm), this.has(unpackedForm))
-                        .save(this.output, ResourceKey.create(Registries.RECIPE, Identifier.parse(packingRecipeId)));
-            }
+
 
             @Override
             public void buildRecipes() {
@@ -146,6 +136,17 @@ public class OCRecipesProvider extends FabricRecipeProvider {
                         .pattern("BCB")
                         .unlockedBy(getHasName(OBSIDIAN_FURNACE), this.has(OBSIDIAN_FURNACE))
                         .save(this.output);
+
+                // Alloying
+                alloyingRecipe(
+                        List.of(OCIngredient.of(4, Items.NETHERITE_SCRAP), OCIngredient.of(4, Items.GOLD_INGOT)),
+                        Items.NETHERITE_INGOT,
+                        200,
+                        1.0F
+                );
+
+                // Remove Vanilla Recipes
+                removeRecipe("netherite_ingot");
             }
         };
     }

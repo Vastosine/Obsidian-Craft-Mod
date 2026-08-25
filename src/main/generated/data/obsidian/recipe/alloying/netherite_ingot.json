@@ -1,0 +1,19 @@
+{
+  "type": "obsidian:alloying",
+  "experience": 1.0,
+  "ingredients": [
+    {
+      "count": 4,
+      "value": "minecraft:netherite_scrap"
+    },
+    {
+      "count": 4,
+      "value": "minecraft:gold_ingot"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:netherite_ingot"
+    }
+  ]
+}
