@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.recipe.crafting.display.AlloyingRecipeDisplay;
+import com.vastosine.obsidian.recipe.crafting.display.IngredientWithCountSlotDisplay;
 import com.vastosine.obsidian.utils.RecipeMatches;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -121,19 +122,10 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     @Override
     public List<RecipeDisplay> display() {
         List<SlotDisplay> ingredientsDisplay = new ArrayList<>();
-        ingredients.forEach(p -> ingredientsDisplay.add(p.ingredient().display()));
+        ingredients.forEach(p -> ingredientsDisplay.add(new IngredientWithCountSlotDisplay(p)));
         List<SlotDisplay> resultDisplay = new ArrayList<>();
         resultDisplay.add(new SlotDisplay.ItemStackSlotDisplay(result));
-//        ingredients.forEach(p -> resultDisplay.add(p.ingredient().display()));
         return List.of(
-//                new FurnaceRecipeDisplay(
-//                        ingredientsDisplay.getFirst(),
-//                        SlotDisplay.AnyFuel.INSTANCE,
-//                        new SlotDisplay.ItemStackSlotDisplay(result),
-//                        new SlotDisplay.ItemSlotDisplay(OCBlocks.ALLOY_SMELTER.asItem()),
-//                        cookingTime,
-//                        experience
-//                ),
                 new AlloyingRecipeDisplay(
                         ingredientsDisplay,
                         SlotDisplay.AnyFuel.INSTANCE,
@@ -149,7 +141,4 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     public RecipeBookCategory recipeBookCategory() {
         return OCRecipeBookCategories.ALLOYING;
     }
-//    public RecipeBookCategory recipeBookCategory() {
-//        return RecipeBookCategories.FURNACE_MISC;
-//    }
 }

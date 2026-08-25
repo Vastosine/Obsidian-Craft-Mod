@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.StackedItemContents;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.crafting.display.FurnaceRecipeDisplay;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.RecipeDisplayEntry;
 
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
             ghostSlots.setInput(fuelSlot[0], context, furnaceRecipe.fuel());
         } else if (recipe instanceof AlloyingRecipeDisplay alloyingRecipe) {
             for (int slot : OCUtils.getSequence(slotInputCount)) {
-//                ghostSlots.setInput(menu.slots.get(slot), context, alloyingRecipe.ingredients().get(slot));
+                ghostSlots.setInput(menu.slots.get(slot), context, alloyingRecipe.ingredients().get(slot));
             }
             Slot[] fuelSlot = menu.getFuelSlots();
             for (Slot slot : fuelSlot) {
@@ -82,7 +83,6 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<Abstrac
 
     @Override
     protected void selectMatchingRecipes(final RecipeCollection collection, final StackedItemContents stackedContents) {
-        collection.selectRecipes(stackedContents, display -> display instanceof AlloyingRecipeDisplay);
-        collection.selectRecipes(stackedContents, display -> display instanceof FurnaceRecipeDisplay);
+        collection.selectRecipes(stackedContents, display -> display instanceof AlloyingRecipeDisplay || display instanceof FurnaceRecipeDisplay);
     }
 }
