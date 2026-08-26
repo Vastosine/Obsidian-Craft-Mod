@@ -46,7 +46,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseConsumesFuelBl
                 .getAllMatches(OCRecipeTypes.ALLOYING, alloyingInput, level)
                 .toList();
         RecipeHolder<AlloyingRecipe> recipe = recipes.stream().filter(
-                i -> canBurn(getMaxStackSize(), i.value().getResults(slotResultCount))
+                i -> canCraft(i.value().getResults(slotResultCount))
         ).max(Comparator.comparingInt(p -> p.value().ingredientSize())).orElse(null);
         if (recipe == null) return false;
         cookingTotalTime = getTotalAlloyTime(recipe);
@@ -63,7 +63,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseConsumesFuelBl
             RecipeHolder<SmeltingRecipe> recipe = smeltingQuickCheck.getRecipeFor(input, level).orElse(null);
             if (recipe == null) continue;
             ItemStack result = recipe.value().assemble(input);
-            if (!canBurn(getMaxStackSize(), result)) continue;
+            if (!canCraft(result)) continue;
             cookingTotalTime = getTotalSmeltTime(recipe);
             recipeResults.add(result);
             ingredient.shrink(1);
@@ -80,28 +80,5 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseConsumesFuelBl
 
     protected int getTotalAlloyTime(final RecipeHolder<AlloyingRecipe> recipe) {
         return Mth.ceil(recipe.value().cookingTime() / alloyingSpeed / (speedMultiplier > 0.0F ? speedMultiplier : 1.0F));
-    }
-
-    private boolean canBurn(final int maxStackSize, final ItemStack burnResult) {
-        for (ItemStack resultItemStack : results) {
-            if (resultItemStack.isEmpty()) {
-                return true;
-            }
-
-            if (!ItemStack.isSameItemSameComponents(resultItemStack, burnResult)) {
-                continue;
-            }
-
-            int resultCount = resultItemStack.getCount() + burnResult.count();
-            int maxResultCount = Math.min(maxStackSize, burnResult.getMaxStackSize());
-            if (resultCount <= maxResultCount) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean canBurn(final int maxStackSize, final List<ItemStack> burnResult) {
-        return burnResult.stream().allMatch(i -> canBurn(maxStackSize, i));
     }
 }

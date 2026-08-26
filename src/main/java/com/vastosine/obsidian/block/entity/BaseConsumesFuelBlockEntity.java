@@ -405,4 +405,35 @@ public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEnti
             this.getRecipesToAwardAndPopExperience(serverLevel, Vec3.atCenterOf(pos));
         }
     }
+
+    protected boolean canCraft(final int maxStackSize, final ItemStack result) {
+        for (ItemStack resultItemStack : results) {
+            if (resultItemStack.isEmpty()) {
+                return true;
+            }
+
+            if (!ItemStack.isSameItemSameComponents(resultItemStack, result)) {
+                continue;
+            }
+
+            int resultCount = resultItemStack.getCount() + result.count();
+            int maxResultCount = Math.min(maxStackSize, result.getMaxStackSize());
+            if (resultCount <= maxResultCount) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected boolean canCraft(final ItemStack result) {
+        return canCraft(getMaxStackSize(), result);
+    }
+
+    protected boolean canCraft(final int maxStackSize, final List<ItemStack> results) {
+        return results.stream().allMatch(i -> canCraft(maxStackSize, i));
+    }
+
+    protected boolean canCraft(final List<ItemStack> results) {
+        return canCraft(getMaxStackSize(), results);
+    }
 }
