@@ -4,7 +4,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.RecipeBookType;
-import net.minecraft.world.item.crafting.RecipePropertySet;
 
 public class AlloySmelterMenu extends AbstractAlloySmelterMenu{
     public static final int SLOT_INPUT_COUNT = 2;
