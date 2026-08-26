@@ -2,9 +2,7 @@ package com.vastosine.obsidian.block.entity;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import com.vastosine.obsidian.recipe.crafting.AlloyingInput;
 import com.vastosine.obsidian.recipe.crafting.AlloyingRecipe;
-import com.vastosine.obsidian.recipe.crafting.OCRecipeTypes;
 import com.vastosine.obsidian.utils.OCUtils;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
@@ -97,8 +95,6 @@ public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEnti
         }
     };
     protected final List<ItemStack> recipeResults = new ArrayList<>();
-    protected final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> smeltingQuickCheck = RecipeManager.createCheck(RecipeType.SMELTING);
-    protected final RecipeManager.CachedCheck<AlloyingInput, AlloyingRecipe> alloyingQuickCheck = RecipeManager.createCheck(OCRecipeTypes.ALLOYING);
     protected final Reference2IntOpenHashMap<ResourceKey<Recipe<?>>> recipesUsed = new Reference2IntOpenHashMap<>();
     protected final Reference2IntOpenHashMap<ResourceKey<Recipe<?>>> recipesUsing = new Reference2IntOpenHashMap<>();
 
@@ -264,10 +260,6 @@ public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEnti
     protected float getSpeedMultiplier(final ServerLevel level, final ItemStack fuelItem) {
         return ResolvableNumber.getFloatFromItem(fuelItem, DataComponents.COOKING_FUEL, CookingFuel::speedMultiplier, this.getLootContext(level), 1.0F);
     }
-
-    protected abstract int getTotalSmeltTime(final RecipeHolder<SmeltingRecipe> recipe);
-
-    protected abstract int getTotalAlloyTime(final RecipeHolder<AlloyingRecipe> recipe);
 
     @Override
     public int[] getSlotsForFace(final Direction direction) {

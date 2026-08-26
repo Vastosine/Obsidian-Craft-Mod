@@ -70,6 +70,16 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
         this.experience = experience;
     }
 
+    private int count_sum = 0;
+    public int ingredientSize() {
+        if (count_sum > 0) return count_sum;
+        int count = 0;
+        for (OCIngredient ingredient : ingredients) {
+            count += ingredient.count();
+        }
+        return count_sum = count;
+    }
+
     public int cookingTime() {
         return cookingTime;
     }
@@ -94,6 +104,14 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
             ItemStack itemStack = input.getItem(i);
             itemStack.setCount(itemStack.count() - match[i]);
         }
+    }
+
+    public List<ItemStack> getResults() {
+        return this.results.stream().map(ItemStackTemplate::create).toList();
+    }
+
+    public List<ItemStack> getResults(int count) {
+        return this.results.stream().limit(count).map(ItemStackTemplate::create).toList();
     }
 
     @Override
