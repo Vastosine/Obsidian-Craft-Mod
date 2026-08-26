@@ -200,45 +200,14 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
             isLit = false;
         }
 
-        ItemStack fuel = null;
-        boolean hasFuel = false;
-        for (ItemStack itemStack : fuels) {
-            if (getBurnDuration(level, itemStack) > 0) {
-                fuel = itemStack;
-                hasFuel = true;
-                break;
-            }
-        }
+        ItemStack fuel = fuels.stream().filter(i -> getBurnDuration(level, i) > 0).findFirst().orElse(null);
+        boolean hasFuel = fuel != null;
         boolean isCooking = !recipeResults.isEmpty();
         if (!isCooking) {
             if (isLit || hasFuel) {
-                AlloyingInput alloyingInput = new AlloyingInput(inputs);
-                RecipeHolder<AlloyingRecipe> alloyingRecipe = alloyingQuickCheck.getRecipeFor(alloyingInput, level).orElse(null);
-                ItemStack alloyingResult;
-                if (alloyingRecipe != null && canBurn(getMaxStackSize(), alloyingResult = alloyingRecipe.value().assemble(alloyingInput))) {
-                    cookingTotalTime = getTotalAlloyTime(alloyingRecipe);
-                    recipeResults.add(alloyingResult);
-                    recipesUsing.clear();
-                    recipesUsing.addTo(alloyingRecipe.id(), 1);
-                    alloyingRecipe.value().consume(alloyingInput);
-                } else {
-                    for (ItemStack ingredient : inputs) {
-                        SingleRecipeInput input = new SingleRecipeInput(ingredient);
-                        RecipeHolder<SmeltingRecipe> recipe = smeltingQuickCheck.getRecipeFor(input, level).orElse(null);
-                        if (recipe == null) continue;
-                        ItemStack result = recipe.value().assemble(input);
-                        if (!canBurn(getMaxStackSize(), result)) continue;
-                        cookingTotalTime = getTotalSmeltTime(recipe);
-                        recipeResults.add(result);
-                        ingredient.shrink(1);
-                        recipesUsing.clear();
-                        recipesUsing.addTo(recipe.id(), 1);
-                        break;
-                    }
-                }
+                isCooking = loadRecipe(level);
             }
         }
-        isCooking = !recipeResults.isEmpty();
         if (isCooking) {
             if (!isLit && hasFuel) {
                 litTotalTime = litTimeRemaining = (int) (getBurnDuration(level, fuel) / fuelConsumingSpeed);
@@ -265,17 +234,50 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
                     burn();
                 }
             } else if (cookingTimer > 0) {
-                cookingTimer = Mth.clamp(cookingTimer - BURN_COOL_SPEED, 0, cookingTotalTime);
+                burnCool();
             }
-        }
-        if (changed) {
-            setChanged(level, pos, state);
         }
         if (wasLit != isLit) {
             changed = true;
             state = state.setValue(BlockStateProperties.LIT, isLit);
             level.setBlockAndUpdate(pos, state);
         }
+        if (changed) {
+            setChanged(level, pos, state);
+        }
+    }
+
+    private void burnCool() {
+        cookingTimer = Mth.clamp(cookingTimer - BURN_COOL_SPEED, 0, cookingTotalTime);
+    }
+
+    private boolean loadRecipe(ServerLevel level) {
+        AlloyingInput alloyingInput = new AlloyingInput(inputs);
+        RecipeHolder<AlloyingRecipe> alloyingRecipe = alloyingQuickCheck.getRecipeFor(alloyingInput, level).orElse(null);
+        ItemStack alloyingResult;
+        if (alloyingRecipe != null && canBurn(getMaxStackSize(), alloyingResult = alloyingRecipe.value().assemble(alloyingInput))) {
+            cookingTotalTime = getTotalAlloyTime(alloyingRecipe);
+            recipeResults.add(alloyingResult);
+            recipesUsing.clear();
+            recipesUsing.addTo(alloyingRecipe.id(), 1);
+            alloyingRecipe.value().consume(alloyingInput);
+            return true;
+        }
+        for (ItemStack ingredient : inputs) {
+            SingleRecipeInput input = new SingleRecipeInput(ingredient);
+            RecipeHolder<SmeltingRecipe> recipe = smeltingQuickCheck.getRecipeFor(input, level).orElse(null);
+            if (recipe == null) continue;
+            ItemStack result = recipe.value().assemble(input);
+            if (!canBurn(getMaxStackSize(), result)) continue;
+            cookingTotalTime = getTotalSmeltTime(recipe);
+            recipeResults.add(result);
+            ingredient.shrink(1);
+            recipesUsing.clear();
+            recipesUsing.addTo(recipe.id(), 1);
+            return true;
+        }
+
+        return false;
     }
 
     private void consumeFuel(final ItemStack fuel) {
@@ -283,9 +285,10 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseContainerBlock
         fuel.shrink(1);
         ItemStackTemplate remainder = fuelItem.getCraftingRemainder();
         if (remainder != null) {
-            for (ItemStack itemStack : fuels) {
+            for (int slot = 0; slot < slotFuelCount; slot++) {
+                ItemStack itemStack = fuels.get(slot);
                 if (itemStack.isEmpty()) {
-                    itemStack = remainder.create();
+                    fuels.set(slot, remainder.create());
                     return;
                 }
             }
