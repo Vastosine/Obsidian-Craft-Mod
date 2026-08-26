@@ -10,12 +10,15 @@ import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
-public class AlloySmelterBlockEntity extends AbstractAlloySmelterBlockEntity{
+public class AlloySmelterBlockEntity extends AbstractAlloySmelterBlockEntity {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final Component DEFAULT_NAME = Component.translatable("container.obsidian.alloy_smelter");
 
     public AlloySmelterBlockEntity(BlockPos worldPosition, BlockState blockState) {
-        super(OCBlockEntityTypes.ALLOY_SMELTER, worldPosition, blockState, blockState.getValue(FACING));
+        super(
+                OCBlockEntityTypes.ALLOY_SMELTER, worldPosition, blockState, blockState.getValue(FACING),
+                2.5F, 1.0F, 2.0F, 2, 1, 1
+        );
     }
 
     @Override
