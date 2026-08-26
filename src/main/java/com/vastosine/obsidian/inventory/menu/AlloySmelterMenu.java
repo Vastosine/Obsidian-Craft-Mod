@@ -12,10 +12,10 @@ public class AlloySmelterMenu extends AbstractAlloySmelterMenu{
     public static final int SLOT_RESULT_COUNT = 1;
 
     public AlloySmelterMenu(final int containerId, final Inventory inventory) {
-        super(OCMenuTypes.ALLOY_SMELTER, RecipePropertySet.FURNACE_INPUT, RecipeBookType.FURNACE, containerId, inventory, SLOT_INPUT_COUNT, SLOT_FUEL_COUNT, SLOT_RESULT_COUNT);
+        super(OCMenuTypes.ALLOY_SMELTER, RecipeBookType.FURNACE, containerId, inventory, SLOT_INPUT_COUNT, SLOT_FUEL_COUNT, SLOT_RESULT_COUNT);
     }
 
     public AlloySmelterMenu(final int containerId, final Inventory inventory, final Container container, final ContainerData data) {
-        super(OCMenuTypes.ALLOY_SMELTER, RecipePropertySet.FURNACE_INPUT, RecipeBookType.FURNACE, containerId, inventory, container, data, SLOT_INPUT_COUNT, SLOT_FUEL_COUNT, SLOT_RESULT_COUNT);
+        super(OCMenuTypes.ALLOY_SMELTER, RecipeBookType.FURNACE, containerId, inventory, container, data, SLOT_INPUT_COUNT, SLOT_FUEL_COUNT, SLOT_RESULT_COUNT);
     }
 }
