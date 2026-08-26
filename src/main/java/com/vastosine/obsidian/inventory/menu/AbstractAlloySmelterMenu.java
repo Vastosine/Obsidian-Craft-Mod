@@ -26,7 +26,6 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
     private final Container container;
     private final ContainerData data;
     protected final Level level;
-    private final RecipePropertySet acceptedInputs;
     private final RecipeBookType recipeBookType;
     private final int slotInputCount;
     private final int slotFuelCount;
@@ -35,7 +34,6 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
 
     protected AbstractAlloySmelterMenu(
             final MenuType<?> menuType,
-            final ResourceKey<RecipePropertySet> allowedInputs,
             final RecipeBookType recipeBookType,
             final int containerId,
             final Inventory inventory,
@@ -44,12 +42,11 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
             final int slotResultCount
     ) {
         int slotCount = slotInputCount + slotFuelCount + slotResultCount;
-        this(menuType, allowedInputs, recipeBookType, containerId, inventory, new SimpleContainer(slotCount), new SimpleContainerData(slotCount), slotInputCount, slotFuelCount, slotResultCount);
+        this(menuType, recipeBookType, containerId, inventory, new SimpleContainer(slotCount), new SimpleContainerData(slotCount), slotInputCount, slotFuelCount, slotResultCount);
     }
 
     protected AbstractAlloySmelterMenu(
             final MenuType<?> menuType,
-            final ResourceKey<RecipePropertySet> allowedInputs,
             final RecipeBookType recipeBookType,
             final int containerId,
             final Inventory inventory,
@@ -70,7 +67,6 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
         this.container = container;
         this.data = data;
         this.level = inventory.player.level();
-        this.acceptedInputs = this.level.recipeAccess().propertySet(allowedInputs);
         for (int slot = 0; slot < slotInputCount; slot++) {
             this.addSlot(new Slot(container, slot, 56 + (2 * slot + 1 - slotInputCount) * 9, 17));
         }
@@ -103,10 +99,6 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
         }
     }
 
-//    public Slot getResultSlot() {
-//        return this.slots.get(2);
-//    }
-
     @Override
     public boolean stillValid(final Player player) {
         return this.container.stillValid(player);
@@ -126,13 +118,11 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
 
                 slot.onQuickCraft(stack, clicked);
             } else if (!isInputSlot(slotIndex) && !isFuelSlot(slotIndex)) {
-                if (this.canSmelt(stack) && !this.moveItemStackTo(stack, 0, slotInputCount, false) && !this.isFuel(stack)) {
-                    return ItemStack.EMPTY;
-                }
                 if (this.isFuel(stack)) {
-                    if (!this.moveItemStackTo(stack, slotInputCount, slotInputCount + slotFuelCount, false)) {
-                        return ItemStack.EMPTY;
-                    }
+                    this.moveItemStackTo(stack, slotInputCount, slotInputCount + slotFuelCount, false);
+                }
+                if (!this.moveItemStackTo(stack, 0, slotInputCount, false)) {
+                    return ItemStack.EMPTY;
                 } else if (slotIndex >= slotCount && slotIndex < 27 + slotCount) {
                     if (!this.moveItemStackTo(stack, 27 + slotCount, 36 + slotCount, false)) {
                         return ItemStack.EMPTY;
@@ -159,11 +149,6 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
 
         return clicked;
     }
-
-    protected boolean canSmelt(final ItemStack itemStack) {
-        return this.acceptedInputs.test(itemStack);
-    }
-
     public boolean isFuel(final ItemStack itemStack) {
         return itemStack.has(DataComponents.COOKING_FUEL);
     }
