@@ -2,7 +2,7 @@ package com.vastosine.obsidian.inventory.menu;
 
 import com.vastosine.obsidian.inventory.slot.AlloySmelterFuelSlot;
 import com.vastosine.obsidian.inventory.slot.AlloySmelterResultSlot;
-import com.vastosine.obsidian.recipe.crafting.OCRecipeInput;
+import com.vastosine.obsidian.recipe.crafting.ProcessingInput;
 import com.vastosine.obsidian.recipe.crafting.AlloyingRecipe;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.recipebook.ServerPlaceRecipe;
@@ -212,7 +212,7 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
 
                 @Override
                 public boolean recipeMatches(RecipeHolder<AlloyingRecipe> recipe) {
-                    return recipe.value().matches(new OCRecipeInput(inputs), level);
+                    return recipe.value().matches(new ProcessingInput(inputs), level);
                 }
             }, slotInputCount, 1, slots.subList(0, slotInputCount), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
 

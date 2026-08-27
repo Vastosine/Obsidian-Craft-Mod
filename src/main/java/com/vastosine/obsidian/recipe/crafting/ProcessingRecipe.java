@@ -3,11 +3,6 @@ package com.vastosine.obsidian.recipe.crafting;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.vastosine.obsidian.block.OCBlocks;
 import com.vastosine.obsidian.recipe.crafting.display.AlloyingRecipeDisplay;
 import com.vastosine.obsidian.recipe.crafting.display.OCIngredientSlotDisplay;
@@ -21,53 +16,99 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
+import org.jspecify.annotations.NonNull;
 
-public class AlloyingRecipe implements Recipe<ProcessingInput> {
-    public static final Codec<List<ItemStackTemplate>> RESULT_CODEC = Codec.withAlternative(
-            ItemStackTemplate.CODEC.listOf(), ItemStackTemplate.CODEC, List::of
-    );
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
-    public static final MapCodec<AlloyingRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(
-            i -> i.group(
-                            OCIngredient.CODEC.listOf().fieldOf("ingredients").forGetter(o -> o.ingredients),
-                            RESULT_CODEC.fieldOf("results").forGetter(o -> o.results),
-                            Codec.INT.optionalFieldOf("cookingTime", 200).forGetter(o -> o.cookingTime),
-                            Codec.FLOAT.optionalFieldOf("experience", 0.0F).forGetter(o -> o.experience)
-                    )
-                    .apply(i, AlloyingRecipe::new)
-    );
-    public static final StreamCodec<RegistryFriendlyByteBuf, AlloyingRecipe> STREAM_CODEC = StreamCodec.composite(
-            OCIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.ingredients,
-            ItemStackTemplate.STREAM_CODEC.apply(ByteBufCodecs.list()), o -> o.results,
-            ByteBufCodecs.INT, o -> o.cookingTime,
-            ByteBufCodecs.FLOAT, o -> o.experience,
-            AlloyingRecipe::new
-    );
-    public static final RecipeSerializer<AlloyingRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+public abstract class ProcessingRecipe implements Recipe<ProcessingInput> {
+    public static final int DEFAULT_COST = 200;
 
+    protected final CommonInfo commonInfo;
     private final List<OCIngredient> ingredients;
     private final List<ItemStackTemplate> results;
-    private final int cookingTime;
+    private final int cost;
+    private final int speed;
     private final float experience;
     private PlacementInfo placementInfo;
 
-    public AlloyingRecipe(
-            List<OCIngredient> ingredients,
-            ItemStackTemplate result,
-            int cookingTime,
-            float experience) {
-        this(ingredients, List.of(result), cookingTime, experience);
+    public ProcessingRecipe(CommonInfo commonInfo, List<OCIngredient> ingredients, List<ItemStackTemplate> results, int cost, int speed, float experience) {
+        this.commonInfo = commonInfo;
+        this.ingredients = ingredients;
+        this.results = results;
+        this.cost = cost;
+        this.speed = speed;
+        this.experience = experience;
     }
 
-    public AlloyingRecipe(
-            List<OCIngredient> ingredients,
-            List<ItemStackTemplate> result,
-            int cookingTime,
-            float experience) {
-        this.ingredients = ingredients;
-        this.results = result;
-        this.cookingTime = cookingTime;
-        this.experience = experience;
+    @FunctionalInterface
+    interface Factory<T extends ProcessingRecipe> {
+        T create(
+                CommonInfo commonInfo,
+                List<OCIngredient> ingredients,
+                List<ItemStackTemplate> results,
+                int cost,
+                int speed,
+                float experience
+        );
+    }
+
+    private static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory, UnaryOperator<String> operator, int defaultCost) {
+        return RecordCodecBuilder.mapCodec(
+                i -> i.group(
+                                CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
+                                OCIngredient.CODEC.listOf().fieldOf(operator.apply("ingredients")).forGetter(ProcessingRecipe::ingredients),
+                                Codec.withAlternative(
+                                        ItemStackTemplate.CODEC.listOf(), ItemStackTemplate.CODEC, List::of
+                                ).fieldOf(operator.apply("results")).forGetter(ProcessingRecipe::results),
+                                Codec.INT.optionalFieldOf(operator.apply("cost"), defaultCost).forGetter(ProcessingRecipe::cost),
+                                Codec.INT.optionalFieldOf(operator.apply("speed"), 1).forGetter(ProcessingRecipe::speed),
+                                Codec.FLOAT.optionalFieldOf(operator.apply("experience"), 0.0F).forGetter(ProcessingRecipe::experience)
+                        )
+                        .apply(i, factory::create)
+        );
+    }
+
+    private static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory, UnaryOperator<String> operator) {
+        return getMapCodec(factory, operator, DEFAULT_COST);
+    }
+
+    private static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory) {
+        return getMapCodec(factory, s -> s);
+    }
+
+    private static <T extends ProcessingRecipe> @NonNull StreamCodec<RegistryFriendlyByteBuf, T> getStreamCodec(Factory<T> factory) {
+        return StreamCodec.composite(
+                CommonInfo.STREAM_CODEC, o -> o.commonInfo,
+                OCIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), ProcessingRecipe::ingredients,
+                ItemStackTemplate.STREAM_CODEC.apply(ByteBufCodecs.list()), ProcessingRecipe::results,
+                ByteBufCodecs.INT, ProcessingRecipe::cost,
+                ByteBufCodecs.INT, ProcessingRecipe::speed,
+                ByteBufCodecs.FLOAT, ProcessingRecipe::experience,
+                factory::create
+        );
+    }
+
+    public List<OCIngredient> ingredients() {
+        return ingredients;
+    }
+
+    public List<ItemStackTemplate> results() {
+        return results;
+    }
+
+    public int cost() {
+        return cost;
+    }
+
+    public int speed() {
+        return speed;
+    }
+
+    public float experience() {
+        return this.experience;
     }
 
     private int count_sum = 0;
@@ -78,14 +119,6 @@ public class AlloyingRecipe implements Recipe<ProcessingInput> {
             count += ingredient.count();
         }
         return count_sum = count;
-    }
-
-    public int cookingTime() {
-        return cookingTime;
-    }
-
-    public float experience() {
-        return experience;
     }
 
     // input will be consumed
@@ -130,16 +163,6 @@ public class AlloyingRecipe implements Recipe<ProcessingInput> {
     }
 
     @Override
-    public RecipeSerializer<? extends Recipe<ProcessingInput>> getSerializer() {
-        return SERIALIZER;
-    }
-
-    @Override
-    public RecipeType<? extends Recipe<ProcessingInput>> getType() {
-        return OCRecipeTypes.ALLOYING;
-    }
-
-    @Override
     public PlacementInfo placementInfo() {
         if (placementInfo == null) {
             List<Ingredient> ingredientList = new ArrayList<>();
@@ -151,6 +174,7 @@ public class AlloyingRecipe implements Recipe<ProcessingInput> {
 
     @Override
     public List<RecipeDisplay> display() {
+        // TODO
         List<SlotDisplay> ingredientsDisplay = ingredients.stream().map(OCIngredientSlotDisplay::new).collect(Collectors.toUnmodifiableList());
         List<SlotDisplay> resultDisplay = results.stream().map(SlotDisplay.ItemStackSlotDisplay::new).collect(Collectors.toUnmodifiableList());
         return List.of(
@@ -159,14 +183,9 @@ public class AlloyingRecipe implements Recipe<ProcessingInput> {
                         SlotDisplay.AnyFuel.INSTANCE,
                         resultDisplay,
                         new SlotDisplay.ItemSlotDisplay(OCBlocks.ALLOY_SMELTER.asItem()),
-                        cookingTime,
+                        cost,
                         experience
                 )
         );
-    }
-
-    @Override
-    public RecipeBookCategory recipeBookCategory() {
-        return OCRecipeBookCategories.ALLOYING;
     }
 }
