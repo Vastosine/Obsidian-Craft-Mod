@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -60,5 +61,35 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseNeedFuelBlockE
     @Override
     protected int getNeedFuelTotalTime(RecipeHolder<? extends NeedFuelRecipe> recipe) {
         return Mth.ceil(recipe.value().cookingTime() / alloyingSpeed / (speedMultiplier > 0.0F ? speedMultiplier : 1.0F));
+    }
+
+    @Override
+    public void burn() {
+        if (recipeResults.stream().anyMatch(i -> i.is(Items.SPONGE))) {
+            int emptyIndex = -1, bucketIndex = -1, singleBucketIndex = -1;
+            for (int index = 0;  index < fuels.size(); index++) {
+                ItemStack itemStack = fuels.get(index);
+                if (itemStack.isEmpty() && emptyIndex == -1) {
+                    emptyIndex = index;
+                } else if (itemStack.is(Items.BUCKET)) {
+                    if (itemStack.count() == 1 && singleBucketIndex == -1) {
+                        singleBucketIndex = index;
+                    }
+                    if (bucketIndex == -1) {
+                        bucketIndex = index;
+                    }
+                }
+            }
+            if (emptyIndex == -1 && singleBucketIndex != -1) {
+                fuels.set(singleBucketIndex, new ItemStack(Items.WATER_BUCKET));
+            } else if (emptyIndex != -1 && bucketIndex != -1) {
+                fuels.get(bucketIndex).shrink(1);
+                if (fuels.get(bucketIndex).isEmpty()) {
+                    emptyIndex = Math.min(emptyIndex, bucketIndex);
+                }
+                fuels.set(emptyIndex, new ItemStack(Items.WATER_BUCKET));
+            }
+        }
+        super.burn();
     }
 }

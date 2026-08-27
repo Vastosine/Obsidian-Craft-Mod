@@ -218,7 +218,7 @@ public abstract class BaseNeedFuelBlockEntity extends BaseContainerBlockEntity i
         }
     }
 
-    protected  <R extends NeedFuelRecipe> boolean loadNeedFuelRecipe(ServerLevel level, RecipeType<R> type) {
+    protected <R extends NeedFuelRecipe> boolean loadNeedFuelRecipe(ServerLevel level, RecipeType<R> type) {
         ProcessingInput alloyingInput = new ProcessingInput(inputs);
         List<RecipeHolder<R>> recipes = level
                 .recipeAccess()
@@ -261,20 +261,8 @@ public abstract class BaseNeedFuelBlockEntity extends BaseContainerBlockEntity i
         }
     }
 
-    private void burn() {
-        for (ItemStack result : recipeResults) {
-            for (int slot = 0; slot < slotResultCount; slot++) {
-                ItemStack resultItemStack = results.get(slot);
-                if (resultItemStack.isEmpty()) {
-                    results.set(slot, result.copy());
-                } else {
-                    if (resultItemStack.getItem() != result.getItem()) continue;
-                    resultItemStack.grow(result.getCount());
-                }
-                break;
-            }
-
-        }
+    public void burn() {
+        applyResult(getMaxStackSize(), recipeResults, results);
         recipeResults.clear();
     }
 
@@ -455,7 +443,32 @@ public abstract class BaseNeedFuelBlockEntity extends BaseContainerBlockEntity i
     }
 
     protected boolean canCraft(final int maxStackSize, final List<ItemStack> results) {
-        return results.stream().allMatch(i -> canCraft(maxStackSize, i));
+        return applyResult(maxStackSize, results, new ArrayList<>(this.results.stream().map(ItemStack::copy).toList()));
+    }
+
+    private static boolean applyResult(final int maxStackSize, final List<ItemStack> results, List<ItemStack> itemStacks) {
+        for (ItemStack result : results) {
+            if (result.isEmpty()) continue;
+            int count = result.count();
+            for (int slot = 0; slot < itemStacks.size(); slot++) {
+                if (count <= 0) break;
+                if  (itemStacks.get(slot).isEmpty()) {
+                    itemStacks.set(slot, result.copyWithCount(1));
+                    count--;
+                    if (count <= 0) break;
+                }
+                ItemStack itemStack = itemStacks.get(slot);
+                if (!ItemStack.isSameItemSameComponents(itemStack, result)) {
+                    continue;
+                }
+                int maxResultCount = Math.min(maxStackSize, result.getMaxStackSize());
+                int x = Math.min(maxResultCount - itemStack.count(), count);
+                itemStack.grow(x);
+                count -= x;
+            }
+            if (count > 0) return false;
+        }
+        return true;
     }
 
     protected boolean canCraft(final List<ItemStack> results) {

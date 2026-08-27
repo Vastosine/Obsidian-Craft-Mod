@@ -12,12 +12,12 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 public class AdvancedAlloySmelterBlockEntity extends AbstractAlloySmelterBlockEntity {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
-    public static final Component DEFAULT_NAME = Component.translatable("container.obsidian.alloy_smelter");
+    public static final Component DEFAULT_NAME = Component.translatable("container.obsidian.advanced_alloy_smelter");
 
     public AdvancedAlloySmelterBlockEntity(BlockPos worldPosition, BlockState blockState) {
         super(
                 OCBlockEntityTypes.ADVANCED_ALLOY_SMELTER, worldPosition, blockState, blockState.getValue(FACING),
-                2.5F, 1.0F, 2.0F, 3, 2, 2
+                3.5F, 2.0F, 2.5F, 3, 2, 2
         );
     }
 
