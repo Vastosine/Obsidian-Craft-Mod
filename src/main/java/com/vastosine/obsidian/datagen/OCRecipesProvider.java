@@ -138,9 +138,9 @@ public class OCRecipesProvider extends FabricRecipeProvider {
                         .save(this.output);
 
                 // Alloying
-                alloyingRecipe(
+                alloying.recipe(
                         List.of(OCIngredient.of(4, Items.NETHERITE_SCRAP), OCIngredient.of(4, Items.GOLD_INGOT)),
-                        Items.NETHERITE_INGOT,
+                        List.of(getTemplate(Items.NETHERITE_INGOT)),
                         200,
                         1.0F
                 );

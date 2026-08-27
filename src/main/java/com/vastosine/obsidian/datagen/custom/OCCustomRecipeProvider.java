@@ -2,7 +2,9 @@ package com.vastosine.obsidian.datagen.custom;
 
 import com.vastosine.obsidian.ObsidianCraft;
 import com.vastosine.obsidian.recipe.crafting.AlloyingRecipe;
+import com.vastosine.obsidian.recipe.crafting.NeedFuelRecipe;
 import com.vastosine.obsidian.recipe.crafting.OCIngredient;
+import com.vastosine.obsidian.recipe.crafting.ProcessingRecipe;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.advancements.triggers.ImpossibleTrigger;
@@ -97,101 +99,118 @@ public abstract class OCCustomRecipeProvider extends RecipeProvider {
         this.customOreCooking(BlastingRecipe::new, smeltables, craftingCategory, cookingCategory, result, experience, cookingTime, group, "_from_blasting");
     }
 
-    public void alloyingRecipe(
-            final String packingRecipeId,
-            final List<OCIngredient> ingredients,
-            final List<ItemStackTemplate> results,
-            final int cookingTime,
-            final float experience,
-            List<Item> unlockItems
-    ) {
-        AlloyingRecipe recipe = new AlloyingRecipe(
-                ingredients,
-                results,
-                cookingTime,
-                experience
-        );
+    public static ItemStackTemplate getTemplate(Item item, int count) {
+        return new ItemStackTemplate(item, count);
+    }
 
-        ResourceKey<Recipe<?>> key = getKey(packingRecipeId);
-        RecipeUnlockAdvancementBuilder advancementBuilder = new RecipeUnlockAdvancementBuilder();
-        unlockItems.forEach(i -> {
-                    if (i != null) {
-                        advancementBuilder.unlockedBy("has_" + getItemName(i), has(i));
+    public static ItemStackTemplate getTemplate(Item item) {
+        return getTemplate(item, 1);
+    }
+
+    public final Processing<AlloyingRecipe> alloying = new Processing<>(
+            NeedFuelRecipe.factoryTransformer(AlloyingRecipe::new),
+            "alloying"
+    );
+
+    public class Processing<T extends ProcessingRecipe> {
+        private final ProcessingRecipe.Factory<T> factory;
+        private final String type;
+        private final RecipeCategory recipeCategory;
+
+        public Processing(ProcessingRecipe.Factory<T> factory, String type, RecipeCategory recipeCategory) {
+            this.factory = factory;
+            this.type = type;
+            this.recipeCategory = recipeCategory;
+        }
+
+        public Processing(ProcessingRecipe.Factory<T> factory, String type) {
+            this.factory = factory;
+            this.type = type;
+            this.recipeCategory = RecipeCategory.MISC;
+        }
+
+        public void recipe(
+                boolean show, final String recipeId,
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cost, final int speed, final float experience,
+                final List<Item> unlockItems, final RecipeCategory recipeCategory
+        ) {
+            T recipe = factory.create(
+                    new Recipe.CommonInfo(show),
+                    ingredients,
+                    results,
+                    cost,
+                    speed,
+                    experience
+            );
+
+            ResourceKey<Recipe<?>> key = getKey(type + "/" + recipeId);
+            RecipeUnlockAdvancementBuilder advancementBuilder = new RecipeUnlockAdvancementBuilder();
+            unlockItems.forEach(i -> {
+                        if (i != null) {
+                            advancementBuilder.unlockedBy(getHasName(i), has(i));
+                        }
                     }
-                }
-        );
+            );
 
-        output.accept(key, recipe, advancementBuilder.build(output, key, RecipeCategory.MISC));
-    }
+            output.accept(key, recipe, advancementBuilder.build(output, key, recipeCategory));
+        }
 
-    public void alloyingRecipe(
-            final String path,
-            final List<OCIngredient> ingredients,
-            final List<ItemStackTemplate> results,
-            final int cookingTime,
-            final float experience,
-            Item... unlockItems
-    ) {
-        alloyingRecipe(path, ingredients, results, cookingTime, experience, List.of(unlockItems));
-    }
+        public void recipe(
+                final String packingRecipeId,
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cost, final int speed, final float experience,
+                final List<Item> unlockItems, final RecipeCategory recipeCategory
+        ) {
+            recipe(true, packingRecipeId, ingredients, results, cost, speed, experience, unlockItems, recipeCategory);
+        }
 
-    public void alloyingRecipeWithExtraName(
-            final String extraName,
-            final List<OCIngredient> ingredients,
-            final List<ItemStackTemplate> results,
-            final int cookingTime,
-            final float experience,
-            Item... unlockItems
-    ) {
-        alloyingRecipe("alloying/" + extraName, ingredients, results, cookingTime, experience, unlockItems);
-    }
+        public void recipe(
+                final String packingRecipeId,
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cost, final int speed, final float experience,
+                final List<Item> unlockItems
+        ) {
+            recipe(packingRecipeId, ingredients, results, cost, speed, experience, unlockItems, recipeCategory);
+        }
 
-    public void alloyingRecipe(
-            final List<OCIngredient> ingredients,
-            final List<ItemStackTemplate> results,
-            final int cookingTime,
-            final float experience,
-            Item... unlockItems
-    ) {
-        alloyingRecipe(
-                "alloying/" + getItemName(results.getFirst().item().value()),
-                ingredients, results, cookingTime, experience, unlockItems
-        );
-    }
+        public void recipe(
+                final String packingRecipeId,
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cost, final int speed, final float experience
+        ) {
+            recipe(
+                    packingRecipeId, ingredients, results, cost, speed, experience,
+                    ingredients.stream().map(i -> i.toVanilla().getSingleItem())
+                            .map(i -> i.map(Holder::value).orElse(null))
+                            .toList()
+            );
+        }
 
-    public void alloyingRecipe(
-            final List<OCIngredient> ingredients,
-            final List<ItemStackTemplate> results,
-            final int cookingTime,
-            final float experience
-    ) {
-        alloyingRecipe(
-                "alloying/" + getItemName(results.getFirst().item().value()),
-                ingredients, results, cookingTime, experience,
-                ingredients.stream()
-                        .map(i -> i.toVanilla().getSingleItem())
-                        .map(i -> i.map(Holder::value).orElse(null))
-                        .toList()
-        );
-    }
+        public void recipe(
+                final String packingRecipeId,
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cookingTime, final float experience
+        ) {
+            recipe(packingRecipeId, ingredients, results, cookingTime, 1, experience);
+        }
 
-    public void alloyingRecipe(
-            final List<OCIngredient> ingredients,
-            final Item result,
-            final int count,
-            final int cookingTime,
-            final float experience
-    ) {
-        alloyingRecipe(ingredients, List.of(new ItemStackTemplate(result, count)), cookingTime, experience);
-    }
+        public void recipe(
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cost, final int speed, final float experience
+        ) {
+            recipe(
+                    getItemName(results.getFirst().item().value()),
+                    ingredients, results, cost, speed, experience
+            );
+        }
 
-    public void alloyingRecipe(
-            final List<OCIngredient> ingredients,
-            final Item result,
-            final int cookingTime,
-            final float experience
-    ) {
-        alloyingRecipe(ingredients, List.of(new ItemStackTemplate(result, 1)), cookingTime, experience);
+        public void recipe(
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cookingTime, final float experience
+        ) {
+            recipe(ingredients, results, cookingTime, 1, experience);
+        }
     }
 
     public void removeRecipe(final String namespace, final String path) {

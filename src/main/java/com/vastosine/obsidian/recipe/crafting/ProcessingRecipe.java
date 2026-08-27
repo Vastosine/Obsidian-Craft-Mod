@@ -44,7 +44,7 @@ public abstract class ProcessingRecipe implements Recipe<ProcessingInput> {
     }
 
     @FunctionalInterface
-    interface Factory<T extends ProcessingRecipe> {
+    public interface Factory<T extends ProcessingRecipe> {
         T create(
                 CommonInfo commonInfo,
                 List<OCIngredient> ingredients,
@@ -55,7 +55,7 @@ public abstract class ProcessingRecipe implements Recipe<ProcessingInput> {
         );
     }
 
-    private static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory, UnaryOperator<String> operator, int defaultCost) {
+    public static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory, UnaryOperator<String> operator, int defaultCost) {
         return RecordCodecBuilder.mapCodec(
                 i -> i.group(
                                 CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
@@ -71,15 +71,15 @@ public abstract class ProcessingRecipe implements Recipe<ProcessingInput> {
         );
     }
 
-    private static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory, UnaryOperator<String> operator) {
+    public static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory, UnaryOperator<String> operator) {
         return getMapCodec(factory, operator, DEFAULT_COST);
     }
 
-    private static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory) {
+    public static <T extends ProcessingRecipe> @NonNull MapCodec<T> getMapCodec(Factory<T> factory) {
         return getMapCodec(factory, s -> s);
     }
 
-    private static <T extends ProcessingRecipe> @NonNull StreamCodec<RegistryFriendlyByteBuf, T> getStreamCodec(Factory<T> factory) {
+    public static <T extends ProcessingRecipe> @NonNull StreamCodec<RegistryFriendlyByteBuf, T> getStreamCodec(Factory<T> factory) {
         return StreamCodec.composite(
                 CommonInfo.STREAM_CODEC, o -> o.commonInfo,
                 OCIngredient.STREAM_CODEC.apply(ByteBufCodecs.list()), ProcessingRecipe::ingredients,
