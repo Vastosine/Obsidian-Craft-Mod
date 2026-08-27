@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.RecipeBookType;
 
-public class AlloySmelterMenu extends AbstractAlloySmelterMenu{
+public class AlloySmelterMenu extends NeedFuelMenu {
     public static final int SLOT_INPUT_COUNT = 2;
     public static final int SLOT_FUEL_COUNT = 1;
     public static final int SLOT_RESULT_COUNT = 1;

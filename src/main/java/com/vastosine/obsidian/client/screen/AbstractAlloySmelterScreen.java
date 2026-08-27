@@ -1,6 +1,6 @@
 package com.vastosine.obsidian.client.screen;
 
-import com.vastosine.obsidian.inventory.menu.AbstractAlloySmelterMenu;
+import com.vastosine.obsidian.inventory.menu.NeedFuelMenu;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -18,14 +18,10 @@ import java.util.List;
 
 
 @Environment(EnvType.CLIENT)
-public abstract class AbstractAlloySmelterScreen<T extends AbstractAlloySmelterMenu> extends AbstractRecipeBookScreen<T> {
+public abstract class AbstractAlloySmelterScreen<T extends NeedFuelMenu> extends AbstractRecipeBookScreen<T> {
     private final Identifier texture;
     private final Identifier litProgressSprite;
     private final Identifier burnProgressSprite;
-    private final int slotCount;
-    private final int slotInputCount;
-    private final int slotFuelCount;
-    private final int slotResultCount;
 
     public AbstractAlloySmelterScreen(
             final T menu,
@@ -42,10 +38,6 @@ public abstract class AbstractAlloySmelterScreen<T extends AbstractAlloySmelterM
         this.texture = texture;
         this.litProgressSprite = litProgressSprite;
         this.burnProgressSprite = burnProgressSprite;
-        this.slotInputCount = slotInputCount;
-        this.slotFuelCount = slotFuelCount;
-        this.slotResultCount = slotResultCount;
-        this.slotCount = slotInputCount + slotFuelCount + slotResultCount;
     }
 
     @Override

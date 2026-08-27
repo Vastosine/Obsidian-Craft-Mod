@@ -1,6 +1,7 @@
 package com.vastosine.obsidian.recipe.crafting;
 
 import com.mojang.serialization.MapCodec;
+import com.vastosine.obsidian.utils.OCUtils;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -43,6 +44,6 @@ public abstract class NeedFuelRecipe extends ProcessingRecipe {
     }
 
     public int cookingTime() {
-        return cost();
+        return OCUtils.getCeilFromDivision(cost(), speed());
     }
 }

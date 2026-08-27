@@ -1,15 +1,15 @@
 package com.vastosine.obsidian.inventory.slot;
 
 import net.minecraft.world.Container;
-import com.vastosine.obsidian.inventory.menu.AbstractAlloySmelterMenu;
+import com.vastosine.obsidian.inventory.menu.NeedFuelMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 public class AlloySmelterFuelSlot extends Slot {
-    private final AbstractAlloySmelterMenu menu;
+    private final NeedFuelMenu menu;
 
-    public AlloySmelterFuelSlot(final AbstractAlloySmelterMenu menu, final Container container, final int slot, final int x, final int y) {
+    public AlloySmelterFuelSlot(final NeedFuelMenu menu, final Container container, final int slot, final int x, final int y) {
         super(container, slot, x, y);
         this.menu = menu;
     }

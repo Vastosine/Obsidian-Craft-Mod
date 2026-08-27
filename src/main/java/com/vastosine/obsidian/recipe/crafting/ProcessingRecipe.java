@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.vastosine.obsidian.block.OCBlocks;
-import com.vastosine.obsidian.recipe.crafting.display.AlloyingRecipeDisplay;
+import com.vastosine.obsidian.recipe.crafting.display.NeedFuelRecipeDisplay;
 import com.vastosine.obsidian.recipe.crafting.display.OCIngredientSlotDisplay;
 import com.vastosine.obsidian.utils.RecipeMatches;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -178,7 +178,7 @@ public abstract class ProcessingRecipe implements Recipe<ProcessingInput> {
         List<SlotDisplay> ingredientsDisplay = ingredients.stream().map(OCIngredientSlotDisplay::new).collect(Collectors.toUnmodifiableList());
         List<SlotDisplay> resultDisplay = results.stream().map(SlotDisplay.ItemStackSlotDisplay::new).collect(Collectors.toUnmodifiableList());
         return List.of(
-                new AlloyingRecipeDisplay(
+                new NeedFuelRecipeDisplay(
                         ingredientsDisplay,
                         SlotDisplay.AnyFuel.INSTANCE,
                         resultDisplay,

@@ -21,7 +21,7 @@ import net.minecraft.world.level.Level;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
+public abstract class NeedFuelMenu extends RecipeBookMenu {
     private final Container container;
     private final ContainerData data;
     protected final Level level;
@@ -31,7 +31,7 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
     private final int slotResultCount;
     private final int slotCount;
 
-    protected AbstractAlloySmelterMenu(
+    protected NeedFuelMenu(
             final MenuType<?> menuType,
             final RecipeBookType recipeBookType,
             final int containerId,
@@ -44,7 +44,7 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
         this(menuType, recipeBookType, containerId, inventory, new SimpleContainer(slotCount), new SimpleContainerData(slotCount), slotInputCount, slotFuelCount, slotResultCount);
     }
 
-    protected AbstractAlloySmelterMenu(
+    protected NeedFuelMenu(
             final MenuType<?> menuType,
             final RecipeBookType recipeBookType,
             final int containerId,
@@ -66,6 +66,11 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
         this.container = container;
         this.data = data;
         this.level = inventory.player.level();
+        addAllSlot(inventory, container, slotInputCount, slotFuelCount, slotResultCount);
+        this.addDataSlots(data);
+    }
+
+    private void addAllSlot(Inventory inventory, Container container, int slotInputCount, int slotFuelCount, int slotResultCount) {
         for (int slot = 0; slot < slotInputCount; slot++) {
             this.addSlot(new Slot(container, slot, 56 + (2 * slot + 1 - slotInputCount) * 9, 17));
         }
@@ -77,7 +82,6 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
             this.addSlot(new AlloySmelterResultSlot(inventory.player, container, slotInputCount + slotFuelCount + slot, 122 + 18 * slot, 36 + slotCount));
         }
         this.addStandardInventorySlots(inventory, 8, 84);
-        this.addDataSlots(data);
     }
 
     public boolean isInputSlot(int slot) {
@@ -179,7 +183,7 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
             return ServerPlaceRecipe.placeRecipe(new ServerPlaceRecipe.CraftingMenuAccess<>() {
                 @Override
                 public void fillCraftSlotsStackedContents(final StackedItemContents stackedContents) {
-                    AbstractAlloySmelterMenu.this.fillCraftSlotsStackedContents(stackedContents);
+                    NeedFuelMenu.this.fillCraftSlotsStackedContents(stackedContents);
                 }
 
                 @Override
@@ -189,14 +193,13 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
 
                 @Override
                 public boolean recipeMatches(final RecipeHolder<AbstractCookingRecipe> recipe) {
-                    return recipe.value().matches(new SingleRecipeInput(AbstractAlloySmelterMenu.this.container.getItem(0)), level);
+                    return recipe.value().matches(new SingleRecipeInput(NeedFuelMenu.this.container.getItem(0)), level);
                 }
             }, 1, 1, List.of(this.getSlot(0)), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
         } else if (recipe.value() instanceof AlloyingRecipe) {
-            final List<Slot> slotsToClear = new ArrayList<>(slots.subList(0, slotInputCount));
-            final List<ItemStack> inputs = new ArrayList<>();
-            slotsToClear.forEach(p -> inputs.add(container.getItem(p.index)));
-            slotsToClear.addAll(slots.subList(slotInputCount + slotFuelCount, slotCount));
+            final List<Slot> slotsToClear = new ArrayList<>(getInputSlots());
+            slotsToClear.addAll(getResultSlots());
+            final List<ItemStack> inputs = getInputSlots().stream().map(i -> container.getItem(i.index)).toList();
             RecipeHolder<AlloyingRecipe> typedRecipe = (RecipeHolder<AlloyingRecipe>) recipe;
             return ServerPlaceRecipe.placeRecipe(new ServerPlaceRecipe.CraftingMenuAccess<>() {
                 @Override
@@ -224,19 +227,15 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
         return recipeBookType;
     }
 
-    public Slot[] getResultSlots() {
-        Slot[] slots = new Slot[slotResultCount];
-        for (int slot = 0; slot < slotResultCount; slot++) {
-            slots[slot] = this.getSlot(slotInputCount + slotFuelCount + slot);
-        }
-        return slots;
+    public List<Slot> getResultSlots() {
+        return slots.subList(slotInputCount + slotFuelCount, slotCount);
     }
 
-    public Slot[] getFuelSlots() {
-        Slot[] slots = new Slot[slotFuelCount];
-        for (int slot = 0; slot < slotFuelCount; slot++) {
-            slots[slot] = this.getSlot(slotInputCount + slot);
-        }
-        return slots;
+    public List<Slot> getFuelSlots() {
+        return slots.subList(slotInputCount, slotInputCount + slotFuelCount);
+    }
+
+    public List<Slot> getInputSlots() {
+        return slots.subList(0, slotInputCount);
     }
 }

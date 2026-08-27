@@ -1,7 +1,6 @@
 package com.vastosine.obsidian.block.entity;
 
-import com.vastosine.obsidian.recipe.crafting.ProcessingInput;
-import com.vastosine.obsidian.recipe.crafting.AlloyingRecipe;
+import com.vastosine.obsidian.recipe.crafting.NeedFuelRecipe;
 import com.vastosine.obsidian.recipe.crafting.OCRecipeTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -12,9 +11,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.*;
-
-public abstract class AbstractAlloySmelterBlockEntity extends BaseConsumesFuelBlockEntity {
+public abstract class AbstractAlloySmelterBlockEntity extends BaseNeedFuelBlockEntity {
     private final float smeltingSpeed;
     private final float alloyingSpeed;
 
@@ -36,25 +33,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseConsumesFuelBl
 
     @Override
     protected boolean loadRecipe(ServerLevel level) {
-        return loadAlloyingRecipe(level) || loadSmeltingRecipe(level);
-    }
-
-    private boolean loadAlloyingRecipe(ServerLevel level) {
-        ProcessingInput alloyingInput = new ProcessingInput(inputs);
-        List<RecipeHolder<AlloyingRecipe>> recipes = level
-                .recipeAccess()
-                .getAllMatches(OCRecipeTypes.ALLOYING, alloyingInput, level)
-                .toList();
-        RecipeHolder<AlloyingRecipe> recipe = recipes.stream().filter(
-                i -> canCraft(i.value().getResults(slotResultCount))
-        ).max(Comparator.comparingInt(p -> p.value().ingredientSize())).orElse(null);
-        if (recipe == null) return false;
-        cookingTotalTime = getTotalAlloyTime(recipe);
-        recipeResults.addAll(recipe.value().getResults(slotResultCount));
-        recipesUsing.clear();
-        recipesUsing.addTo(recipe.id(), 1);
-        recipe.value().consume(alloyingInput);
-        return true;
+        return loadNeedFuelRecipe(level, OCRecipeTypes.ALLOYING) || loadSmeltingRecipe(level);
     }
 
     private boolean loadSmeltingRecipe(ServerLevel level) {
@@ -78,7 +57,8 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseConsumesFuelBl
         return Mth.ceil(recipe.value().cookingTime() / smeltingSpeed / (speedMultiplier > 0.0F ? speedMultiplier : 1.0F));
     }
 
-    protected int getTotalAlloyTime(final RecipeHolder<AlloyingRecipe> recipe) {
+    @Override
+    protected int getNeedFuelTotalTime(RecipeHolder<? extends NeedFuelRecipe> recipe) {
         return Mth.ceil(recipe.value().cookingTime() / alloyingSpeed / (speedMultiplier > 0.0F ? speedMultiplier : 1.0F));
     }
 }

@@ -12,6 +12,6 @@ public class OCRecipeDisplays {
 
     public static void onInitialize() {
         ObsidianCraft.onInitializeInfo("Recipe Displays");
-        register("alloying", AlloyingRecipeDisplay.TYPE);
+        register("alloying", NeedFuelRecipeDisplay.TYPE);
     }
 }

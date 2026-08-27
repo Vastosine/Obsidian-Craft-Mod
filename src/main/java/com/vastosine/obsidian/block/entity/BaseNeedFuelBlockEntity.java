@@ -3,6 +3,8 @@ package com.vastosine.obsidian.block.entity;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import com.vastosine.obsidian.recipe.crafting.AlloyingRecipe;
+import com.vastosine.obsidian.recipe.crafting.NeedFuelRecipe;
+import com.vastosine.obsidian.recipe.crafting.ProcessingInput;
 import com.vastosine.obsidian.utils.OCUtils;
 import it.unimi.dsi.fastutil.objects.Reference2IntMap;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
@@ -40,13 +42,14 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, StackedContentsCompatible, RecipeCraftingHolder {
-    protected final int slotInputCount;
-    protected final int slotFuelCount;
-    protected final int slotResultCount;
+public abstract class BaseNeedFuelBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, StackedContentsCompatible, RecipeCraftingHolder {
+    private final int slotInputCount;
+    private final int slotFuelCount;
+    private final int slotResultCount;
 
     public static final int DATA_LIT_TIME = 0;
     public static final int DATA_LIT_DURATION = 1;
@@ -54,10 +57,10 @@ public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEnti
     public static final int DATA_COOKING_TOTAL_TIME = 3;
     public static final int NUM_DATA_VALUES = 4;
     public static final int BURN_COOL_SPEED = 2;
-    protected static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USED_CODEC = Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
-    protected static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USING_CODEC = Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
-    protected static final Codec<List<ItemStack>> RECIPE_RESULTS = Codec.list(ItemStack.CODEC);
-    protected static final float DEFAULT_SPEED_MULTIPLIER = 1.0F;
+    public static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USED_CODEC = Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
+    public static final Codec<Map<ResourceKey<Recipe<?>>, Integer>> RECIPES_USING_CODEC = Codec.unboundedMap(Recipe.KEY_CODEC, Codec.INT);
+    public static final Codec<List<ItemStack>> RECIPE_RESULTS = Codec.list(ItemStack.CODEC);
+    public static final float DEFAULT_SPEED_MULTIPLIER = 1.0F;
     protected NonNullList<ItemStack> items;
     protected List<ItemStack> inputs, fuels, results;
     protected int litTimeRemaining;
@@ -71,10 +74,10 @@ public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEnti
         @Override
         public int get(final int dataId) {
             return switch (dataId) {
-                case DATA_LIT_TIME -> BaseConsumesFuelBlockEntity.this.litTimeRemaining;
-                case DATA_LIT_DURATION -> BaseConsumesFuelBlockEntity.this.litTotalTime;
-                case DATA_COOKING_PROGRESS -> BaseConsumesFuelBlockEntity.this.cookingTimer;
-                case DATA_COOKING_TOTAL_TIME -> BaseConsumesFuelBlockEntity.this.cookingTotalTime;
+                case DATA_LIT_TIME -> BaseNeedFuelBlockEntity.this.litTimeRemaining;
+                case DATA_LIT_DURATION -> BaseNeedFuelBlockEntity.this.litTotalTime;
+                case DATA_COOKING_PROGRESS -> BaseNeedFuelBlockEntity.this.cookingTimer;
+                case DATA_COOKING_TOTAL_TIME -> BaseNeedFuelBlockEntity.this.cookingTotalTime;
                 default -> 0;
             };
         }
@@ -82,10 +85,10 @@ public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEnti
         @Override
         public void set(final int dataId, final int value) {
             switch (dataId) {
-                case DATA_LIT_TIME -> BaseConsumesFuelBlockEntity.this.litTimeRemaining = value;
-                case DATA_LIT_DURATION -> BaseConsumesFuelBlockEntity.this.litTotalTime = value;
-                case DATA_COOKING_PROGRESS -> BaseConsumesFuelBlockEntity.this.cookingTimer = value;
-                case DATA_COOKING_TOTAL_TIME -> BaseConsumesFuelBlockEntity.this.cookingTotalTime = value;
+                case DATA_LIT_TIME -> BaseNeedFuelBlockEntity.this.litTimeRemaining = value;
+                case DATA_LIT_DURATION -> BaseNeedFuelBlockEntity.this.litTotalTime = value;
+                case DATA_COOKING_PROGRESS -> BaseNeedFuelBlockEntity.this.cookingTimer = value;
+                case DATA_COOKING_TOTAL_TIME -> BaseNeedFuelBlockEntity.this.cookingTotalTime = value;
             }
         }
 
@@ -100,7 +103,7 @@ public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEnti
 
     private final Direction face;
 
-    protected BaseConsumesFuelBlockEntity(
+    protected BaseNeedFuelBlockEntity(
             BlockEntityType<?> type, BlockPos worldPosition,
             BlockState blockState, Direction face,
             float fuelConsumingSpeed,
@@ -213,6 +216,28 @@ public abstract class BaseConsumesFuelBlockEntity extends BaseContainerBlockEnti
         if (changed) {
             setChanged(level, pos, state);
         }
+    }
+
+    protected  <R extends NeedFuelRecipe> boolean loadNeedFuelRecipe(ServerLevel level, RecipeType<R> type) {
+        ProcessingInput alloyingInput = new ProcessingInput(inputs);
+        List<RecipeHolder<R>> recipes = level
+                .recipeAccess()
+                .getAllMatches(type, alloyingInput, level)
+                .toList();
+        RecipeHolder<R> recipe = recipes.stream().filter(
+                i -> canCraft(i.value().getResults(slotResultCount))
+        ).max(Comparator.comparingInt(p -> p.value().ingredientSize())).orElse(null);
+        if (recipe == null) return false;
+        cookingTotalTime = getNeedFuelTotalTime(recipe);
+        recipeResults.addAll(recipe.value().getResults(slotResultCount));
+        recipesUsing.clear();
+        recipesUsing.addTo(recipe.id(), 1);
+        recipe.value().consume(alloyingInput);
+        return true;
+    }
+
+    protected int getNeedFuelTotalTime(final RecipeHolder<? extends NeedFuelRecipe> recipe) {
+        return Mth.ceil(recipe.value().cookingTime() / (speedMultiplier > 0.0F ? speedMultiplier : 1.0F));
     }
 
     protected void burnCool() {

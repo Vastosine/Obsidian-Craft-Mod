@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import java.util.function.Function;
 
 public class OCBlocks {
+    // Blocks
     public static final Block OBSIDIAN_BLOCK = register(OCBlockItemIds.OBSIDIAN_BLOCK, BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK).strength(5.0f, 800));
 
     // Entity Blocks
@@ -34,6 +35,7 @@ public class OCBlocks {
     private static Block register(final BlockItemId id, final BlockBehaviour.Properties properties) {
         return register(id, Block::new, properties, true);
     }
+
     private static Block register(final BlockItemId id, final Function<BlockBehaviour.Properties, Block> factory, final BlockBehaviour.Properties properties) {
         return register(id, factory, properties, true);
     }
