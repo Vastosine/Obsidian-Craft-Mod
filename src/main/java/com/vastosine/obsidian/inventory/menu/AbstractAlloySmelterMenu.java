@@ -2,11 +2,10 @@ package com.vastosine.obsidian.inventory.menu;
 
 import com.vastosine.obsidian.inventory.slot.AlloySmelterFuelSlot;
 import com.vastosine.obsidian.inventory.slot.AlloySmelterResultSlot;
-import com.vastosine.obsidian.recipe.crafting.AlloyingInput;
+import com.vastosine.obsidian.recipe.crafting.OCRecipeInput;
 import com.vastosine.obsidian.recipe.crafting.AlloyingRecipe;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.recipebook.ServerPlaceRecipe;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
@@ -194,8 +193,7 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
                 }
             }, 1, 1, List.of(this.getSlot(0)), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
         } else if (recipe.value() instanceof AlloyingRecipe) {
-            final List<Slot> slotsToClear = new ArrayList<>();
-            slotsToClear.addAll(slots.subList(0, slotInputCount));
+            final List<Slot> slotsToClear = new ArrayList<>(slots.subList(0, slotInputCount));
             final List<ItemStack> inputs = new ArrayList<>();
             slotsToClear.forEach(p -> inputs.add(container.getItem(p.index)));
             slotsToClear.addAll(slots.subList(slotInputCount + slotFuelCount, slotCount));
@@ -214,7 +212,7 @@ public abstract class AbstractAlloySmelterMenu extends RecipeBookMenu {
 
                 @Override
                 public boolean recipeMatches(RecipeHolder<AlloyingRecipe> recipe) {
-                    return recipe.value().matches(new AlloyingInput(inputs), level);
+                    return recipe.value().matches(new OCRecipeInput(inputs), level);
                 }
             }, slotInputCount, 1, slots.subList(0, slotInputCount), slotsToClear, inventory, typedRecipe, useMaxItems, allowDroppingItemsToClear);
 

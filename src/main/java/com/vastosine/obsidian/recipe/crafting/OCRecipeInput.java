@@ -5,7 +5,7 @@ import net.minecraft.world.item.crafting.RecipeInput;
 
 import java.util.List;
 
-public record AlloyingInput(List<ItemStack> inputs) implements RecipeInput {
+public record OCRecipeInput(List<ItemStack> inputs) implements RecipeInput {
     @Override
     public ItemStack getItem(int index) {
         return inputs.get(index);

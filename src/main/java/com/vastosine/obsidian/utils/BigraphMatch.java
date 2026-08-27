@@ -10,8 +10,9 @@ public class BigraphMatch {
     private int[] matches;
     private final int ln, rn;
 
-    public interface CheckValid {
-        boolean isValid(int leftNode, int rightNode);
+    @FunctionalInterface
+    public interface IntBiPredicate {
+        boolean test(int leftNode, int rightNode);
     }
 
     public BigraphMatch(int[] lCount, int[] rCount) {
@@ -29,15 +30,15 @@ public class BigraphMatch {
         }
     }
 
-    public BigraphMatch(int[] lCount, int[] rCount, CheckValid checker) {
+    public BigraphMatch(int[] lCount, int[] rCount, IntBiPredicate predicate) {
         this(lCount, rCount);
-        loadChecker(checker);
+        loadChecker(predicate);
     }
 
-    void loadChecker(CheckValid checker) {
+    void loadChecker(IntBiPredicate predicate) {
         for (int i = 0; i < ln; i++) {
             for (int j = 0; j < rn; j++) {
-                if (checker.isValid(i, j)) {
+                if (predicate.test(i, j)) {
                     addEdge(i, j);
                 }
             }

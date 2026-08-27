@@ -1,6 +1,6 @@
 package com.vastosine.obsidian.block.entity;
 
-import com.vastosine.obsidian.recipe.crafting.AlloyingInput;
+import com.vastosine.obsidian.recipe.crafting.OCRecipeInput;
 import com.vastosine.obsidian.recipe.crafting.AlloyingRecipe;
 import com.vastosine.obsidian.recipe.crafting.OCRecipeTypes;
 import net.minecraft.core.BlockPos;
@@ -40,7 +40,7 @@ public abstract class AbstractAlloySmelterBlockEntity extends BaseConsumesFuelBl
     }
 
     private boolean loadAlloyingRecipe(ServerLevel level) {
-        AlloyingInput alloyingInput = new AlloyingInput(inputs);
+        OCRecipeInput alloyingInput = new OCRecipeInput(inputs);
         List<RecipeHolder<AlloyingRecipe>> recipes = level
                 .recipeAccess()
                 .getAllMatches(OCRecipeTypes.ALLOYING, alloyingInput, level)

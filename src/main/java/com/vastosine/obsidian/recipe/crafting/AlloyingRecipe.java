@@ -22,7 +22,7 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
 
-public class AlloyingRecipe implements Recipe<AlloyingInput> {
+public class AlloyingRecipe implements Recipe<OCRecipeInput> {
     public static final Codec<List<ItemStackTemplate>> RESULT_CODEC = Codec.withAlternative(
             ItemStackTemplate.CODEC.listOf(), ItemStackTemplate.CODEC, List::of
     );
@@ -90,15 +90,15 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
 
     // input will be consumed
     @Override
-    public boolean matches(AlloyingInput input, Level level) {
+    public boolean matches(OCRecipeInput input, Level level) {
         return get_match(input) != null;
     }
 
-    private int[] get_match(AlloyingInput input) {
+    private int[] get_match(OCRecipeInput input) {
         return RecipeMatches.getMatches(ingredients, input);
     }
 
-    public void consume(AlloyingInput input) {
+    public void consume(OCRecipeInput input) {
         int[] match = get_match(input);
         for (int i = 0; i < input.size() && i < match.length; i++) {
             ItemStack itemStack = input.getItem(i);
@@ -115,7 +115,7 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     }
 
     @Override
-    public ItemStack assemble(AlloyingInput input) {
+    public ItemStack assemble(OCRecipeInput input) {
         return this.results.getFirst().create();
     }
 
@@ -130,12 +130,12 @@ public class AlloyingRecipe implements Recipe<AlloyingInput> {
     }
 
     @Override
-    public RecipeSerializer<? extends Recipe<AlloyingInput>> getSerializer() {
+    public RecipeSerializer<? extends Recipe<OCRecipeInput>> getSerializer() {
         return SERIALIZER;
     }
 
     @Override
-    public RecipeType<? extends Recipe<AlloyingInput>> getType() {
+    public RecipeType<? extends Recipe<OCRecipeInput>> getType() {
         return OCRecipeTypes.ALLOYING;
     }
 
