@@ -24,5 +24,6 @@ public class OCMenuScreens {
         ObsidianCraft.onInitializeInfo("Menu Screens");
         register(OCMenuTypes.OBSIDIAN_FURNACE, ObsidianFurnaceScreen::new);
         register(OCMenuTypes.ALLOY_SMELTER, AlloySmelterScreen::new);
+        register(OCMenuTypes.ADVANCED_ALLOY_SMELTER, AdvancedAlloySmelterScreen::new);
     }
 }

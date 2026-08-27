@@ -28,7 +28,7 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<NeedFue
     );
     private final Component recipeFilterName;
 
-    public AlloySmelterRecipeBookComponent(final NeedFuelMenu menu, final Component recipeFilterName, final List<TabInfo> tabInfos, int slotInputCount, int slotFuelCount, int slotResultCount) {
+    public AlloySmelterRecipeBookComponent(final NeedFuelMenu menu, final Component recipeFilterName, final List<TabInfo> tabInfos) {
         super(menu, tabInfos);
         this.recipeFilterName = recipeFilterName;
     }

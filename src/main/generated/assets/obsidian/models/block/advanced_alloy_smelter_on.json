@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "obsidian:block/advanced_alloy_smelter_front_on",
+    "side": "obsidian:block/advanced_alloy_smelter_side",
+    "top": "obsidian:block/advanced_alloy_smelter_top"
+  }
+}

@@ -31,10 +31,9 @@ public abstract class AbstractAlloySmelterScreen<T extends NeedFuelMenu> extends
             final Identifier texture,
             final Identifier litProgressSprite,
             final Identifier burnProgressSprite,
-            final List<RecipeBookComponent.TabInfo> tabInfos,
-            int slotInputCount, int slotFuelCount, int slotResultCount
+            final List<RecipeBookComponent.TabInfo> tabInfos
     ) {
-        super(menu, new AlloySmelterRecipeBookComponent(menu, recipeFilterName, tabInfos, slotInputCount, slotFuelCount, slotResultCount), inventory, title);
+        super(menu, new AlloySmelterRecipeBookComponent(menu, recipeFilterName, tabInfos), inventory, title);
         this.texture = texture;
         this.litProgressSprite = litProgressSprite;
         this.burnProgressSprite = burnProgressSprite;

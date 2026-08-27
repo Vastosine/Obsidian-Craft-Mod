@@ -57,7 +57,8 @@ public class OCCreativeModeTabs {
                     // Blocks
                     OBSIDIAN_BLOCK,
                     OBSIDIAN_FURNACE,
-                    ALLOY_SMELTER
+                    ALLOY_SMELTER,
+                    ADVANCED_ALLOY_SMELTER
             )).build();
 
     public static void onInitialize() {

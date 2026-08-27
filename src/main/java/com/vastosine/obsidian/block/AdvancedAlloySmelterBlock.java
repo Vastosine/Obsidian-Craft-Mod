@@ -1,6 +1,6 @@
 package com.vastosine.obsidian.block;
 
-import com.vastosine.obsidian.block.entity.AlloySmelterBlockEntity;
+import com.vastosine.obsidian.block.entity.AdvancedAlloySmelterBlockEntity;
 import com.vastosine.obsidian.block.entity.OCBlockEntityTypes;
 import com.vastosine.obsidian.stats.OCStats;
 import net.minecraft.core.BlockPos;
@@ -13,27 +13,27 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jspecify.annotations.Nullable;
 
-public class AlloySmelterBlock extends NeedFuelBlock {
-    protected AlloySmelterBlock(Properties properties) {
+public class AdvancedAlloySmelterBlock extends NeedFuelBlock {
+    protected AdvancedAlloySmelterBlock(Properties properties) {
         super(properties);
     }
 
     @Override
     public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState blockState, BlockEntityType<T> type) {
-        return createFurnaceTicker(level, type, OCBlockEntityTypes.ALLOY_SMELTER);
+        return createFurnaceTicker(level, type, OCBlockEntityTypes.ADVANCED_ALLOY_SMELTER);
     }
 
     @Override
     protected void openContainer(Level level, BlockPos pos, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
-        if (blockEntity instanceof AlloySmelterBlockEntity) {
+        if (blockEntity instanceof AdvancedAlloySmelterBlockEntity) {
             player.openMenu((MenuProvider) blockEntity);
-            player.awardStat(OCStats.INTERACT_WITH_ALLOY_SMELTER);
+            player.awardStat(OCStats.INTERACT_WITH_ADVANCED_ALLOY_SMELTER);
         }
     }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos worldPosition, BlockState blockState) {
-        return new AlloySmelterBlockEntity(worldPosition, blockState);
+        return new AdvancedAlloySmelterBlockEntity(worldPosition, blockState);
     }
 }

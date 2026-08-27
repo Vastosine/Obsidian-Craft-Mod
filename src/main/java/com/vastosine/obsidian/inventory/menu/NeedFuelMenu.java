@@ -79,7 +79,7 @@ public abstract class NeedFuelMenu extends RecipeBookMenu {
         }
         this.addSlot(new AlloySmelterResultSlot(inventory.player, container, slotInputCount + slotFuelCount, 116, 35));
         for (int slot = 1; slot < slotResultCount; slot++) {
-            this.addSlot(new AlloySmelterResultSlot(inventory.player, container, slotInputCount + slotFuelCount + slot, 122 + 18 * slot, 36 + slotCount));
+            this.addSlot(new AlloySmelterResultSlot(inventory.player, container, slotInputCount + slotFuelCount + slot, 122 + 18 * slot, 39));
         }
         this.addStandardInventorySlots(inventory, 8, 84);
     }

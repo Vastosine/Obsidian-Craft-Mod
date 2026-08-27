@@ -31,6 +31,11 @@ public class OCBlocks {
             AlloySmelterBlock::new,
             BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)
     );
+    public static final Block ADVANCED_ALLOY_SMELTER = register(
+            OCBlockItemIds.ADVANCED_ALLOY_SMELTER,
+            AdvancedAlloySmelterBlock::new,
+            BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)
+    );
 
     private static Block register(final BlockItemId id, final BlockBehaviour.Properties properties) {
         return register(id, Block::new, properties, true);

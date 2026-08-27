@@ -25,7 +25,8 @@ public class OCLootTablesProvider extends FabricBlockLootSubProvider {
         dropSelf(OBSIDIAN_BLOCK);
         addNameableBlockEntityTable(
                 OBSIDIAN_FURNACE,
-                ALLOY_SMELTER
+                ALLOY_SMELTER,
+                ADVANCED_ALLOY_SMELTER
         );
     }
 }

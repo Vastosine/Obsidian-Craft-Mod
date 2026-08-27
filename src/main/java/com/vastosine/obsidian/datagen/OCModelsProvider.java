@@ -23,6 +23,7 @@ public class OCModelsProvider extends FabricModelProvider {
         blockModelGenerators.createTrivialCube(COUNTER_BLOCK);
         blockModelGenerators.createFurnace(OBSIDIAN_FURNACE, TexturedModel.ORIENTABLE_ONLY_TOP);
         blockModelGenerators.createFurnace(ALLOY_SMELTER, TexturedModel.ORIENTABLE_ONLY_TOP);
+        blockModelGenerators.createFurnace(ADVANCED_ALLOY_SMELTER, TexturedModel.ORIENTABLE_ONLY_TOP);
     }
 
     public static void generateFlatItem(ItemModelGenerators itemModelGenerators, ModelTemplate modelTemplate, Item...items) {

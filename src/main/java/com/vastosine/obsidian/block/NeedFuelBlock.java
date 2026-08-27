@@ -1,6 +1,6 @@
 package com.vastosine.obsidian.block;
 
-import com.vastosine.obsidian.block.entity.AbstractAlloySmelterBlockEntity;
+import com.vastosine.obsidian.block.entity.BaseNeedFuelBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -22,11 +22,11 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jspecify.annotations.Nullable;
 
-public abstract class AbstractAlloySmelterBlock extends BaseEntityBlock {
+public abstract class NeedFuelBlock extends BaseEntityBlock {
 	public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-	protected AbstractAlloySmelterBlock(final Properties properties) {
+	protected NeedFuelBlock(final Properties properties) {
 		super(properties);
 		this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
 	}
@@ -78,7 +78,7 @@ public abstract class AbstractAlloySmelterBlock extends BaseEntityBlock {
 	}
 
 	protected static <T extends BlockEntity> @Nullable BlockEntityTicker<T> createFurnaceTicker(
-		final Level level, final BlockEntityType<T> actualType, final BlockEntityType<? extends AbstractAlloySmelterBlockEntity> expectedType
+		final Level level, final BlockEntityType<T> actualType, final BlockEntityType<? extends BaseNeedFuelBlockEntity> expectedType
 	) {
 		return level instanceof ServerLevel serverLevel
 			? createTickerHelper(actualType, expectedType, (innerLevel, pos, state, entity) -> entity.tick(serverLevel, pos, state))

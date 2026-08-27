@@ -47,13 +47,16 @@ public class OCEnUsProvider extends OCLanguageProvider {
                 OBSIDIAN_BLOCK, "Obsidian Block",
                 OBSIDIAN_FURNACE, "Obsidian Furnace",
                 ALLOY_SMELTER, "Alloy Smelter",
+                ADVANCED_ALLOY_SMELTER, "Advanced Alloy Smelter",
 
                 // Block Entities
                 "container.obsidian.obsidian_furnace", "Obsidian Furnace",
                 "container.obsidian.alloy_smelter", "Alloy Smelter",
+                "container.obsidian.advanced_alloy_smelter", "Advanced Alloy Smelter",
 
                 OCStats.INTERACT_WITH_OBSIDIAN_FURNACE.toLanguageKey("stat"), "Interactions With Obsidian Furnace",
                 OCStats.INTERACT_WITH_ALLOY_SMELTER.toLanguageKey("stat"), "Interactions With Alloy Smelter",
+                OCStats.INTERACT_WITH_ADVANCED_ALLOY_SMELTER.toLanguageKey("stat"), "Interactions With Advanced Alloy Smelter",
 
                 // Block Tags
                 OCBlockTags.INCORRECT_FOR_OBSIDIAN_TOOL, "Incorrect for Obsidian Tool",

@@ -2,7 +2,7 @@ package com.vastosine.obsidian.client.screen;
 
 import com.vastosine.obsidian.ObsidianCraft;
 import com.vastosine.obsidian.block.OCBlocks;
-import com.vastosine.obsidian.inventory.menu.AlloySmelterMenu;
+import com.vastosine.obsidian.inventory.menu.AdvancedAlloySmelterMenu;
 import com.vastosine.obsidian.recipe.crafting.OCRecipeBookCategories;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,17 +15,17 @@ import net.minecraft.world.entity.player.Inventory;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class AlloySmelterScreen extends AbstractAlloySmelterScreen<AlloySmelterMenu> {
-    private static final Identifier LIT_PROGRESS_SPRITE = ObsidianCraft.id("container/alloy_smelter/lit_progress");
-    private static final Identifier BURN_PROGRESS_SPRITE = ObsidianCraft.id("container/alloy_smelter/burn_progress");
-    private static final Identifier TEXTURE = ObsidianCraft.id("textures/gui/container/alloy_smelter.png");
+public class AdvancedAlloySmelterScreen extends AbstractAlloySmelterScreen<AdvancedAlloySmelterMenu> {
+    private static final Identifier LIT_PROGRESS_SPRITE = ObsidianCraft.id("container/advanced_alloy_smelter/lit_progress");
+    private static final Identifier BURN_PROGRESS_SPRITE = ObsidianCraft.id("container/advanced_alloy_smelter/burn_progress");
+    private static final Identifier TEXTURE = ObsidianCraft.id("textures/gui/container/advanced_alloy_smelter.png");
     private static final Component FILTER_NAME = Component.translatable("gui.recipebook.toggleRecipes.smeltable");
     private static final List<RecipeBookComponent.TabInfo> TABS = List.of(
-            new RecipeBookComponent.TabInfo(OCBlocks.ALLOY_SMELTER.asItem(), OCRecipeBookCategories.ALLOYING),
+            new RecipeBookComponent.TabInfo(OCBlocks.ADVANCED_ALLOY_SMELTER.asItem(), OCRecipeBookCategories.ALLOYING),
             new RecipeBookComponent.TabInfo(SearchRecipeBookCategory.FURNACE)
     );
 
-    public AlloySmelterScreen(final AlloySmelterMenu menu, final Inventory inventory, final Component title) {
+    public AdvancedAlloySmelterScreen(final AdvancedAlloySmelterMenu menu, final Inventory inventory, final Component title) {
         super(menu, inventory, title, FILTER_NAME, TEXTURE, LIT_PROGRESS_SPRITE, BURN_PROGRESS_SPRITE, TABS);
     }
 }
