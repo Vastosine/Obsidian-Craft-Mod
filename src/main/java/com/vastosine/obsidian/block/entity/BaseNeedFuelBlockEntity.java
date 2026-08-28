@@ -225,7 +225,7 @@ public abstract class BaseNeedFuelBlockEntity extends BaseContainerBlockEntity i
                 .getAllMatches(type, alloyingInput, level)
                 .toList();
         RecipeHolder<R> recipe = recipes.stream().filter(
-                i -> canCraft(i.value().getResults(slotResultCount))
+                i -> i.value().needSlotCount() <= slotInputCount && canCraft(i.value().getResults(slotResultCount))
         ).max(Comparator.comparingInt(p -> p.value().ingredientSize())).orElse(null);
         if (recipe == null) return false;
         cookingTotalTime = getNeedFuelTotalTime(recipe);
@@ -282,7 +282,10 @@ public abstract class BaseNeedFuelBlockEntity extends BaseContainerBlockEntity i
             return OCUtils.getSequence(slotInputCount + slotFuelCount + slotResultCount - 1, slotFuelCount + slotResultCount, -1);
         if (x == -2) return OCUtils.getSequence(0, slotInputCount);
         int z = (x - y + 4) % 4;
-        if (z == 0 && slotInputCount >= 3) return new int[]{2};
+        if (slotInputCount >= 3) {
+            if (z == 0) return new int[]{1};
+            if (z == 3) return new int[]{2};
+        }
         if (z % 2 == 0) return OCUtils.getSequence(slotInputCount, slotFuelCount);
         if (z == 1) return new int[]{0};
         if (z == 3) return new int[]{1};
@@ -452,7 +455,7 @@ public abstract class BaseNeedFuelBlockEntity extends BaseContainerBlockEntity i
             int count = result.count();
             for (int slot = 0; slot < itemStacks.size(); slot++) {
                 if (count <= 0) break;
-                if  (itemStacks.get(slot).isEmpty()) {
+                if (itemStacks.get(slot).isEmpty()) {
                     itemStacks.set(slot, result.copyWithCount(1));
                     count--;
                     if (count <= 0) break;

@@ -9,6 +9,7 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.advancements.triggers.ImpossibleTrigger;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -17,40 +18,45 @@ import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
 public abstract class OCCustomRecipeProvider extends RecipeProvider {
 
+    private final HolderGetter<Item> items;
+
     protected OCCustomRecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
         super(recipeOutput, advancementOutput);
+        items = recipeOutput.lookup(Registries.ITEM);
     }
 
     public void fourBlockStorageRecipes(
             final RecipeCategory unpackedFormCategory, final ItemLike unpackedForm, final RecipeCategory packedFormCategory, final ItemLike packedForm
     ) {
-        String packingRecipeId = getItemName(packedForm) + "_from_" + getItemName(unpackedForm);
-        String unpackingRecipeId = getItemName(unpackedForm) + "_from_" + getItemName(packedForm);
+        String path = getItemName(packedForm) + "_from_" + getItemName(unpackedForm);
+        String unpath = getItemName(unpackedForm) + "_from_" + getItemName(packedForm);
         shapeless(unpackedFormCategory, unpackedForm, 4)
                 .requires(packedForm)
                 .unlockedBy(getHasName(packedForm), this.has(packedForm))
-                .save(this.output, getKey(unpackingRecipeId));
+                .save(this.output, getKey(unpath));
         shaped(packedFormCategory, packedForm)
                 .define('I', unpackedForm)
                 .pattern("II")
                 .pattern("II")
                 .unlockedBy(getHasName(unpackedForm), this.has(unpackedForm))
-                .save(this.output, getKey(packingRecipeId));
+                .save(this.output, getKey(path));
     }
 
-    private static @NonNull ResourceKey<Recipe<?>> getKey(String packingRecipeId) {
-        return ResourceKey.create(Registries.RECIPE, ObsidianCraft.id(packingRecipeId));
+    private static @NonNull ResourceKey<Recipe<?>> getKey(String path) {
+        return ResourceKey.create(Registries.RECIPE, ObsidianCraft.id(path));
     }
 
 
@@ -107,10 +113,42 @@ public abstract class OCCustomRecipeProvider extends RecipeProvider {
         return getTemplate(item, 1);
     }
 
+    public static ItemStackTemplate getTemplate(Block block, int count) {
+        return new ItemStackTemplate(block.asItem(), count);
+    }
+
+    public static ItemStackTemplate getTemplate(Block block) {
+        return getTemplate(block.asItem(), 1);
+    }
+
     public final Processing<AlloyingRecipe> alloying = new Processing<>(
             NeedFuelRecipe.factoryTransformer(AlloyingRecipe::new),
             "alloying"
     );
+
+    public OCIngredient get(final TagKey<Item> tag, int count) {
+        return OCIngredient.of(items.getOrThrow(tag), count);
+    }
+
+    public OCIngredient get(final TagKey<Item> tag) {
+        return OCIngredient.of(items.getOrThrow(tag));
+    }
+
+    public OCIngredient get(final ItemLike item) {
+        return  OCIngredient.of(item);
+    }
+
+    public OCIngredient get(final Block block) {
+        return  OCIngredient.of(block.asItem());
+    }
+
+    public OCIngredient get(final ItemLike item, int count) {
+        return  OCIngredient.of(item, count);
+    }
+
+    public OCIngredient get(final Block block, int count) {
+        return  OCIngredient.of(block.asItem(), count);
+    }
 
     public class Processing<T extends ProcessingRecipe> {
         private final ProcessingRecipe.Factory<T> factory;
@@ -157,30 +195,30 @@ public abstract class OCCustomRecipeProvider extends RecipeProvider {
         }
 
         public void recipe(
-                final String packingRecipeId,
+                final String path,
                 final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
                 final int cost, final int speed, final float experience,
                 final List<Item> unlockItems, final RecipeCategory recipeCategory
         ) {
-            recipe(true, packingRecipeId, ingredients, results, cost, speed, experience, unlockItems, recipeCategory);
+            recipe(true, path, ingredients, results, cost, speed, experience, unlockItems, recipeCategory);
         }
 
         public void recipe(
-                final String packingRecipeId,
+                final String path,
                 final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
                 final int cost, final int speed, final float experience,
                 final List<Item> unlockItems
         ) {
-            recipe(packingRecipeId, ingredients, results, cost, speed, experience, unlockItems, recipeCategory);
+            recipe(path, ingredients, results, cost, speed, experience, unlockItems, recipeCategory);
         }
 
         public void recipe(
-                final String packingRecipeId,
+                final String path,
                 final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
                 final int cost, final int speed, final float experience
         ) {
             recipe(
-                    packingRecipeId, ingredients, results, cost, speed, experience,
+                    path, ingredients, results, cost, speed, experience,
                     ingredients.stream().map(i -> i.toVanilla().getSingleItem())
                             .map(i -> i.map(Holder::value).orElse(null))
                             .toList()
@@ -188,11 +226,11 @@ public abstract class OCCustomRecipeProvider extends RecipeProvider {
         }
 
         public void recipe(
-                final String packingRecipeId,
+                final String path,
                 final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
                 final int cookingTime, final float experience
         ) {
-            recipe(packingRecipeId, ingredients, results, cookingTime, 1, experience);
+            recipe(path, ingredients, results, cookingTime, 1, experience);
         }
 
         public void recipe(
@@ -210,6 +248,21 @@ public abstract class OCCustomRecipeProvider extends RecipeProvider {
                 final int cookingTime, final float experience
         ) {
             recipe(ingredients, results, cookingTime, 1, experience);
+        }
+
+        public void recipe(
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cookingTime, final float experience, List<Item> unlockItems
+        ) {
+            recipe(getItemName(results.getFirst().item().value()), ingredients, results, cookingTime, 1, experience, unlockItems);
+        }
+
+        public void recipe(
+                final String path,
+                final List<OCIngredient> ingredients, final List<ItemStackTemplate> results,
+                final int cookingTime, final float experience, List<Item> unlockItems
+        ) {
+            recipe(path, ingredients, results, cookingTime, 1, experience, unlockItems);
         }
     }
 

@@ -1,0 +1,21 @@
+{
+  "type": "obsidian:alloying",
+  "cookingTime": 120,
+  "experience": 0.1,
+  "ingredients": [
+    {
+      "value": "obsidian:obsidian_furnace"
+    },
+    {
+      "value": "minecraft:blast_furnace"
+    },
+    {
+      "value": "obsidian:obsidian_block"
+    }
+  ],
+  "results": [
+    {
+      "id": "obsidian:alloy_smelter"
+    }
+  ]
+}

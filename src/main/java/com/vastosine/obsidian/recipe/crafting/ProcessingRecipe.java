@@ -121,6 +121,10 @@ public abstract class ProcessingRecipe implements Recipe<ProcessingInput> {
         return count_sum = count;
     }
 
+    public int needSlotCount() {
+        return ingredients.size();
+    }
+
     // input will be consumed
     @Override
     public boolean matches(ProcessingInput input, Level level) {

@@ -4,7 +4,7 @@ import static com.vastosine.obsidian.item.OCItems.*;
 import static com.vastosine.obsidian.block.OCBlocks.*;
 
 import com.vastosine.obsidian.datagen.custom.OCCustomRecipeProvider;
-import com.vastosine.obsidian.recipe.crafting.OCIngredient;
+import com.vastosine.obsidian.tags.OCItemTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.advancements.Advancement;
@@ -139,10 +139,48 @@ public class OCRecipesProvider extends FabricRecipeProvider {
 
                 // Alloying
                 alloying.recipe(
-                        List.of(OCIngredient.of(4, Items.NETHERITE_SCRAP), OCIngredient.of(4, Items.GOLD_INGOT)),
+                        List.of(get(Items.NETHERITE_SCRAP, 4), get(Items.GOLD_INGOT, 4)),
                         List.of(getTemplate(Items.NETHERITE_INGOT)),
                         200,
                         1.0F
+                );
+                alloying.recipe(
+                        List.of(get(Items.FURNACE), get(OBSIDIAN_INGOT, 2)),
+                        List.of(getTemplate(OBSIDIAN_FURNACE)),
+                        150,
+                        0.1F
+                );
+                alloying.recipe(
+                        List.of(get(Items.FURNACE), get(Items.IRON_INGOT, 3)),
+                        List.of(getTemplate(Items.BLAST_FURNACE)),
+                        50,
+                        0.1F
+                );
+                alloying.recipe(
+                        List.of(get(OCItemTags.CAN_BE_SMELTED_INTO_OBSIDIAN, 3)),
+                        List.of(getTemplate(OBSIDIAN_INGOT, 4), getTemplate(OBSIDIAN_INGOT)),
+                        100,
+                        0.1F,
+                        List.of(ALLOY_SMELTER.asItem())
+                );
+                alloying.recipe(
+                        List.of(get(ALLOY_SMELTER, 3), get(OBSIDIAN_BLOCK, 5)),
+                        List.of(getTemplate(ADVANCED_ALLOY_SMELTER)),
+                        120,
+                        0.1F
+                );
+                alloying.recipe(
+                        "advanced_alloy_smelter_from_advanced_alloy",
+                        List.of(get(ALLOY_SMELTER), get(OBSIDIAN_FURNACE), get(OBSIDIAN_BLOCK)),
+                        List.of(getTemplate(ADVANCED_ALLOY_SMELTER)),
+                        120,
+                        0.1F
+                );
+                alloying.recipe(
+                        List.of(get(OBSIDIAN_FURNACE), get(Items.BLAST_FURNACE), get(OBSIDIAN_BLOCK)),
+                        List.of(getTemplate(ALLOY_SMELTER)),
+                        120,
+                        0.1F
                 );
 
                 // Remove Vanilla Recipes

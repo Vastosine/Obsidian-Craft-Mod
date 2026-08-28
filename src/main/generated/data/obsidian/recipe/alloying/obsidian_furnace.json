@@ -1,0 +1,19 @@
+{
+  "type": "obsidian:alloying",
+  "cookingTime": 150,
+  "experience": 0.1,
+  "ingredients": [
+    {
+      "value": "minecraft:furnace"
+    },
+    {
+      "count": 2,
+      "value": "obsidian:obsidian_ingot"
+    }
+  ],
+  "results": [
+    {
+      "id": "obsidian:obsidian_furnace"
+    }
+  ]
+}

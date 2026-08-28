@@ -1,0 +1,20 @@
+{
+  "type": "obsidian:alloying",
+  "cookingTime": 120,
+  "experience": 0.1,
+  "ingredients": [
+    {
+      "count": 3,
+      "value": "obsidian:alloy_smelter"
+    },
+    {
+      "count": 5,
+      "value": "obsidian:obsidian_block"
+    }
+  ],
+  "results": [
+    {
+      "id": "obsidian:advanced_alloy_smelter"
+    }
+  ]
+}

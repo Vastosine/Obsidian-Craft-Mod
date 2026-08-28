@@ -79,6 +79,9 @@ public class AlloySmelterRecipeBookComponent extends RecipeBookComponent<NeedFue
 
     @Override
     protected void selectMatchingRecipes(final RecipeCollection collection, final StackedItemContents stackedContents) {
-        collection.selectRecipes(stackedContents, display -> display instanceof NeedFuelRecipeDisplay || display instanceof FurnaceRecipeDisplay);
+        collection.selectRecipes(stackedContents,
+                display -> (display instanceof NeedFuelRecipeDisplay alloy &&
+                        alloy.ingredients().size() <= menu.getInputSlots().size())
+                        || display instanceof FurnaceRecipeDisplay);
     }
 }

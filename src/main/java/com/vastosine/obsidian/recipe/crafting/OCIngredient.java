@@ -48,34 +48,30 @@ public record OCIngredient(HolderSet<Item> values, int count) implements CustomI
     }
 
     public static OCIngredient of(ItemLike itemLike) {
-        return of(1, itemLike);
+        return of(itemLike, 1);
     }
 
     public static OCIngredient of(final ItemLike... items) {
-        return of(1, Arrays.stream(items));
+        return of(Arrays.stream(items), 1);
     }
 
     public static OCIngredient of(final Stream<? extends ItemLike> stream) {
-        return of(1, stream);
+        return of(stream, 1);
     }
 
     public static OCIngredient of(final HolderSet<Item> tag) {
-        return of(1, tag);
+        return of(tag, 1);
     }
 
-    public static OCIngredient of(int count, ItemLike itemLike) {
+    public static OCIngredient of(ItemLike itemLike, int count) {
         return new OCIngredient(HolderSet.direct(toHolder(itemLike)), count);
     }
 
-    public static OCIngredient of(int count, final ItemLike... items) {
-        return of(count, Arrays.stream(items));
-    }
-
-    public static OCIngredient of(int count, final Stream<? extends ItemLike> stream) {
+    public static OCIngredient of(final Stream<? extends ItemLike> stream, int count) {
         return new OCIngredient(HolderSet.direct(stream.map(e -> toHolder(e.asItem())).toList()), count);
     }
 
-    public static OCIngredient of(int count, final HolderSet<Item> tag) {
+    public static OCIngredient of(final HolderSet<Item> tag, int count) {
         return new OCIngredient(tag, count);
     }
 

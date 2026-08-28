@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.BlockItemTagAppender;
 import net.minecraft.references.BlockItemId;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -51,6 +52,10 @@ public class OCItemTagsProvider extends FabricTagsProvider.ItemTagsProvider {
                 OBSIDIAN_CHESTPLATE,
                 OBSIDIAN_LEGGINGS,
                 OBSIDIAN_BOOTS
+        );
+        tag(OCItemTags.CAN_BE_SMELTED_INTO_OBSIDIAN).add(
+                BlockItemIds.OBSIDIAN,
+                BlockItemIds.CRYING_OBSIDIAN
         );
     }
 }
